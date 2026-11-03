@@ -255,6 +255,7 @@ public static class SurvivorsSetup
         upgrades.maxWeapons = 6;
         systems.AddComponent<FxManager>().particleSprite = sSquare;
         systems.AddComponent<AudioManager>();
+        systems.AddComponent<DayNightCycle>().ground = groundSr;
         var spawner = systems.AddComponent<EnemySpawner>();
         spawner.entries = new[]
         {
@@ -304,6 +305,13 @@ public static class SurvivorsSetup
 
         hud.timerText = MakeText(root, "Timer", "00:00", 52, TextAnchor.UpperCenter, Color.white);
         Anchor(hud.timerText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -50f), new Vector2(300f, 70f));
+
+        hud.periodText = MakeText(root, "Period", "DIA 1", 28, TextAnchor.UpperCenter, new Color(1f, 0.88f, 0.4f));
+        Anchor(hud.periodText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -112f), new Vector2(700f, 40f));
+
+        hud.bannerText = MakeText(root, "Banner", "DIA 1", 96, TextAnchor.MiddleCenter, Color.white);
+        hud.bannerText.supportRichText = true;
+        Anchor(hud.bannerText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 180f), new Vector2(1400f, 220f));
 
         hud.killsText = MakeText(root, "Kills", "Abates: 0", 30, TextAnchor.UpperRight, Color.white);
         Anchor(hud.killsText.rectTransform, new Vector2(1f, 1f), new Vector2(-170f, -55f), new Vector2(300f, 50f));
@@ -429,7 +437,7 @@ public static class SurvivorsSetup
         menu.quitButton = quit.gameObject;
 
         var howTo = MakeText(canvas.transform, "HowTo",
-            "WASD / Setas: mover   •   Shift: dash   •   As armas atacam sozinhas   •   ESC: pausar\nColete gemas para subir de nível e sobreviva por 10 minutos!",
+            "WASD / Setas: mover   •   Shift: dash   •   As armas atacam sozinhas   •   ESC: pausar\nColete gemas para subir de nível e sobreviva ao máximo de noites que conseguir!",
             26, TextAnchor.MiddleCenter, new Color(1f, 1f, 1f, 0.75f));
         Anchor(howTo.rectTransform, new Vector2(0.5f, 0f), new Vector2(0f, 110f), new Vector2(1600f, 100f));
 

@@ -13,13 +13,14 @@ public class SpawnEntry
     public float weight = 1f;
 }
 
-// Spawna inimigos fora da tela. A dificuldade cresce com o tempo pelas curvas abaixo.
+// Spawna inimigos fora da tela, só durante a noite (se tiver DayNightCycle na cena).
+// A dificuldade cresce com o tempo de noite acumulado, pelas curvas abaixo.
 public class EnemySpawner : MonoBehaviour
 {
     public SpawnEntry[] entries;
 
     [Header("Ritmo")]
-    [Tooltip("Inimigos por segundo (eixo X = tempo da run em segundos).")]
+    [Tooltip("Inimigos por segundo (eixo X = segundos de noite já passados na run).")]
     public AnimationCurve spawnsPerSecond = AnimationCurve.Linear(0f, 1f, 600f, 7f);
     [Tooltip("Multiplicador de vida dos inimigos ao longo do tempo.")]
     public AnimationCurve healthMultiplier = AnimationCurve.Linear(0f, 1f, 600f, 4f);
@@ -50,7 +51,9 @@ public class EnemySpawner : MonoBehaviour
         var gm = GameManager.Instance;
         if (!gm || gm.State != GameState.Playing || !cam || entries == null || entries.Length == 0) return;
 
-        float t = gm.ElapsedTime;
+        var cycle = DayNightCycle.Instance;
+        if (cycle && !cycle.IsNight) return;
+        float t = cycle ? cycle.NightElapsed : gm.ElapsedTime;
 
         accumulator += spawnsPerSecond.Evaluate(t) * Time.deltaTime;
         while (accumulator >= 1f)

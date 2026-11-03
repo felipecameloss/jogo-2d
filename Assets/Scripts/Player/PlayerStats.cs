@@ -118,6 +118,6 @@ public class PlayerStats : MonoBehaviour
         if (visual) visual.color = new Color(0.4f, 0.4f, 0.4f);
         FxManager.Burst(transform.position, baseColor, 25, 6f, 0.25f);
         FxManager.Shake(0.4f, 0.4f);
-        if (GameManager.Instance) GameManager.Instance.EndRun(false);
+        if (GameManager.Instance) GameManager.Instance.EndRun();
     }
 }

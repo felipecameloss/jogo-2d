@@ -8,9 +8,43 @@ public class HUD : MonoBehaviour
     public Text timerText;
     public Text killsText;
     public Text dashText;
+    [Tooltip("Mostra 'DIA 1' / 'NOITE 1' e quanto falta para o próximo período.")]
+    public Text periodText;
+    [Tooltip("Aviso grande no meio da tela quando o período muda.")]
+    public Text bannerText;
+    public float bannerDuration = 3f;
+
+    static readonly Color DayColor = new Color(1f, 0.88f, 0.4f);
+    static readonly Color NightColor = new Color(0.6f, 0.72f, 1f);
 
     PlayerExperience xp;
     PlayerController controller;
+    DayNightCycle cycle;
+    float bannerTimer;
+
+    void Start()
+    {
+        cycle = DayNightCycle.Instance;
+        if (cycle) cycle.OnPeriodChanged += ShowBanner;
+        if (bannerText) bannerText.gameObject.SetActive(false);
+        if (cycle) ShowBanner(cycle.Period);
+    }
+
+    void OnDestroy()
+    {
+        if (cycle) cycle.OnPeriodChanged -= ShowBanner;
+    }
+
+    void ShowBanner(DayPeriod period)
+    {
+        if (!bannerText || !cycle) return;
+        bool night = period == DayPeriod.Night;
+        bannerText.text = night ? $"NOITE {cycle.NightNumber}\n<size=40>Os monstros estão chegando...</size>"
+                                : $"DIA {cycle.DayNumber}\n<size=40>Prepare-se para a noite</size>";
+        bannerText.color = night ? NightColor : DayColor;
+        bannerText.gameObject.SetActive(true);
+        bannerTimer = bannerDuration;
+    }
 
     void Update()
     {
@@ -21,7 +55,23 @@ public class HUD : MonoBehaviour
 
         if (xpFill) xpFill.fillAmount = xp.CurrentXP / xp.XPToNext;
         if (levelText) levelText.text = $"Nv {xp.Level}";
-        if (timerText) timerText.text = GameManager.FormatTime(gm.ElapsedTime);
+        if (timerText) timerText.text = cycle ? cycle.ClockText : GameManager.FormatTime(gm.ElapsedTime);
+        if (periodText && cycle)
+        {
+            string left = GameManager.FormatTime(cycle.TimeLeftInPeriod);
+            periodText.text = cycle.IsNight ? $"NOITE {cycle.NightNumber}  •  amanhece em {left}"
+                                            : $"DIA {cycle.DayNumber}  •  anoitece em {left}";
+            periodText.color = cycle.IsNight ? NightColor : DayColor;
+            if (timerText) timerText.color = periodText.color;
+        }
+        if (bannerText && bannerTimer > 0f)
+        {
+            bannerTimer -= Time.deltaTime;
+            var c = bannerText.color;
+            c.a = Mathf.Clamp01(bannerTimer / 0.6f); // some no final
+            bannerText.color = c;
+            if (bannerTimer <= 0f) bannerText.gameObject.SetActive(false);
+        }
         if (killsText) killsText.text = $"Abates: {gm.Kills}";
         if (dashText && controller)
         {

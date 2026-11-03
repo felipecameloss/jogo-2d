@@ -152,6 +152,22 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.TryGetComponent(out PlayerStats player)) player.TakeDamage(contactDamage);
     }
 
+    // Some sem dropar nada (usado quando amanhece).
+    public void Vanish()
+    {
+        if (IsDead) return;
+        IsDead = true;
+        Active.Remove(this);
+        FxManager.Burst(transform.position, new Color(1f, 0.75f, 0.3f), 6, 3f);
+        Destroy(gameObject);
+    }
+
+    public static void VanishAll()
+    {
+        for (int i = Active.Count - 1; i >= 0; i--)
+            if (i < Active.Count) Active[i].Vanish();
+    }
+
     // Deixa o inimigo mais lento por um tempo. Lentidões não somam: vale a mais forte.
     public void ApplySlow(float factor, float duration)
     {

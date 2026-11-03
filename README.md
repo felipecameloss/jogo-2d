@@ -9,7 +9,9 @@ Roguelike top-down 2D no estilo "survivors" (inspirado em Vampire Survivors e Me
 - As armas atacam sozinhas
 - Colete as gemas que os inimigos derrubam para subir de nível e escolher upgrades (clique ou teclas **1, 2, 3**)
 - **ESC / P**: pausar
-- Objetivo: sobreviver por 10 minutos
+- Dia e noite: cada período dura 3 minutos. De dia não aparecem inimigos; de noite eles vêm (e os que sobrarem somem quando amanhece). O relógio e o período aparecem no topo da tela.
+- **N** (só no Editor): pula para o próximo período, para testar sem esperar
+- Objetivo: não tem fim. Sobreviva ao máximo de noites que conseguir
 
 ## Estrutura do projeto
 

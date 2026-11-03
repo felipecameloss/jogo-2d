@@ -51,6 +51,21 @@ public static class GameInput
 #endif
     }
 
+    // Atalho de teste (só funciona no Editor): N pula para o próximo período (dia/noite).
+    public static bool DebugSkipPeriodPressed()
+    {
+#if UNITY_EDITOR
+#if ENABLE_INPUT_SYSTEM
+        var k = Keyboard.current;
+        return k != null && k.nKey.wasPressedThisFrame;
+#else
+        return Input.GetKeyDown(KeyCode.N);
+#endif
+#else
+        return false;
+#endif
+    }
+
     // Retorna 0, 1 ou 2 se as teclas 1, 2 ou 3 foram apertadas neste frame; senão -1.
     public static int OptionPressed()
     {

@@ -4,13 +4,11 @@ using UnityEngine.UI;
 
 public enum GameState { Playing, Paused, LevelUp, GameOver }
 
-// Controla o estado da run: tempo, abates, pausa, level up, derrota e vitória.
+// Controla o estado da run (infinita): tempo, abates, pausa, level up e derrota.
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [Tooltip("Duração da run em segundos. Sobreviva até o fim para vencer.")]
-    public float runDuration = 600f;
     public string mainMenuScene = "MainMenu";
 
     [Header("UI")]
@@ -48,8 +46,8 @@ public class GameManager : MonoBehaviour
 
         if (State != GameState.Playing) return;
 
+        // A run é infinita: dura enquanto o jogador aguentar as noites.
         ElapsedTime += Time.deltaTime;
-        if (ElapsedTime >= runDuration) EndRun(true);
     }
 
     public void RegisterKill() => Kills++;
@@ -84,7 +82,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public void EndRun(bool victory)
+    public void EndRun()
     {
         if (State == GameState.GameOver) return;
         State = GameState.GameOver;
@@ -93,9 +91,14 @@ public class GameManager : MonoBehaviour
         if (gameOverPanel) gameOverPanel.SetActive(true);
 
         var xp = Player ? Player.GetComponent<PlayerExperience>() : null;
-        if (gameOverTitle) gameOverTitle.text = victory ? "VOCÊ SOBREVIVEU!" : "VOCÊ CAIU...";
+        var cycle = DayNightCycle.Instance;
+        if (gameOverTitle)
+            gameOverTitle.text = cycle && cycle.IsNight ? $"VOCÊ CAIU NA NOITE {cycle.NightNumber}..." : "VOCÊ CAIU...";
         if (gameOverStats)
-            gameOverStats.text = $"Tempo: {FormatTime(ElapsedTime)}\nNível: {(xp ? xp.Level : 1)}\nAbates: {Kills}";
+        {
+            string nights = cycle ? $"\nNoites enfrentadas: {cycle.NightNumber}" : "";
+            gameOverStats.text = $"Tempo: {FormatTime(ElapsedTime)}{nights}\nNível: {(xp ? xp.Level : 1)}\nAbates: {Kills}";
+        }
     }
 
     public void Restart()
