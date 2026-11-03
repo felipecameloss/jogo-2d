@@ -21,6 +21,12 @@ public class Enemy : MonoBehaviour
     [Range(0f, 1f)] public float healDropChance = 0.01f;
     public Pickup magnetPrefab;
     [Range(0f, 1f)] public float magnetDropChance = 0.004f;
+    public Pickup goldPrefab;
+    [Range(0f, 1f)] public float goldDropChance = 0.2f;
+    public int goldMin = 1;
+    public int goldMax = 2;
+    [Tooltip("Ouro extra por noite: na noite N o valor é multiplicado por 1 + (N - 1) x isso.")]
+    public float goldBonusPerNight = 0.2f;
 
     [Tooltip("Se ficar mais longe que isso do jogador, reaparece do outro lado (como no Vampire Survivors).")]
     public float relocateDistance = 22f;
@@ -67,6 +73,9 @@ public class Enemy : MonoBehaviour
             IsElite = true;
             maxHealth *= 12f;
             xpValue *= 10f;
+            goldDropChance = 1f;
+            goldMin *= 8;
+            goldMax *= 10;
             contactDamage *= 1.5f;
             knockbackResistance = Mathf.Max(knockbackResistance, 0.8f);
             healDropChance = 1f;
@@ -142,6 +151,7 @@ public class Enemy : MonoBehaviour
         if (xpGemPrefab) Instantiate(xpGemPrefab, pos, Quaternion.identity).value = xpValue;
         if (healPrefab && Random.value < healDropChance) Instantiate(healPrefab, pos + (Vector3)Random.insideUnitCircle * 0.4f, Quaternion.identity);
         if (magnetPrefab && Random.value < magnetDropChance) Instantiate(magnetPrefab, pos + (Vector3)Random.insideUnitCircle * 0.4f, Quaternion.identity);
+        if (goldPrefab && Random.value < goldDropChance) DropGold(pos);
 
         Destroy(gameObject);
     }
@@ -150,6 +160,18 @@ public class Enemy : MonoBehaviour
     {
         if (IsDead) return;
         if (collision.gameObject.TryGetComponent(out PlayerStats player)) player.TakeDamage(contactDamage);
+    }
+
+    void DropGold(Vector3 pos)
+    {
+        var cycle = DayNightCycle.Instance;
+        int night = cycle ? Mathf.Max(1, cycle.NightNumber) : 1;
+        float multiplier = 1f + (night - 1) * goldBonusPerNight;
+        if (GameManager.Instance && GameManager.Instance.Player) multiplier *= GameManager.Instance.Player.goldMultiplier;
+
+        int amount = Mathf.Max(1, Mathf.RoundToInt(Random.Range(goldMin, goldMax + 1) * multiplier));
+        var gold = Instantiate(goldPrefab, pos + (Vector3)Random.insideUnitCircle * 0.4f, Quaternion.identity);
+        gold.value = amount;
     }
 
     // Some sem dropar nada (usado quando amanhece).

@@ -97,7 +97,9 @@ public class GameManager : MonoBehaviour
         if (gameOverStats)
         {
             string nights = cycle ? $"\nNoites enfrentadas: {cycle.NightNumber}" : "";
-            gameOverStats.text = $"Tempo: {FormatTime(ElapsedTime)}{nights}\nNível: {(xp ? xp.Level : 1)}\nAbates: {Kills}";
+            var wallet = Player ? Player.GetComponent<PlayerWallet>() : null;
+            string gold = wallet ? $"\nOuro coletado: {wallet.TotalEarned}" : "";
+            gameOverStats.text = $"Tempo: {FormatTime(ElapsedTime)}{nights}\nNível: {(xp ? xp.Level : 1)}\nAbates: {Kills}{gold}";
         }
     }
 

@@ -34,6 +34,8 @@ public class PlayerStats : MonoBehaviour
     public float pickupRadius = 2f;
     [Tooltip("Multiplica o XP das gemas.")]
     public float xpMultiplier = 1f;
+    [Tooltip("Multiplica o ouro dropado pelos inimigos (para itens/upgrades futuros).")]
+    public float goldMultiplier = 1f;
 
     [Header("Feedback")]
     public SpriteRenderer visual;

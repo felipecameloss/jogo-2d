@@ -180,4 +180,9 @@ MonoBehaviour:
   healDropChance: 0.01
   magnetPrefab: {fileID: 118198265039007450, guid: 34921f4baa6c48d4fb5cc16aa55cc331, type: 3}
   magnetDropChance: 0.004
+  goldPrefab: {fileID: 7955937520484661250, guid: c0055ae3ccc25084383d474be4196083, type: 3}
+  goldDropChance: 0.15
+  goldMin: 1
+  goldMax: 2
+  goldBonusPerNight: 0.2
   relocateDistance: 22

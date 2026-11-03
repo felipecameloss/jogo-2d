@@ -8,6 +8,7 @@ public class HUD : MonoBehaviour
     public Text timerText;
     public Text killsText;
     public Text dashText;
+    public Text goldText;
     [Tooltip("Mostra 'DIA 1' / 'NOITE 1' e quanto falta para o próximo período.")]
     public Text periodText;
     [Tooltip("Aviso grande no meio da tela quando o período muda.")]
@@ -19,6 +20,9 @@ public class HUD : MonoBehaviour
 
     PlayerExperience xp;
     PlayerController controller;
+    PlayerWallet wallet;
+    int shownGold = -1;
+    float goldPunch;
     DayNightCycle cycle;
     float bannerTimer;
 
@@ -52,6 +56,7 @@ public class HUD : MonoBehaviour
         if (!gm || !gm.Player) return;
         if (!xp) xp = gm.Player.GetComponent<PlayerExperience>();
         if (!controller) controller = gm.Player.GetComponent<PlayerController>();
+        if (!wallet) wallet = gm.Player.GetComponent<PlayerWallet>();
 
         if (xpFill) xpFill.fillAmount = xp.CurrentXP / xp.XPToNext;
         if (levelText) levelText.text = $"Nv {xp.Level}";
@@ -73,6 +78,18 @@ public class HUD : MonoBehaviour
             if (bannerTimer <= 0f) bannerText.gameObject.SetActive(false);
         }
         if (killsText) killsText.text = $"Abates: {gm.Kills}";
+        if (goldText && wallet)
+        {
+            // "Pulinho" no texto quando ganha ouro.
+            if (wallet.Gold != shownGold)
+            {
+                if (shownGold >= 0 && wallet.Gold > shownGold) goldPunch = 1f;
+                shownGold = wallet.Gold;
+                goldText.text = $"Ouro: {shownGold}";
+            }
+            goldPunch = Mathf.MoveTowards(goldPunch, 0f, Time.unscaledDeltaTime * 5f);
+            goldText.rectTransform.localScale = Vector3.one * (1f + goldPunch * 0.2f);
+        }
         if (dashText && controller)
         {
             int charges = controller.DashCharges;

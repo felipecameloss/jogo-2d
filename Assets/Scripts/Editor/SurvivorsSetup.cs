@@ -59,11 +59,12 @@ public static class SurvivorsSetup
         var gem = MakePickup("XPGem", sDiamond, PickupType.Experience, new Color(0.35f, 0.7f, 1f), 0.32f, 1f);
         var heal = MakePickup("HealOrb", sCross, PickupType.Heal, new Color(1f, 0.35f, 0.4f), 0.45f, 30f);
         var magnet = MakePickup("Magnet", sRing, PickupType.Magnet, new Color(0.6f, 0.8f, 1f), 0.5f, 0f);
+        var gold = MakePickup("Gold", sCircle, PickupType.Gold, new Color(1f, 0.8f, 0.2f), 0.3f, 1f);
 
         // ---------- Inimigos ----------
-        var slime = MakeEnemy("Slime", sBlob, new Color(0.45f, 0.9f, 0.4f), 0.8f, hp: 10, speed: 1.8f, damage: 6, xp: 1, gem, heal, magnet);
-        var bat = MakeEnemy("Bat", sDiamond, new Color(0.7f, 0.45f, 1f), 0.6f, hp: 6, speed: 3.4f, damage: 4, xp: 1, gem, heal, magnet);
-        var golem = MakeEnemy("Golem", sSquare, new Color(0.85f, 0.5f, 0.35f), 1.3f, hp: 60, speed: 1.2f, damage: 12, xp: 5, gem, heal, magnet);
+        var slime = MakeEnemy("Slime", sBlob, new Color(0.45f, 0.9f, 0.4f), 0.8f, hp: 10, speed: 1.8f, damage: 6, xp: 1, gem, heal, magnet, gold, 0.2f, 1, 2);
+        var bat = MakeEnemy("Bat", sDiamond, new Color(0.7f, 0.45f, 1f), 0.6f, hp: 6, speed: 3.4f, damage: 4, xp: 1, gem, heal, magnet, gold, 0.15f, 1, 2);
+        var golem = MakeEnemy("Golem", sSquare, new Color(0.85f, 0.5f, 0.35f), 1.3f, hp: 60, speed: 1.2f, damage: 12, xp: 5, gem, heal, magnet, gold, 0.6f, 3, 6);
         golem.knockbackResistance = 0.7f;
         PrefabUtility.SavePrefabAsset(golem.gameObject);
 
@@ -224,6 +225,7 @@ public static class SurvivorsSetup
         var controller = player.AddComponent<PlayerController>();
         controller.visual = visual.transform;
         player.AddComponent<PlayerExperience>();
+        player.AddComponent<PlayerWallet>();
         var holder = player.AddComponent<WeaponHolder>();
         holder.startingWeapon = startWeapon;
 
@@ -318,6 +320,9 @@ public static class SurvivorsSetup
 
         hud.dashText = MakeText(root, "Dash", "DASH x1", 30, TextAnchor.LowerCenter, Color.white);
         Anchor(hud.dashText.rectTransform, new Vector2(0.5f, 0f), new Vector2(0f, 40f), new Vector2(400f, 50f));
+
+        hud.goldText = MakeText(root, "Gold", "Ouro: 0", 30, TextAnchor.UpperRight, new Color(1f, 0.85f, 0.25f));
+        Anchor(hud.goldText.rectTransform, new Vector2(1f, 1f), new Vector2(-170f, -100f), new Vector2(300f, 50f));
 
         var hint = MakeText(root, "Hint", "WASD/Setas: mover    Shift: dash    ESC: pausar", 22, TextAnchor.LowerLeft, new Color(1f, 1f, 1f, 0.6f));
         Anchor(hint.rectTransform, new Vector2(0f, 0f), new Vector2(330f, 30f), new Vector2(640f, 40f));
@@ -461,7 +466,7 @@ public static class SurvivorsSetup
     }
 
     static Enemy MakeEnemy(string name, Sprite sprite, Color color, float scale, float hp, float speed, float damage, float xp,
-        Pickup gem, Pickup heal, Pickup magnet)
+        Pickup gem, Pickup heal, Pickup magnet, Pickup gold, float goldChance, int goldMin, int goldMax)
     {
         var go = new GameObject(name);
         go.transform.localScale = Vector3.one * scale;
@@ -480,6 +485,10 @@ public static class SurvivorsSetup
         e.xpGemPrefab = gem;
         e.healPrefab = heal;
         e.magnetPrefab = magnet;
+        e.goldPrefab = gold;
+        e.goldDropChance = goldChance;
+        e.goldMin = goldMin;
+        e.goldMax = goldMax;
         return SavePrefab<Enemy>(go, "Enemy_" + name);
     }
 

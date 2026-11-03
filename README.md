@@ -10,6 +10,7 @@ Roguelike top-down 2D no estilo "survivors" (inspirado em Vampire Survivors e Me
 - Colete as gemas que os inimigos derrubam para subir de nível e escolher upgrades (clique ou teclas **1, 2, 3**)
 - **ESC / P**: pausar
 - Dia e noite: cada período dura 3 minutos. De dia não aparecem inimigos; de noite eles vêm (e os que sobrarem somem quando amanhece). O relógio e o período aparecem no topo da tela.
+- Inimigos têm chance de dropar ouro (moedas douradas), e o valor cresce a cada noite. Por enquanto o ouro só acumula; depois vai servir para baús e loja
 - **N** (só no Editor): pula para o próximo período, para testar sem esperar
 - Objetivo: não tem fim. Sobreviva ao máximo de noites que conseguir
 
