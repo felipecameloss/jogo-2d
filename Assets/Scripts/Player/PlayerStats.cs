@@ -8,18 +8,32 @@ public class PlayerStats : MonoBehaviour
     public float regenPerSecond = 0f;
     [Tooltip("Tempo invencível depois de levar dano.")]
     public float invincibilityTime = 0.5f;
+    [Tooltip("Reduz cada golpe recebido (mínimo de 1 de dano).")]
+    public float armor = 0f;
+    [Tooltip("Chance de recuperar vida ao matar um inimigo.")]
+    [Range(0f, 1f)] public float lifestealChance = 0f;
+    public float lifestealAmount = 2f;
 
     [Header("Movimento")]
     public float moveSpeed = 5f;
+    [Tooltip("Segundos para recuperar uma carga de dash.")]
+    public float dashCooldown = 1.2f;
+    public int dashCharges = 1;
 
     [Header("Ataque (multiplicadores aplicados em todas as armas)")]
     public float damageMultiplier = 1f;
     public float cooldownMultiplier = 1f;
     public float areaMultiplier = 1f;
     public int bonusProjectiles = 0;
+    [Tooltip("Multiplica a duração de efeitos (poças, lentidão etc).")]
+    public float durationMultiplier = 1f;
+    [Range(0f, 1f)] public float critChance = 0f;
+    public float critMultiplier = 2f;
 
     [Header("Coleta")]
     public float pickupRadius = 2f;
+    [Tooltip("Multiplica o XP das gemas.")]
+    public float xpMultiplier = 1f;
 
     [Header("Feedback")]
     public SpriteRenderer visual;
@@ -29,10 +43,12 @@ public class PlayerStats : MonoBehaviour
 
     float invincibleTimer;
     Color baseColor;
+    PlayerController controller;
 
     void Awake()
     {
         CurrentHealth = maxHealth;
+        controller = GetComponent<PlayerController>();
         if (!visual) visual = GetComponentInChildren<SpriteRenderer>();
         if (visual) baseColor = visual.color;
     }
@@ -55,7 +71,9 @@ public class PlayerStats : MonoBehaviour
     public void TakeDamage(float amount)
     {
         if (IsDead || invincibleTimer > 0f) return;
+        if (controller && controller.IsDashing) return; // dash = invencível
 
+        amount = Mathf.Max(1f, amount - armor);
         CurrentHealth -= amount;
         invincibleTimer = invincibilityTime;
 
@@ -78,6 +96,19 @@ public class PlayerStats : MonoBehaviour
     {
         maxHealth += amount;
         Heal(amount);
+    }
+
+    // Chamado pelo Enemy quando morre.
+    public void OnEnemyKilled()
+    {
+        if (lifestealChance > 0f && Random.value < lifestealChance) Heal(lifestealAmount, false);
+    }
+
+    // Rola crítico para um golpe. Usado pelo Enemy.TakeDamage.
+    public float RollDamage(float amount, out bool crit)
+    {
+        crit = critChance > 0f && Random.value < critChance;
+        return crit ? amount * critMultiplier : amount;
     }
 
     void Die()

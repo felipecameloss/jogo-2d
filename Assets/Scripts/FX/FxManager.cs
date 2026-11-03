@@ -52,6 +52,23 @@ public class FxManager : MonoBehaviour
         go.AddComponent<FloatingText>();
     }
 
+    // Sprite temporário que some aos poucos (raios, cortes, explosões, sombras do dash).
+    // Se sprite for null, usa o quadrado das partículas.
+    public static SpriteRenderer Flash(Sprite sprite, Vector3 position, Vector2 startScale, Vector2 endScale, Color color,
+        float duration, float rotation = 0f, int sortingOrder = 40)
+    {
+        if (!sprite && Instance) sprite = Instance.particleSprite;
+        if (!sprite) return null;
+        var go = new GameObject("FxFlash");
+        go.transform.SetPositionAndRotation(position, Quaternion.Euler(0f, 0f, rotation));
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = sprite;
+        sr.color = color;
+        sr.sortingOrder = sortingOrder;
+        go.AddComponent<FxFade>().Init(startScale, endScale, duration);
+        return sr;
+    }
+
     public static void Shake(float intensity, float duration)
     {
         if (CameraFollow.Instance) CameraFollow.Instance.Shake(intensity, duration);

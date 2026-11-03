@@ -15,9 +15,13 @@ public class PlayerExperience : MonoBehaviour
 
     public event Action OnLevelUp;
 
+    PlayerStats stats;
+
+    void Awake() => stats = GetComponent<PlayerStats>();
+
     public void AddXP(float amount)
     {
-        CurrentXP += amount * xpMultiplier;
+        CurrentXP += amount * xpMultiplier * (stats ? stats.xpMultiplier : 1f);
         while (CurrentXP >= XPToNext)
         {
             CurrentXP -= XPToNext;

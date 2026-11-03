@@ -5,6 +5,7 @@ Roguelike top-down 2D no estilo "survivors" (inspirado em Vampire Survivors e Me
 ## Como jogar
 
 - **WASD / Setas**: mover (gamepad também funciona se o Input System estiver instalado)
+- **Left Shift**: dash (fica invencível e atravessa inimigos durante o dash; recarrega sozinho)
 - As armas atacam sozinhas
 - Colete as gemas que os inimigos derrubam para subir de nível e escolher upgrades (clique ou teclas **1, 2, 3**)
 - **ESC / P**: pausar
@@ -19,7 +20,8 @@ Assets/
     Core/            GameManager (estados, tempo, pausa, game over), câmera, input, menu
     Player/          movimento, atributos, XP, barra de vida
     Enemies/         Enemy (IA de perseguição, dano, drops) e EnemySpawner (ondas, anel, elite)
-    Weapons/         Weapon (base) + Orbe Arcano, Lâminas Orbitais, Aura Sagrada
+    Weapons/         Weapon (base) + 10 armas: Orbe Arcano, Lâminas Orbitais, Aura Sagrada, Facas,
+                     Raio Celeste, Bumerangue, Frasco Venenoso, Chicote, Nova Gélida, Bombas
     Upgrades/        UpgradeManager (opções de level up)
     Pickups/         gemas de XP, cura, ímã
     UI/              HUD e tela de level up

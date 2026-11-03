@@ -39,6 +39,18 @@ public static class GameInput
 #endif
     }
 
+    public static bool DashPressed()
+    {
+#if ENABLE_INPUT_SYSTEM
+        var k = Keyboard.current;
+        var g = Gamepad.current;
+        return (k != null && k.leftShiftKey.wasPressedThisFrame)
+            || (g != null && (g.buttonSouth.wasPressedThisFrame || g.rightShoulder.wasPressedThisFrame));
+#else
+        return Input.GetKeyDown(KeyCode.LeftShift);
+#endif
+    }
+
     // Retorna 0, 1 ou 2 se as teclas 1, 2 ou 3 foram apertadas neste frame; senão -1.
     public static int OptionPressed()
     {

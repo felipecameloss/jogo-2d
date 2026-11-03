@@ -68,7 +68,8 @@ public static class SurvivorsSetup
         PrefabUtility.SavePrefabAsset(golem.gameObject);
 
         // ---------- Armas ----------
-        var projectile = MakeProjectile(sCircle);
+        var projectile = MakeProjectile("Projectile", sCircle, new Color(1f, 0.95f, 0.5f), new Vector3(0.4f, 0.28f, 1f));
+        var knife = MakeProjectile("Knife", sDiamond, new Color(0.85f, 0.9f, 1f), new Vector3(0.6f, 0.18f, 1f));
         var blade = MakeBlade(sDiamond);
 
         var boltGo = new GameObject("W_MagicBolt");
@@ -98,8 +99,72 @@ public static class SurvivorsSetup
         aura.visual = auraVisual;
         aura = SavePrefab<AuraWeapon>(auraGo, "W_Aura");
 
+        var knifeGo = new GameObject("W_Knife");
+        var knifeW = knifeGo.AddComponent<KnifeWeapon>();
+        knifeW.weaponName = "Facas";
+        knifeW.description = "Arremessa facas na direção em que você anda.";
+        knifeW.damage = 7f;
+        knifeW.cooldown = 0.6f;
+        knifeW.projectilePrefab = knife;
+        knifeW = SavePrefab<KnifeWeapon>(knifeGo, "W_Knife");
+
+        var lightningGo = new GameObject("W_Lightning");
+        var lightning = lightningGo.AddComponent<LightningWeapon>();
+        lightning.weaponName = "Raio Celeste";
+        lightning.description = "Raios caem em inimigos aleatórios.";
+        lightning.damage = 14f;
+        lightning.cooldown = 1.8f;
+        lightning.impactSprite = sGlow;
+        lightning = SavePrefab<LightningWeapon>(lightningGo, "W_Lightning");
+
+        var boomerangGo = new GameObject("W_Boomerang");
+        var boomerang = boomerangGo.AddComponent<BoomerangWeapon>();
+        boomerang.weaponName = "Bumerangue";
+        boomerang.description = "Vai até o inimigo e volta, acertando duas vezes.";
+        boomerang.damage = 9f;
+        boomerang.cooldown = 1.6f;
+        boomerang.sprite = sCross;
+        boomerang = SavePrefab<BoomerangWeapon>(boomerangGo, "W_Boomerang");
+
+        var flaskGo = new GameObject("W_Flask");
+        var flask = flaskGo.AddComponent<FlaskWeapon>();
+        flask.weaponName = "Frasco Venenoso";
+        flask.description = "Cria poças de veneno embaixo dos inimigos.";
+        flask.damage = 4f;
+        flask.cooldown = 2.5f;
+        flask.zoneSprite = sGlow;
+        flask = SavePrefab<FlaskWeapon>(flaskGo, "W_Flask");
+
+        var whipGo = new GameObject("W_Whip");
+        var whip = whipGo.AddComponent<WhipWeapon>();
+        whip.weaponName = "Chicote";
+        whip.description = "Golpe horizontal forte na sua frente.";
+        whip.damage = 13f;
+        whip.cooldown = 1.3f;
+        whip.slashSprite = sDiamond;
+        whip = SavePrefab<WhipWeapon>(whipGo, "W_Whip");
+
+        var novaGo = new GameObject("W_FrostNova");
+        var nova = novaGo.AddComponent<FrostNovaWeapon>();
+        nova.weaponName = "Nova Gélida";
+        nova.description = "Explosão de gelo que empurra e deixa os inimigos lentos.";
+        nova.damage = 8f;
+        nova.cooldown = 4f;
+        nova.ringSprite = sRing;
+        nova = SavePrefab<FrostNovaWeapon>(novaGo, "W_FrostNova");
+
+        var bombGo = new GameObject("W_Bomb");
+        var bomb = bombGo.AddComponent<BombWeapon>();
+        bomb.weaponName = "Bombas";
+        bomb.description = "Larga bombas que explodem depois de um tempo.";
+        bomb.damage = 30f;
+        bomb.cooldown = 3f;
+        bomb.bombSprite = sCircle;
+        bomb.explosionSprite = sGlow;
+        bomb = SavePrefab<BombWeapon>(bombGo, "W_Bomb");
+
         // ---------- Cenas ----------
-        BuildGameScene(sBlob, sSquare, sPlain, sGround, new[] { slime, bat, golem }, bolt, new Weapon[] { bolt, orbit, aura });
+        BuildGameScene(sBlob, sSquare, sPlain, sGround, new[] { slime, bat, golem }, bolt, new Weapon[] { bolt, orbit, aura, knifeW, lightning, boomerang, flask, whip, nova, bomb });
         BuildMenuScene();
 
         EditorBuildSettings.scenes = new[]
@@ -187,6 +252,7 @@ public static class SurvivorsSetup
         var upgrades = systems.AddComponent<UpgradeManager>();
         upgrades.panel = levelUp;
         upgrades.availableWeapons = allWeapons;
+        upgrades.maxWeapons = 6;
         systems.AddComponent<FxManager>().particleSprite = sSquare;
         systems.AddComponent<AudioManager>();
         var spawner = systems.AddComponent<EnemySpawner>();
@@ -242,8 +308,11 @@ public static class SurvivorsSetup
         hud.killsText = MakeText(root, "Kills", "Abates: 0", 30, TextAnchor.UpperRight, Color.white);
         Anchor(hud.killsText.rectTransform, new Vector2(1f, 1f), new Vector2(-170f, -55f), new Vector2(300f, 50f));
 
-        var hint = MakeText(root, "Hint", "WASD/Setas: mover    ESC: pausar", 22, TextAnchor.LowerLeft, new Color(1f, 1f, 1f, 0.6f));
-        Anchor(hint.rectTransform, new Vector2(0f, 0f), new Vector2(260f, 30f), new Vector2(500f, 40f));
+        hud.dashText = MakeText(root, "Dash", "DASH x1", 30, TextAnchor.LowerCenter, Color.white);
+        Anchor(hud.dashText.rectTransform, new Vector2(0.5f, 0f), new Vector2(0f, 40f), new Vector2(400f, 50f));
+
+        var hint = MakeText(root, "Hint", "WASD/Setas: mover    Shift: dash    ESC: pausar", 22, TextAnchor.LowerLeft, new Color(1f, 1f, 1f, 0.6f));
+        Anchor(hint.rectTransform, new Vector2(0f, 0f), new Vector2(330f, 30f), new Vector2(640f, 40f));
 
         return hud;
     }
@@ -360,7 +429,7 @@ public static class SurvivorsSetup
         menu.quitButton = quit.gameObject;
 
         var howTo = MakeText(canvas.transform, "HowTo",
-            "WASD / Setas: mover   •   As armas atacam sozinhas   •   ESC: pausar\nColete gemas para subir de nível e sobreviva por 10 minutos!",
+            "WASD / Setas: mover   •   Shift: dash   •   As armas atacam sozinhas   •   ESC: pausar\nColete gemas para subir de nível e sobreviva por 10 minutos!",
             26, TextAnchor.MiddleCenter, new Color(1f, 1f, 1f, 0.75f));
         Anchor(howTo.rectTransform, new Vector2(0.5f, 0f), new Vector2(0f, 110f), new Vector2(1600f, 100f));
 
@@ -406,13 +475,13 @@ public static class SurvivorsSetup
         return SavePrefab<Enemy>(go, "Enemy_" + name);
     }
 
-    static Projectile MakeProjectile(Sprite sprite)
+    static Projectile MakeProjectile(string name, Sprite sprite, Color color, Vector3 scale)
     {
-        var go = new GameObject("Projectile");
-        go.transform.localScale = new Vector3(0.4f, 0.28f, 1f);
+        var go = new GameObject(name);
+        go.transform.localScale = scale;
         var sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = sprite;
-        sr.color = new Color(1f, 0.95f, 0.5f);
+        sr.color = color;
         sr.sortingOrder = 5;
         var rb = go.AddComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic;
@@ -420,7 +489,7 @@ public static class SurvivorsSetup
         col.isTrigger = true;
         col.radius = 0.5f;
         go.AddComponent<Projectile>();
-        return SavePrefab<Projectile>(go, "Projectile");
+        return SavePrefab<Projectile>(go, name);
     }
 
     static OrbitBlade MakeBlade(Sprite sprite)

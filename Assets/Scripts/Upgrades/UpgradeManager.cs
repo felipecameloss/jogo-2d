@@ -16,7 +16,7 @@ public class UpgradeManager : MonoBehaviour
     public LevelUpPanel panel;
     [Tooltip("Armas que podem aparecer como 'NOVO' no level up.")]
     public Weapon[] availableWeapons;
-    public int maxWeapons = 4;
+    public int maxWeapons = 6;
     public int optionsPerLevel = 3;
     public int maxStatLevel = 5;
 
@@ -99,7 +99,14 @@ public class UpgradeManager : MonoBehaviour
         AddStat(pool, "area", "Expansão", "+12% de área das armas", () => stats.areaMultiplier += 0.12f);
         AddStat(pool, "ima", "Ímã", "+30% de alcance para coletar", () => stats.pickupRadius *= 1.3f);
         AddStat(pool, "regen", "Regeneração", "Recupera +0.5 de vida por segundo", () => stats.regenPerSecond += 0.5f);
-        AddStat(pool, "proj", "Duplicação", "+1 projétil nas armas de disparo", () => stats.bonusProjectiles++, 2);
+        AddStat(pool, "proj", "Duplicação", "+1 projétil, raio, frasco, bumerangue e bomba", () => stats.bonusProjectiles++, 2);
+        AddStat(pool, "xp", "Sabedoria", "+15% de XP ganho", () => stats.xpMultiplier += 0.15f);
+        AddStat(pool, "armadura", "Armadura", "-1 de dano em cada golpe recebido", () => stats.armor += 1f);
+        AddStat(pool, "crit", "Olho Afiado", "+8% de chance de crítico (dano x2)", () => stats.critChance += 0.08f);
+        AddStat(pool, "duracao", "Ampulheta", "+15% de duração de poças e lentidão", () => stats.durationMultiplier += 0.15f);
+        AddStat(pool, "vampiro", "Presas", "+4% de chance de curar 2 de vida ao matar", () => stats.lifestealChance += 0.04f);
+        AddStat(pool, "dashcd", "Passo Rápido", "-15% de recarga do dash", () => stats.dashCooldown *= 0.85f);
+        AddStat(pool, "dashcarga", "Fôlego Extra", "+1 carga de dash", () => stats.dashCharges++, 2);
 
         // Embaralha e pega as primeiras.
         for (int i = pool.Count - 1; i > 0; i--)
