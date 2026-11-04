@@ -33,6 +33,15 @@ public class Enemy : MonoBehaviour
 
     public bool IsDead { get; private set; }
     public bool IsElite { get; private set; }
+    public bool IsBoss { get; private set; }
+    public float Health => health;
+    public float HealthFraction => maxHealth > 0f ? Mathf.Clamp01(health / maxHealth) : 0f;
+
+    // Quando true, quem controla a velocidade é outro script (ex.: o Boss durante uma investida).
+    [HideInInspector] public bool externalMovement;
+
+    // Disparado quando o inimigo morre por dano (não quando some ao amanhecer).
+    public event System.Action<Enemy> Died;
 
     float health;
     Rigidbody2D rb;
@@ -88,6 +97,36 @@ public class Enemy : MonoBehaviour
         health = maxHealth;
     }
 
+    // Transforma este inimigo em chefe (chamado pelo spawner nas noites de chefe).
+    public void InitBoss(float health, float scaleMultiplier, Color tint, float damageMultiplier, float speedMultiplier,
+        float xpAmount, int goldAmount)
+    {
+        IsBoss = true;
+        maxHealth = health;
+        this.health = health;
+        contactDamage *= damageMultiplier;
+        moveSpeed *= speedMultiplier;
+        knockbackResistance = 0.95f;
+        relocateDistance = 30f;
+        xpValue = xpAmount;
+        goldDropChance = 1f;
+        goldMin = goldMax = goldAmount;
+        goldBonusPerNight = 0f;
+        healDropChance = 1f;
+        magnetDropChance = 1f; // ao morrer, puxa todas as gemas da tela
+        transform.localScale *= scaleMultiplier;
+        baseScale = transform.localScale;
+        baseColor = tint;
+        sr.color = baseColor;
+        rb.mass = 50f; // empurra o jogador em vez de ser empurrado
+    }
+
+    public void SetTint(Color color)
+    {
+        baseColor = color;
+        if (flashTimer <= 0f) sr.color = color;
+    }
+
     void FixedUpdate()
     {
         if (IsDead || !target) return;
@@ -100,6 +139,7 @@ public class Enemy : MonoBehaviour
             rb.position = (Vector2)target.position + toPlayer.normalized * (relocateDistance * 0.7f);
             return;
         }
+        if (externalMovement) return;
 
         float speed = slowTimer > 0f ? moveSpeed * slowFactor : moveSpeed;
         rb.linearVelocity = toPlayer.normalized * speed + knockbackVelocity;
@@ -126,7 +166,7 @@ public class Enemy : MonoBehaviour
         health -= amount;
         flashTimer = 0.08f;
         sr.color = Color.white;
-        transform.localScale = baseScale * 1.15f;
+        if (!IsBoss) transform.localScale = baseScale * 1.15f; // chefe não "pula" a cada golpe
         knockbackVelocity += knockback * (1f - knockbackResistance);
 
         if (crit) FxManager.Popup(transform.position + Vector3.up * 0.4f, Mathf.RoundToInt(amount) + "!", new Color(1f, 0.85f, 0.2f), 1.4f);
@@ -146,8 +186,9 @@ public class Enemy : MonoBehaviour
             if (GameManager.Instance.Player) GameManager.Instance.Player.OnEnemyKilled();
         }
 
-        FxManager.Burst(transform.position, baseColor, IsElite ? 24 : 8);
-        if (IsElite) FxManager.Shake(0.25f, 0.25f);
+        FxManager.Burst(transform.position, baseColor, IsBoss ? 60 : IsElite ? 24 : 8, IsBoss ? 9f : 4f, IsBoss ? 0.3f : 0.18f);
+        if (IsBoss) FxManager.Shake(0.6f, 0.6f);
+        else if (IsElite) FxManager.Shake(0.25f, 0.25f);
         AudioManager.Play(Sfx.EnemyDie, 0.5f);
 
         Vector3 pos = transform.position;
@@ -156,6 +197,7 @@ public class Enemy : MonoBehaviour
         if (magnetPrefab && Random.value < magnetDropChance) Instantiate(magnetPrefab, pos + (Vector3)Random.insideUnitCircle * 0.4f, Quaternion.identity);
         if (goldPrefab && Random.value < goldDropChance) DropGold(pos);
 
+        Died?.Invoke(this);
         Destroy(gameObject);
     }
 
