@@ -56,3 +56,16 @@ File > Build Profiles > Web > Switch Platform > Build. Suba o .zip da pasta gera
 - Fonte: LegacyRuntime (fonte padrão do Unity).
 - Arte e sons atuais: placeholders gerados por código.
 - (adicione aqui os assets usados, com autor e licença)
+
+
+## Coleta de materiais durante o dia
+
+- Explore e segure **E** perto de uma árvore, rocha ou cristal. No controle, use o botão oeste (X no Xbox / quadrado no PlayStation; no Input Manager antigo, botão 2).
+- Madeira rende 5, pedra 3 e cristal 2. Pontos maiores são ricos e rendem o dobro; cristais levam mais tempo para extrair.
+- O painel **Materiais da vila** acompanha os saldos. A barra mostra o progresso da coleta.
+- Soltar o botão, sair do alcance, dar dash, pausar ou anoitecer cancela a coleta em andamento. Armas continuam automáticas.
+- Os pontos esgotados ficam menores e acinzentados; voltar à mesma região no mesmo dia não repõe seus recursos.
+- Ao amanhecer, os pontos se renovam. O mapa mantém apenas 49 pontos ativos ao redor do jogador.
+- Materiais acumulam durante a run; reiniciar a partida zera o inventário. Construções e estações de trabalho serão implementadas em suas tasks próprias.
+- Integração: `ResourceInventory.Count`, `Add`, `CanAfford(wood, stone, crystal)`, `TrySpend(wood, stone, crystal)` e evento `OnChanged`. Gastos compostos são atômicos e custos negativos são rejeitados.
+- Nenhuma regeneração de cena é necessária. Para testar o ciclo no Editor, **N** alterna dia/noite.

@@ -27,6 +27,17 @@ public static class GameInput
 #endif
     }
 
+    public static bool CollectHeld()
+    {
+#if ENABLE_INPUT_SYSTEM
+        var k = Keyboard.current;
+        var g = Gamepad.current;
+        return (k != null && k.eKey.isPressed) || (g != null && g.buttonWest.isPressed);
+#else
+        return Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.JoystickButton2);
+#endif
+    }
+
     public static bool PausePressed()
     {
 #if ENABLE_INPUT_SYSTEM
