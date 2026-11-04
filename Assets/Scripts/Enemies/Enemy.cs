@@ -44,6 +44,7 @@ public class Enemy : MonoBehaviour
     Transform target;
     float slowTimer;
     float slowFactor = 1f;
+    PlayerStats touchingPlayer;
 
     static readonly Color SlowTint = new Color(0.55f, 0.85f, 1f);
 
@@ -90,6 +91,8 @@ public class Enemy : MonoBehaviour
     void FixedUpdate()
     {
         if (IsDead || !target) return;
+
+        if (touchingPlayer) touchingPlayer.TakeDamage(contactDamage);
 
         Vector2 toPlayer = (Vector2)target.position - rb.position;
         if (toPlayer.sqrMagnitude > relocateDistance * relocateDistance)
@@ -148,7 +151,7 @@ public class Enemy : MonoBehaviour
         AudioManager.Play(Sfx.EnemyDie, 0.5f);
 
         Vector3 pos = transform.position;
-        if (xpGemPrefab) Instantiate(xpGemPrefab, pos, Quaternion.identity).value = xpValue;
+        if (xpGemPrefab && !Pickup.TryMergeXP(xpValue)) Instantiate(xpGemPrefab, pos, Quaternion.identity).value = xpValue;
         if (healPrefab && Random.value < healDropChance) Instantiate(healPrefab, pos + (Vector3)Random.insideUnitCircle * 0.4f, Quaternion.identity);
         if (magnetPrefab && Random.value < magnetDropChance) Instantiate(magnetPrefab, pos + (Vector3)Random.insideUnitCircle * 0.4f, Quaternion.identity);
         if (goldPrefab && Random.value < goldDropChance) DropGold(pos);
@@ -156,10 +159,18 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void OnCollisionStay2D(Collision2D collision)
+    // Antes era OnCollisionStay2D, que o Unity chama a cada passo de física para TODO par de
+    // colisores encostados — inclusive inimigo com inimigo. Com centenas de inimigos amontoados
+    // à noite isso virava milhares de chamadas por frame. Agora só registramos quando o contato
+    // com o jogador começa/termina e aplicamos o dano no FixedUpdate.
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (IsDead) return;
-        if (collision.gameObject.TryGetComponent(out PlayerStats player)) player.TakeDamage(contactDamage);
+        if (target && collision.gameObject == target.gameObject) touchingPlayer = collision.gameObject.GetComponent<PlayerStats>();
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (target && collision.gameObject == target.gameObject) touchingPlayer = null;
     }
 
     void DropGold(Vector3 pos)

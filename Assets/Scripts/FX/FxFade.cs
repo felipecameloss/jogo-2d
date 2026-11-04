@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Faz um sprite mudar de escala e sumir ao longo do tempo, depois se destrói.
+// Faz um sprite mudar de escala e sumir ao longo do tempo, depois volta para o pool (ver FxManager).
 [RequireComponent(typeof(SpriteRenderer))]
 public class FxFade : MonoBehaviour
 {
@@ -8,13 +8,16 @@ public class FxFade : MonoBehaviour
     float duration, age, startAlpha;
     SpriteRenderer sr;
 
+    public SpriteRenderer Renderer => sr ? sr : (sr = GetComponent<SpriteRenderer>());
+
     public void Init(Vector2 from, Vector2 to, float time)
     {
-        sr = GetComponent<SpriteRenderer>();
+        sr = Renderer;
         startScale = new Vector3(from.x, from.y, 1f);
         endScale = new Vector3(to.x, to.y, 1f);
         duration = Mathf.Max(0.01f, time);
         startAlpha = sr.color.a;
+        age = 0f;
         transform.localScale = startScale;
     }
 
@@ -26,6 +29,6 @@ public class FxFade : MonoBehaviour
         var c = sr.color;
         c.a = startAlpha * (1f - t);
         sr.color = c;
-        if (t >= 1f) Destroy(gameObject);
+        if (t >= 1f) FxManager.Release(this);
     }
 }

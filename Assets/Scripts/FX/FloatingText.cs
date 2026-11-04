@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Número de dano / texto flutuante reaproveitável (ver FxManager).
 [RequireComponent(typeof(TextMesh))]
 public class FloatingText : MonoBehaviour
 {
@@ -10,10 +11,14 @@ public class FloatingText : MonoBehaviour
     Color startColor;
     float age;
 
-    void Start()
+    public void Play(string text, Color color)
     {
-        tm = GetComponent<TextMesh>();
-        startColor = tm.color;
+        if (!tm) tm = GetComponent<TextMesh>();
+        tm.text = text;
+        tm.color = color;
+        startColor = color;
+        age = 0f;
+        gameObject.SetActive(true);
     }
 
     void Update()
@@ -21,7 +26,7 @@ public class FloatingText : MonoBehaviour
         age += Time.deltaTime;
         if (age >= lifetime)
         {
-            Destroy(gameObject);
+            FxManager.Release(this);
             return;
         }
         transform.position += Vector3.up * riseSpeed * Time.deltaTime;
