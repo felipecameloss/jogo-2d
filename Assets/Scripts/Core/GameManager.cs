@@ -31,6 +31,13 @@ public class GameManager : MonoBehaviour
         if (gameOverPanel) gameOverPanel.SetActive(false);
     }
 
+    void Start()
+    {
+        // Também funciona nas cenas já existentes: não é preciso regenerar o protótipo.
+        if (Player && DayNightCycle.Instance && !GetComponent<DayResourceSystem>())
+            gameObject.AddComponent<DayResourceSystem>();
+    }
+
     void OnDestroy()
     {
         if (Instance == this) Instance = null;
@@ -98,8 +105,10 @@ public class GameManager : MonoBehaviour
         {
             string nights = cycle ? $"\nNoites enfrentadas: {cycle.NightNumber}" : "";
             var wallet = Player ? Player.GetComponent<PlayerWallet>() : null;
+            var materials = Player ? Player.GetComponent<ResourceInventory>() : null;
+            string resources = materials ? $"\nMateriais coletados: {materials.TotalCollected}" : "";
             string gold = wallet ? $"\nOuro coletado: {wallet.TotalEarned}" : "";
-            gameOverStats.text = $"Tempo: {FormatTime(ElapsedTime)}{nights}\nNível: {(xp ? xp.Level : 1)}\nAbates: {Kills}{gold}";
+            gameOverStats.text = $"Tempo: {FormatTime(ElapsedTime)}{nights}\nNível: {(xp ? xp.Level : 1)}\nAbates: {Kills}{gold}{resources}";
         }
     }
 
