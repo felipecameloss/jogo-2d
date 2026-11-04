@@ -27,6 +27,17 @@ public static class GameInput
 #endif
     }
 
+    public static bool TradePressed()
+    {
+#if ENABLE_INPUT_SYSTEM
+        var k = Keyboard.current;
+        var g = Gamepad.current;
+        return (k != null && k.fKey.wasPressedThisFrame) || (g != null && g.buttonNorth.wasPressedThisFrame);
+#else
+        return Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.JoystickButton3);
+#endif
+    }
+
     public static bool CollectHeld()
     {
 #if ENABLE_INPUT_SYSTEM
