@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public enum GameState { Playing, Paused, LevelUp, GameOver }
+public enum GameState { Playing, Paused, LevelUp, GameOver, Trading }
 
 // Controla o estado da run (infinita): tempo, abates, pausa, level up e derrota.
 public class GameManager : MonoBehaviour
@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
         // Também funciona nas cenas já existentes: não é preciso regenerar o protótipo.
         if (Player && DayNightCycle.Instance && !GetComponent<DayResourceSystem>())
             gameObject.AddComponent<DayResourceSystem>();
+        if (Player && DayNightCycle.Instance && !GetComponent<TradeSystem>())
+            gameObject.AddComponent<TradeSystem>();
     }
 
     void OnDestroy()
@@ -45,6 +47,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (State == GameState.Trading)
+        {
+            if (GameInput.PausePressed()) GetComponent<TradeSystem>()?.Close();
+            return;
+        }
         if (GameInput.PausePressed())
         {
             if (State == GameState.Playing) Pause();
@@ -55,6 +62,21 @@ public class GameManager : MonoBehaviour
 
         // A run é infinita: dura enquanto o jogador aguentar as noites.
         ElapsedTime += Time.deltaTime;
+    }
+
+    public bool EnterTrade()
+    {
+        if (State != GameState.Playing) return false;
+        State = GameState.Trading;
+        Time.timeScale = 0f;
+        return true;
+    }
+
+    public void ExitTrade()
+    {
+        if (State != GameState.Trading) return;
+        State = GameState.Playing;
+        Time.timeScale = 1f;
     }
 
     public void RegisterKill() => Kills++;
