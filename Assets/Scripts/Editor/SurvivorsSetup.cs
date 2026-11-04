@@ -1,8 +1,10 @@
 using System;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Events;
 using UnityEditor.SceneManagement;
+using UnityEditor.U2D.Sprites;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -17,6 +19,9 @@ public static class SurvivorsSetup
 {
     const string GenRoot = "Assets/Generated";
     const string SpriteDir = GenRoot + "/Sprites";
+    // Spritesheets exportadas do Aseprite (arte de verdade, não é gerada aqui).
+    const string ArtDir = "Assets/Art/Sprites";
+    const int ArtPixelsPerUnit = 24;
     const string PrefabDir = GenRoot + "/Prefabs";
     const string SceneDir = "Assets/Scenes";
     const string MenuScenePath = SceneDir + "/MainMenu.unity";
@@ -54,6 +59,20 @@ public static class SurvivorsSetup
         var sGlow = MakeSprite("Glow", 128, 128, Shapes.Glow);
         var sPlain = MakeSprite("Pixel", 8, 8, (u, v, px) => Color.white);
         var sGround = MakeGroundSprite();
+
+        // ---------- Arte (Aseprite) ----------
+        // Pivô nos pés / base do tronco, para ordenar pela altura (quem está mais embaixo fica na frente).
+        var playerFrames = ImportSheet($"{ArtDir}/character_men.png", 32, 32, new Vector2(0.5f, 0.25f));
+        ImportSheet($"{ArtDir}/character_women.png", 32, 32, new Vector2(0.5f, 0.25f));
+        var bushAFrames = ImportSheet($"{ArtDir}/bush_a.png", 32, 32, new Vector2(0.5f, 0.15f));
+        var bushBFrames = ImportSheet($"{ArtDir}/bush_b.png", 32, 32, new Vector2(0.5f, 0.15f));
+        var treeFrames = ImportSheet($"{ArtDir}/tree.png", 64, 80, new Vector2(0.5f, 0.12f));
+        var decorations = new[]
+        {
+            new DecorationEntry { prefab = MakeDecoration("Deco_Tree", treeFrames), weight = 1f },
+            new DecorationEntry { prefab = MakeDecoration("Deco_BushA", bushAFrames), weight = 1.5f },
+            new DecorationEntry { prefab = MakeDecoration("Deco_BushB", bushBFrames), weight = 1.5f },
+        };
 
         // ---------- Pickups ----------
         var gem = MakePickup("XPGem", sDiamond, PickupType.Experience, new Color(0.35f, 0.7f, 1f), 0.32f, 1f);
@@ -165,7 +184,7 @@ public static class SurvivorsSetup
         bomb = SavePrefab<BombWeapon>(bombGo, "W_Bomb");
 
         // ---------- Cenas ----------
-        BuildGameScene(sBlob, sSquare, sPlain, sGround, new[] { slime, bat, golem }, bolt, new Weapon[] { bolt, orbit, aura, knifeW, lightning, boomerang, flask, whip, nova, bomb });
+        BuildGameScene(sSquare, sPlain, sGround, playerFrames, decorations, new[] { slime, bat, golem }, bolt, new Weapon[] { bolt, orbit, aura, knifeW, lightning, boomerang, flask, whip, nova, bomb });
         BuildMenuScene();
 
         EditorBuildSettings.scenes = new[]
@@ -179,7 +198,7 @@ public static class SurvivorsSetup
 
     // ===================================================================== Cena do jogo
 
-    static void BuildGameScene(Sprite sBlob, Sprite sSquare, Sprite sPlain, Sprite sGround, Enemy[] enemies, Weapon startWeapon, Weapon[] allWeapons)
+    static void BuildGameScene(Sprite sSquare, Sprite sPlain, Sprite sGround, Sprite[] playerFrames, DecorationEntry[] decorations, Enemy[] enemies, Weapon startWeapon, Weapon[] allWeapons)
     {
         var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
@@ -192,6 +211,10 @@ public static class SurvivorsSetup
         cam.clearFlags = CameraClearFlags.SolidColor;
         cam.backgroundColor = new Color(0.1f, 0.14f, 0.1f);
         camGo.transform.position = new Vector3(0f, 0f, -10f);
+        // Ordenação top-down: no mesmo sortingOrder, quem está mais para baixo na tela é desenhado na frente.
+        // (Fica no Graphics Settings do projeto; o campo da câmera não é salvo na cena.)
+        UnityEngine.Rendering.GraphicsSettings.transparencySortMode = TransparencySortMode.CustomAxis;
+        UnityEngine.Rendering.GraphicsSettings.transparencySortAxis = Vector3.up;
         camGo.AddComponent<AudioListener>();
         var follow = camGo.AddComponent<CameraFollow>();
 
@@ -206,6 +229,12 @@ public static class SurvivorsSetup
         bg.follow = camGo.transform;
         bg.tileSize = 2f;
 
+        // Árvores e arbustos
+        var decoGo = new GameObject("Decorations");
+        var scatter = decoGo.AddComponent<DecorationScatter>();
+        scatter.follow = camGo.transform;
+        scatter.entries = decorations;
+
         // Jogador
         var player = new GameObject("Player");
         player.tag = "Player";
@@ -217,13 +246,16 @@ public static class SurvivorsSetup
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         player.AddComponent<CircleCollider2D>().radius = 0.35f;
 
-        var visual = NewSprite("Visual", player.transform, sBlob, new Color(0.35f, 0.85f, 1f), 10);
-        visual.transform.localScale = Vector3.one * 0.9f;
+        var visual = NewSprite("Visual", player.transform, playerFrames.Length > 0 ? playerFrames[0] : null, Color.white, 10);
+        visual.spriteSortPoint = SpriteSortPoint.Pivot;
 
         var stats = player.AddComponent<PlayerStats>();
         stats.visual = visual;
         var controller = player.AddComponent<PlayerController>();
         controller.visual = visual.transform;
+        var anim = player.AddComponent<CharacterAnimator>();
+        anim.target = visual;
+        anim.frames = playerFrames;
         player.AddComponent<PlayerExperience>();
         player.AddComponent<PlayerWallet>();
         var holder = player.AddComponent<WeaponHolder>();
@@ -231,7 +263,7 @@ public static class SurvivorsSetup
 
         var barRoot = new GameObject("HealthBar");
         barRoot.transform.SetParent(player.transform, false);
-        barRoot.transform.localPosition = new Vector3(0f, -0.62f, 0f);
+        barRoot.transform.localPosition = new Vector3(0f, -0.42f, 0f);
         var barBg = NewSprite("Background", barRoot.transform, sPlain, new Color(0.1f, 0.1f, 0.1f, 0.8f), 11);
         barBg.transform.localScale = new Vector3(0.95f, 0.13f, 1f);
         var barFill = NewSprite("Fill", barRoot.transform, sPlain, new Color(0.9f, 0.25f, 0.3f), 12);
@@ -492,6 +524,22 @@ public static class SurvivorsSetup
         return SavePrefab<Enemy>(go, "Enemy_" + name);
     }
 
+    // Planta animada (árvore/arbusto). Sem colisão para não prender os inimigos.
+    static GameObject MakeDecoration(string name, Sprite[] frames)
+    {
+        var go = new GameObject(name);
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = frames.Length > 0 ? frames[0] : null;
+        sr.sortingOrder = 10; // mesma camada do jogador, ordenado pela altura
+        sr.spriteSortPoint = SpriteSortPoint.Pivot;
+        var loop = go.AddComponent<SpriteLoop>();
+        loop.frames = frames;
+        loop.frameTime = 0.12f;
+        var asset = PrefabUtility.SaveAsPrefabAsset(go, $"{PrefabDir}/{name}.prefab");
+        Object.DestroyImmediate(go);
+        return asset;
+    }
+
     static Projectile MakeProjectile(string name, Sprite sprite, Color color, Vector3 scale)
     {
         var go = new GameObject(name);
@@ -694,6 +742,66 @@ public static class SurvivorsSetup
         imp.SaveAndReimport();
 
         return AssetDatabase.LoadAssetAtPath<Sprite>(path);
+    }
+
+    // Fatia uma spritesheet em grade (frames lidos da esquerda p/ direita, de cima p/ baixo)
+    // e devolve os sprites em ordem. Os nomes são "<arquivo>_000", "<arquivo>_001"...
+    static Sprite[] ImportSheet(string path, int frameW, int frameH, Vector2 pivot)
+    {
+        AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+        var imp = (TextureImporter)AssetImporter.GetAtPath(path);
+        if (!imp)
+        {
+            Debug.LogError($"[Survivors] Não achei {path}");
+            return new Sprite[0];
+        }
+        imp.textureType = TextureImporterType.Sprite;
+        imp.spriteImportMode = SpriteImportMode.Multiple;
+        imp.spritePixelsPerUnit = ArtPixelsPerUnit;
+        imp.alphaIsTransparency = true;
+        imp.mipmapEnabled = false;
+        imp.textureCompression = TextureImporterCompression.Uncompressed;
+        imp.filterMode = FilterMode.Point; // pixel art
+        imp.wrapMode = TextureWrapMode.Clamp;
+        var settings = new TextureImporterSettings();
+        imp.ReadTextureSettings(settings);
+        settings.spriteMeshType = SpriteMeshType.FullRect;
+        imp.SetTextureSettings(settings);
+        imp.SaveAndReimport();
+
+        imp.GetSourceTextureWidthAndHeight(out int texW, out int texH);
+        int cols = texW / frameW, rows = texH / frameH;
+        string baseName = Path.GetFileNameWithoutExtension(path);
+
+        var factory = new SpriteDataProviderFactories();
+        factory.Init();
+        var dp = factory.GetSpriteEditorDataProviderFromObject(imp);
+        dp.InitSpriteEditorDataProvider();
+        // Reaproveita os IDs já existentes para não quebrar referências ao gerar de novo.
+        var oldIds = dp.GetSpriteRects().GroupBy(r => r.name).ToDictionary(g => g.Key, g => g.First().spriteID);
+
+        var rects = new SpriteRect[cols * rows];
+        for (int i = 0; i < rects.Length; i++)
+        {
+            int col = i % cols, row = i / cols;
+            string name = $"{baseName}_{i:000}";
+            rects[i] = new SpriteRect
+            {
+                name = name,
+                rect = new Rect(col * frameW, texH - (row + 1) * frameH, frameW, frameH),
+                alignment = SpriteAlignment.Custom,
+                pivot = pivot,
+                spriteID = oldIds.TryGetValue(name, out var id) ? id : GUID.Generate(),
+            };
+        }
+        dp.SetSpriteRects(rects);
+        var names = dp.GetDataProvider<ISpriteNameFileIdDataProvider>();
+        names.SetNameFileIdPairs(rects.Select(r => new SpriteNameFileIdPair(r.name, r.spriteID)).ToList());
+        dp.Apply();
+        imp.SaveAndReimport();
+
+        return AssetDatabase.LoadAllAssetsAtPath(path).OfType<Sprite>()
+            .OrderBy(s => s.name, StringComparer.Ordinal).ToArray();
     }
 
     static Sprite MakeGroundSprite()
