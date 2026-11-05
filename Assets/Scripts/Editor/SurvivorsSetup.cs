@@ -67,9 +67,19 @@ public static class SurvivorsSetup
         var bushAFrames = ImportSheet($"{ArtDir}/bush_a.png", 32, 32, new Vector2(0.5f, 0.15f));
         var bushBFrames = ImportSheet($"{ArtDir}/bush_b.png", 32, 32, new Vector2(0.5f, 0.15f));
         var treeFrames = ImportSheet($"{ArtDir}/tree.png", 64, 80, new Vector2(0.5f, 0.12f));
+        // Pedras coletáveis: cada uma sorteia uma dessas variações.
+        var rockSprites = new[]
+        {
+            ImportSheet($"{ArtDir}/rock_1_small.png", 16, 14, new Vector2(0.5f, 0.14f)),
+            ImportSheet($"{ArtDir}/rock_2_round.png", 24, 20, new Vector2(0.5f, 0.1f)),
+            ImportSheet($"{ArtDir}/rock_3_flat.png", 32, 20, new Vector2(0.58f, 0.15f)),
+            ImportSheet($"{ArtDir}/rock_4_mossy.png", 32, 28, new Vector2(0.48f, 0.11f)),
+            ImportSheet($"{ArtDir}/rock_5_cluster.png", 40, 30, new Vector2(0.48f, 0.17f)),
+        }.Where(f => f.Length > 0).Select(f => f[0]).ToArray();
+        // A árvore não é decoração: é o recurso de madeira coletável durante o dia.
+        var resourceTree = MakeDecoration("Resource_Tree", treeFrames);
         var decorations = new[]
         {
-            new DecorationEntry { prefab = MakeDecoration("Deco_Tree", treeFrames), weight = 1f },
             new DecorationEntry { prefab = MakeDecoration("Deco_BushA", bushAFrames), weight = 1.5f },
             new DecorationEntry { prefab = MakeDecoration("Deco_BushB", bushBFrames), weight = 1.5f },
         };
@@ -184,7 +194,7 @@ public static class SurvivorsSetup
         bomb = SavePrefab<BombWeapon>(bombGo, "W_Bomb");
 
         // ---------- Cenas ----------
-        BuildGameScene(sSquare, sPlain, sGround, playerFrames, decorations, new[] { slime, bat, golem }, bolt, new Weapon[] { bolt, orbit, aura, knifeW, lightning, boomerang, flask, whip, nova, bomb });
+        BuildGameScene(sSquare, sPlain, sGround, playerFrames, decorations, resourceTree, rockSprites, new[] { slime, bat, golem }, bolt, new Weapon[] { bolt, orbit, aura, knifeW, lightning, boomerang, flask, whip, nova, bomb });
         BuildMenuScene();
 
         EditorBuildSettings.scenes = new[]
@@ -198,7 +208,7 @@ public static class SurvivorsSetup
 
     // ===================================================================== Cena do jogo
 
-    static void BuildGameScene(Sprite sSquare, Sprite sPlain, Sprite sGround, Sprite[] playerFrames, DecorationEntry[] decorations, Enemy[] enemies, Weapon startWeapon, Weapon[] allWeapons)
+    static void BuildGameScene(Sprite sSquare, Sprite sPlain, Sprite sGround, Sprite[] playerFrames, DecorationEntry[] decorations, GameObject resourceTree, Sprite[] rockSprites, Enemy[] enemies, Weapon startWeapon, Weapon[] allWeapons)
     {
         var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
@@ -290,6 +300,10 @@ public static class SurvivorsSetup
         systems.AddComponent<FxManager>().particleSprite = sSquare;
         systems.AddComponent<AudioManager>();
         systems.AddComponent<DayNightCycle>().ground = groundSr;
+        var resources = systems.AddComponent<DayResourceSystem>();
+        resources.treePrefab = resourceTree;
+        resources.rockSprites = rockSprites;
+        systems.AddComponent<ChestSystem>();
         var spawner = systems.AddComponent<EnemySpawner>();
         spawner.entries = new[]
         {

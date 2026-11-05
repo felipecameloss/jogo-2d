@@ -27,7 +27,7 @@ public static class GameInput
 #endif
     }
 
-    public static bool TradePressed()
+    public static bool InteractPressed()
     {
 #if ENABLE_INPUT_SYSTEM
         var k = Keyboard.current;

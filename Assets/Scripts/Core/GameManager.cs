@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public enum GameState { Playing, Paused, LevelUp, GameOver, Trading }
+public enum GameState { Playing, Paused, LevelUp, GameOver, Chest }
 
 // Controla o estado da run (infinita): tempo, abates, pausa, level up e derrota.
 public class GameManager : MonoBehaviour
@@ -36,8 +36,8 @@ public class GameManager : MonoBehaviour
         // Também funciona nas cenas já existentes: não é preciso regenerar o protótipo.
         if (Player && DayNightCycle.Instance && !GetComponent<DayResourceSystem>())
             gameObject.AddComponent<DayResourceSystem>();
-        if (Player && DayNightCycle.Instance && !GetComponent<TradeSystem>())
-            gameObject.AddComponent<TradeSystem>();
+        if (Player && !GetComponent<ChestSystem>())
+            gameObject.AddComponent<ChestSystem>();
     }
 
     void OnDestroy()
@@ -47,9 +47,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (State == GameState.Trading)
+        if (State == GameState.Chest)
         {
-            if (GameInput.PausePressed()) GetComponent<TradeSystem>()?.Close();
+            if (GameInput.PausePressed()) GetComponent<ChestSystem>()?.Close();
             return;
         }
         if (GameInput.PausePressed())
@@ -64,17 +64,17 @@ public class GameManager : MonoBehaviour
         ElapsedTime += Time.deltaTime;
     }
 
-    public bool EnterTrade()
+    public bool EnterChest()
     {
         if (State != GameState.Playing) return false;
-        State = GameState.Trading;
+        State = GameState.Chest;
         Time.timeScale = 0f;
         return true;
     }
 
-    public void ExitTrade()
+    public void ExitChest()
     {
-        if (State != GameState.Trading) return;
+        if (State != GameState.Chest) return;
         State = GameState.Playing;
         Time.timeScale = 1f;
     }

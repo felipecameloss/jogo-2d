@@ -36,7 +36,7 @@ public class ResourceHUD : MonoBehaviour
         bool show = GameManager.Instance.State == GameState.Playing;
         canvasObject.SetActive(show);
         var bag = source.Inventory;
-        inventoryText.text = $"<b>MATERIAIS DA VILA</b>\n<color=#A6DD77>Madeira</color>     {bag.Wood}\n<color=#C9D4ED>Pedra</color>          {bag.Stone}\n<color=#75EFFF>Cristal</color>         {bag.Crystal}";
+        inventoryText.text = $"<b>MATERIAIS DA VILA</b>\n<color=#A6DD77>Madeira</color>     {bag.Wood}\n<color=#C9D4ED>Pedra</color>          {bag.Stone}\n<color=#FFD45E>Chaves</color>        {bag.Keys}";
         promptText.text = source.Prompt;
         progress.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 720 * source.Progress);
     }
