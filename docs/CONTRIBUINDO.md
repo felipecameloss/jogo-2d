@@ -9,9 +9,9 @@ As responsabilidades ainda precisam ser confirmadas pela equipe. A coluna de his
 | Integrante | GitHub | Responsabilidade | Histórico no repositório |
 |---|---|---|---|
 | Pedro Nadotti | Nadotti | **A definir** | Sprites do Aseprite e personagem animado; decoração; revisão e merge de PRs |
-| Felipe (nome completo a confirmar) | felipecameloss | **A definir** | Base do protótipo; dash e armas; dia e noite; ouro |
+| Felipe Camelo | felipecameloss | **A definir** | Base do protótipo; dash e armas; dia e noite; ouro |
 | Gustavo (nome completo a confirmar) | gustavolafz | **A definir** | Coleta diurna |
-| **4º integrante a informar** | — | **A definir** | Sem commits até agora |
+| Carlos (nome a confirmar) | carloslifranco | **A definir** | Sem commits até agora |
 
 Toda frente da `RUBRICA.md` precisa de um responsável:
 

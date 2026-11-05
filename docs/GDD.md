@@ -24,21 +24,21 @@ Organizado pelo framework **DDE** (Design, Dynamics, Experience), como pede a ru
 - **Combate (05/11/2026):** armas automáticas e sem magia. Serão 4 a 6 armas medievais, escolhidas entre as atuais e adaptadas.
 - **Construção (05/11/2026):** em pontos fixos do acampamento. O jogador se aproxima, aperta F e paga os materiais.
 
-A ideia pode ser refinada durante o desenvolvimento. Registre cada mudança no histórico ao final.
+- **Coração da base (05/11/2026):** uma fogueira no centro do acampamento.
+- **Monstros (05/11/2026):** vão até a fogueira, atacam o que os bloqueia e perseguem o jogador a até 7 unidades. Os danos persistem entre noites.
+- **Pessoas (05/11/2026):** dois NPCs, ferreiro de armas e ferreira de armaduras. Nunca morrem: derrotados, voltam a ficar perdidos longe do acampamento e precisam de novo resgate; a estação fecha até lá.
+- **Armas (05/11/2026):** Besta (inicial), Espada, Facas, Machado de arremesso e Bombas. Quanto mais pessoas no acampamento, melhores as armas à venda.
+- **Baús (05/11/2026):** mantêm chaves e oferecem armas e gear.
+
+Detalhes em `docs/superpowers/specs/2026-11-05-base-do-acampamento-design.md`. A ideia pode ser refinada durante o desenvolvimento: registre cada mudança no histórico ao final.
 
 ## Decisões abertas
 
-1. O coração da base é uma fogueira ou outra estrutura?
-2. Quais 4 a 6 armas ficam e que nomes recebem?
-3. Baús: mantêm chaves? Quais armas básicas e gear oferecem?
-4. Monstros atacam o que primeiro, jogador ou construções?
-5. A base mantém os danos de uma noite para outra?
-6. Ouro continua no jogo? Com qual uso?
-7. Quais são os "outros materiais" além de madeira e pedra?
-8. Quantas pessoas perdidas existem, como são encontradas e como vão ao acampamento?
-9. A run é infinita ou existe uma noite final?
-10. Nome do jogo, protagonista e origem dos monstros
-11. Como ensinar o jogo e qual o incentivo para jogar de novo
+1. Ouro continua no jogo? Com qual uso?
+2. Quais são os "outros materiais" além de madeira e pedra?
+3. A run é infinita ou existe uma noite final?
+4. Nome do jogo, protagonista e origem dos monstros
+5. Como ensinar o jogo e qual o incentivo para jogar de novo
 
 ## 1. Design
 
