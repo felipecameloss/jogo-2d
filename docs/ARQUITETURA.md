@@ -71,5 +71,5 @@ Durante o Play, **Survivors > Testes** adiciona materiais e causa dano na foguei
 - **Arma:** herde de `Weapon` (a `AuraWeapon` é a mais simples), crie o prefab e adicione em `GameSystems > UpgradeManager > Available Weapons`.
 - **Upgrade de atributo:** uma linha `AddStat(...)` em `UpgradeManager.RollOptions`.
 - **Recompensa de baú:** novo valor em `ChestReward`, com caso em `ChestOffer.Create` e `Apply`. O sorteio em `ChestSystem.Awake` usa `% 7` fixo: atualize junto.
-- **Arte do acampamento:** coloque `heart`, `fence`, `wall`, `gate`, `station_weapon`, `station_armor` ou `spot` em `Assets/Art/Resources/Camp/`; `CampArt` carrega sem mudar código e usa placeholder se faltar.
+- **Arte do acampamento:** coloque `heart`, `fence`, `wall`, `gate`, `station_weapon`, `station_armor` ou `spot` em `Assets/Art/Resources/Camp/`; `CampArt` carrega sem mudar código e usa placeholder se faltar. Arte animada é uma spritesheet horizontal de quadros quadrados, sem compressão, importada como sprite único e fatiada por `CampArt.Frames`.
 - **Som:** arraste o `AudioClip` no `AudioManager`; sem clip, ele usa o som gerado.

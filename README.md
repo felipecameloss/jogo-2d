@@ -101,5 +101,5 @@ File > Build Profiles > Web > Switch Platform > Build. Suba o .zip da pasta gera
 - Equipe: ver [Contribuindo](docs/CONTRIBUINDO.md).
 - Código-base do protótipo gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
 - Fonte: LegacyRuntime (fonte padrão do Unity).
-- Personagens, árvore, arbustos e rochas: feitos no Aseprite (autoria a confirmar em [Assets](docs/ASSETS.md)).
+- Personagens, árvore, arbustos, rochas e fogueira: feitos no Aseprite (autoria a confirmar em [Assets](docs/ASSETS.md)).
 - Demais sprites e sons: placeholders gerados por código.

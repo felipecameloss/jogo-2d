@@ -7,6 +7,7 @@ public static class CampArt
 {
     const float PixelsPerUnit = 20f;
     static readonly Dictionary<string, Sprite> Cache = new Dictionary<string, Sprite>();
+    static readonly Dictionary<string, Sprite[]> FrameCache = new Dictionary<string, Sprite[]>();
 
     public static Sprite Get(string name)
     {
@@ -15,6 +16,25 @@ public static class CampArt
         if (!sprite) sprite = Placeholder(name);
         Cache[name] = sprite;
         return sprite;
+    }
+
+    // Arte animada: spritesheet horizontal de quadros quadrados. Sem arquivo, devolve só o placeholder.
+    public static Sprite[] Frames(string name, Vector2 pivot, float pixelsPerUnit)
+    {
+        if (FrameCache.TryGetValue(name, out var cached) && cached[0]) return cached;
+        var sheet = Resources.Load<Sprite>("Camp/" + name);
+        var frames = sheet ? Slice(sheet.texture, pivot, pixelsPerUnit) : new[] { Get(name) };
+        FrameCache[name] = frames;
+        return frames;
+    }
+
+    static Sprite[] Slice(Texture2D texture, Vector2 pivot, float pixelsPerUnit)
+    {
+        int size = texture.height;
+        var frames = new Sprite[Mathf.Max(1, texture.width / size)];
+        for (int i = 0; i < frames.Length; i++)
+            frames[i] = Sprite.Create(texture, new Rect(i * size, 0, size, size), pivot, pixelsPerUnit, 0, SpriteMeshType.FullRect);
+        return frames;
     }
 
     static Sprite Placeholder(string name)
