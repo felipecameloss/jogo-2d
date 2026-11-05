@@ -62,7 +62,7 @@ public static class SurvivorsSetup
 
         // ---------- Arte (Aseprite) ----------
         // Pivô nos pés / base do tronco, para ordenar pela altura (quem está mais embaixo fica na frente).
-        var playerFrames = ImportSheet($"{ArtDir}/character_men.png", 32, 32, new Vector2(0.5f, 0.25f));
+        var playerFrames = ImportSheet($"{ArtDir}/player.png", 32, 32, new Vector2(0.5f, 0.25f));
         ImportSheet($"{ArtDir}/character_women.png", 32, 32, new Vector2(0.5f, 0.25f));
         var bushAFrames = ImportSheet($"{ArtDir}/bush_a.png", 32, 32, new Vector2(0.5f, 0.15f));
         var bushBFrames = ImportSheet($"{ArtDir}/bush_b.png", 32, 32, new Vector2(0.5f, 0.15f));

@@ -2,7 +2,8 @@ using UnityEngine;
 
 // Anima o personagem com a spritesheet exportada do Aseprite:
 // 24 animações de 8 frames, na ordem (idle, walk, run) x (down, up, left, right,
-// down_left, down_right, up_left, up_right).
+// down_left, down_right, up_left, up_right). Em movimento usa sempre run; os frames
+// de walk continuam na spritesheet, mas não são tocados.
 [RequireComponent(typeof(PlayerController))]
 public class CharacterAnimator : MonoBehaviour
 {
@@ -13,18 +14,14 @@ public class CharacterAnimator : MonoBehaviour
 
     [Header("Duração de cada frame (segundos, igual ao Aseprite)")]
     public float idleFrameTime = 0.13f;
-    public float walkFrameTime = 0.11f;
     public float runFrameTime = 0.07f;
-    [Tooltip("A partir dessa velocidade usa a animação de correr em vez de andar.")]
-    public float runSpeedThreshold = 6f;
 
-    enum State { Idle = 0, Walk = 1, Run = 2 }
+    enum State { Idle = 0, Run = 2 }
 
     // Índice da direção na spritesheet para cada setor de 45° (começando na direita, sentido anti-horário).
     static readonly int[] SectorToRow = { 3, 7, 1, 6, 2, 4, 0, 5 };
 
     PlayerController controller;
-    PlayerStats stats;
     int direction; // começa olhando para baixo
     int currentAnimation = -1;
     int frame;
@@ -33,7 +30,6 @@ public class CharacterAnimator : MonoBehaviour
     void Awake()
     {
         controller = GetComponent<PlayerController>();
-        stats = GetComponent<PlayerStats>();
         if (!target && controller.visual) target = controller.visual.GetComponent<SpriteRenderer>();
     }
 
@@ -46,8 +42,7 @@ public class CharacterAnimator : MonoBehaviour
         if (move.sqrMagnitude > 0.01f)
         {
             direction = DirectionIndex(move);
-            bool fast = controller.IsDashing || (stats && stats.moveSpeed >= runSpeedThreshold);
-            state = fast ? State.Run : State.Walk;
+            state = State.Run;
         }
 
         int animation = (int)state * 8 + direction;
@@ -58,7 +53,7 @@ public class CharacterAnimator : MonoBehaviour
             currentAnimation = animation;
         }
 
-        float frameTime = state == State.Idle ? idleFrameTime : state == State.Walk ? walkFrameTime : runFrameTime;
+        float frameTime = state == State.Idle ? idleFrameTime : runFrameTime;
         timer += Time.deltaTime;
         while (timer >= frameTime)
         {
