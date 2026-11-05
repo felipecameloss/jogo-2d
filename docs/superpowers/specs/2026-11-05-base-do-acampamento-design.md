@@ -207,6 +207,15 @@ Blocos com poucas dependências entre si:
 | Arte | Fogueira, muros, portões, estações, monstros, armas | 1 integrante |
 | Som e acabamento | Música, SFX, tutorial, UI, itch.io, Milanote | 1 integrante |
 
+## Ajustes durante a implementação
+
+- Monstros gerados perto da câmera com o jogador a mais de 15 unidades da fogueira nascem como `HuntsPlayer`, perseguem e reposicionam em relação ao jogador.
+- O dash usa `Collider2D.excludeLayers` com a layer `Enemy`, pois jogador e estruturas estão na layer Default.
+- Com ação de construção disponível, F é do acampamento e não abre baú.
+- `CampSystem` é criado no `Awake` de `GameManager` e `ChestSystem`.
+- O centro do acampamento fica 1,5 unidade acima do ponto inicial, para o jogador não nascer dentro da fogueira. Baús e chaves são medidos a partir desse centro.
+- Spawns a menos de 7 unidades do centro são empurrados para o raio 8.
+
 ## Fora deste design
 
 Reparador e construtor como NPCs, mais monstros, construção livre, luz da fogueira, tutorial, nome e história do jogo.

@@ -11,7 +11,7 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 | Mover | WASD / Setas | Analógico |
 | Dash (invencível durante o movimento) | Left Shift | Indisponível |
 | Coletar materiais (segurar) | E | Botão oeste (X no Xbox, quadrado no PlayStation) |
-| Abrir baú | F | Botão norte (Y no Xbox, triângulo no PlayStation) |
+| Construir e abrir baú | F | Botão norte (Y no Xbox, triângulo no PlayStation) |
 | Escolher upgrade ou recompensa | 1, 2, 3 ou clique | Não testado |
 | Pausar | Esc / P | Indisponível |
 
@@ -34,6 +34,12 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 - Perto do baú, aperte **F** e escolha **uma** de três recompensas permanentes. A chave só é gasta ao confirmar a escolha.
 - **Esc / P** ou Voltar fecha a janela sem gastar a chave. As opções continuam as mesmas ao reabrir.
 - O canto da tela indica a direção do baú fechado mais próximo.
+
+### Acampamento
+
+- Você começa ao lado da fogueira, no centro do acampamento. **Se ela se apagar, a run termina**; a barra fica no topo da tela.
+- Perto de uma marca no chão, aperte **F** para construir cerca ou portão. Depois, F transforma a cerca em muro. O custo aparece na tela.
+- Estruturas destruídas deixam o ponto vazio, sem devolver materiais. Os pontos de estação abrem quando as pessoas forem resgatadas.
 
 ### Ouro
 
@@ -70,6 +76,7 @@ Assets/
                      Raio Celeste, Bumerangue, Frasco Venenoso, Chicote, Nova Gélida, Bombas
     Resources/       coleta diurna, geração de recursos e inventário de materiais
     Chests/          baús, chaves, recompensas e interface
+    Camp/            fogueira, construções e HUD do acampamento
     Upgrades/        UpgradeManager (opções de level up)
     Pickups/         gemas de XP, cura, ímã e ouro
     UI/              HUD e tela de level up

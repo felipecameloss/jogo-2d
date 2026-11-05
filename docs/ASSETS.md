@@ -29,6 +29,7 @@ Inventário dos assets do jogo. A rubrica exige referências e créditos no `REA
 | Armas e projéteis | Formas geradas | Sprites finais ou efeitos |
 | XP, ouro, cura, ímã | Formas geradas | Sprites finais |
 | Baús e chave | Pixel art gerada por código em `ChestArt` | Avaliar se mantém |
+| Fogueira, cerca, muro, portão, estações e marca de ponto | Gerados em `CampArt` | Sprites em `Assets/Art/Resources/Camp/` |
 | Chão | Textura gerada em `Assets/Generated/Sprites` | Sprite ou tileset final |
 | SFX | Sons 8-bit de `SfxGenerator` | `AudioClip` final no `AudioManager` |
 | Música | **Nenhuma** (`music` vazio em `Game.unity`) | Trilha de dia e de noite |

@@ -154,6 +154,7 @@ public class DayResourceSystem : MonoBehaviour
             var position = new Vector3((x + 0.25f + (float)random.NextDouble() * 0.5f) * size,
                 (y + 0.25f + (float)random.NextDouble() * 0.5f) * size, 0);
             if (ChestSystem.Instance && ChestSystem.Instance.IsReserved(position, 3f)) continue;
+            if (CampSystem.Instance && CampSystem.Instance.IsReserved(position, 1f)) continue;
             bool rich = random.Next(8) == 0;
             bool flip = random.Next(2) == 0;
             int variant = random.Next(rockSprites != null && rockSprites.Length > 0 ? rockSprites.Length : 1);
