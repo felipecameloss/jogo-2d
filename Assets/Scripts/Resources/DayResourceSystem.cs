@@ -2,10 +2,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Mapa determinístico por dia: descarregar uma região não repõe o que foi coletado.
-// Sem colliders: os pontos de coleta não prendem jogador/inimigos durante as waves.
+// Árvores e pedras têm colisão só na base (tronco/pé da pedra): dá para passar atrás da copa.
 public class DayResourceSystem : MonoBehaviour
 {
-    public float cellSize = 5.5f;
+    [Tooltip("Árvore animada (idle) usada como recurso de madeira.")]
+    public GameObject treePrefab;
+    public float treeScale = 1.6f;
+    [Tooltip("Variações de pedra (Aseprite); cada pedra sorteia uma.")]
+    public Sprite[] rockSprites;
+    public float rockScale = 1.6f;
+    [Header("Colisão (tamanho local, antes da escala)")]
+    public Vector2 trunkColliderSize = new Vector2(0.6f, 0.35f);
+    public Vector2 trunkColliderOffset = new Vector2(0f, 0.1f);
+    [Tooltip("Fração da largura/altura do sprite da pedra usada na colisão.")]
+    public Vector2 rockColliderFraction = new Vector2(0.8f, 0.5f);
+    public float cellSize = 6.5f;
     public float collectRange = 1.9f;
     public float collectSeconds = 1.1f;
     public ResourceInventory Inventory { get; private set; }
@@ -21,12 +32,12 @@ public class DayResourceSystem : MonoBehaviour
         public bool Rich;
         public GameObject Object;
         public SpriteRenderer Renderer;
+        public Vector3 BaseScale;
     }
 
     readonly Dictionary<Vector2Int, Node> nodes = new Dictionary<Vector2Int, Node>();
     readonly HashSet<Vector2Int> depleted = new HashSet<Vector2Int>();
     readonly List<Vector2Int> removal = new List<Vector2Int>();
-    readonly Sprite[] sprites = new Sprite[3];
     Node target;
     DayNightCycle cycle;
     PlayerController controller;
@@ -34,8 +45,8 @@ public class DayResourceSystem : MonoBehaviour
     Vector2Int lastCell = new Vector2Int(int.MinValue, int.MinValue);
     int day;
 
-    public static string Label(ResourceKind kind) => kind == ResourceKind.Wood ? "Madeira" : kind == ResourceKind.Stone ? "Pedra" : "Cristal";
-    public static Color Tint(ResourceKind kind) => kind == ResourceKind.Wood ? new Color(0.55f, 0.88f, 0.35f) : kind == ResourceKind.Stone ? new Color(0.78f, 0.83f, 0.93f) : new Color(0.35f, 0.95f, 1f);
+    public static string Label(ResourceKind kind) => kind == ResourceKind.Wood ? "Madeira" : "Pedra";
+    public static Color Tint(ResourceKind kind) => kind == ResourceKind.Wood ? new Color(0.55f, 0.88f, 0.35f) : new Color(0.78f, 0.83f, 0.93f);
 
     void Start()
     {
@@ -46,7 +57,8 @@ public class DayResourceSystem : MonoBehaviour
         controller = gm.Player.GetComponent<PlayerController>();
         Inventory = gm.Player.GetComponent<ResourceInventory>();
         if (!Inventory) Inventory = gm.Player.gameObject.AddComponent<ResourceInventory>();
-        for (int i = 0; i < sprites.Length; i++) sprites[i] = ResourceArt.Create((ResourceKind)i);
+        if (!treePrefab || rockSprites == null || rockSprites.Length == 0)
+            Debug.LogError("[DayResourceSystem] treePrefab/rockSprites não definidos. Regere a cena pelo menu Survivors.");
         day = cycle.DayNumber;
         cycle.OnPeriodChanged += PeriodChanged;
         gameObject.AddComponent<ResourceHUD>().source = this;
@@ -77,8 +89,10 @@ public class DayResourceSystem : MonoBehaviour
         {
             bool empty = depleted.Contains(node.Cell);
             node.Renderer.color = empty ? new Color(0.3f, 0.3f, 0.3f, 0.5f) : Color.white;
-            node.Object.transform.localScale = Vector3.one * (empty ? 0.55f : node.Rich ? 1.25f : 1f);
+            node.Object.transform.localScale = node.BaseScale * (empty ? 0.55f : node.Rich ? 1.25f : 1f);
             float d = ((Vector2)(node.Object.transform.position - player.position)).sqrMagnitude;
+            // O pivô da árvore fica no pé do tronco: dá um pouco mais de alcance.
+            if (node.Kind == ResourceKind.Wood) d /= 1.44f;
             if (!empty && d < distance) { nearest = node; distance = d; }
         }
         if (!playing || cycle.IsNight || (controller && controller.IsDashing))
@@ -92,14 +106,14 @@ public class DayResourceSystem : MonoBehaviour
         target = nearest;
         if (target == null)
         {
-            Prompt = "Explore: árvores, rochas e cristais • Segure E para coletar";
+            Prompt = "Explore: árvores e rochas • Segure E para coletar";
             return;
         }
         target.Renderer.color = Color.Lerp(Color.white, Tint(target.Kind), 0.3f + 0.2f * Mathf.Sin(Time.time * 5f));
         int amount = Yield(target.Kind) * (target.Rich ? 2 : 1);
         Prompt = $"Segure E / X (controle)  •  {Label(target.Kind)} +{amount}" + (target.Rich ? "  •  VEIO RICO!" : "");
         if (!GameInput.CollectHeld()) { Progress = 0; return; }
-        float duration = Mathf.Max(0.1f, collectSeconds) * (target.Kind == ResourceKind.Crystal ? 1.5f : 1f);
+        float duration = Mathf.Max(0.1f, collectSeconds);
         Progress = Mathf.Min(1f, Progress + Time.deltaTime / duration);
         target.Object.transform.localScale *= 1f + Mathf.Sin(Time.time * 30f) * 0.04f;
         if (Progress < 1f) return;
@@ -112,7 +126,7 @@ public class DayResourceSystem : MonoBehaviour
         target = null;
     }
 
-    static int Yield(ResourceKind kind) => kind == ResourceKind.Wood ? 5 : kind == ResourceKind.Stone ? 3 : 2;
+    static int Yield(ResourceKind kind) => kind == ResourceKind.Wood ? 5 : 3;
 
     void RefreshRegion()
     {
@@ -131,23 +145,67 @@ public class DayResourceSystem : MonoBehaviour
             if (nodes.ContainsKey(cell)) continue;
             int seed = unchecked(x * 73856093 ^ y * 19349663 ^ day * 83492791);
             var random = new System.Random(seed);
-            int roll = random.Next(10);
-            var kind = roll < 5 ? ResourceKind.Wood : roll < 8 ? ResourceKind.Stone : ResourceKind.Crystal;
-            var go = new GameObject("Resource_" + kind);
-            go.transform.SetParent(transform, false);
-            go.transform.position = new Vector3((x + 0.25f + (float)random.NextDouble() * 0.5f) * size,
+            // ~45% das células ficam vazias; árvores em ~25% e pedras em ~30%.
+            int roll = random.Next(20);
+            if (roll >= 11) continue;
+            var kind = roll < 5 ? ResourceKind.Wood : ResourceKind.Stone;
+            if (kind == ResourceKind.Wood && !treePrefab) continue;
+            if (kind == ResourceKind.Stone && (rockSprites == null || rockSprites.Length == 0)) continue;
+            var position = new Vector3((x + 0.25f + (float)random.NextDouble() * 0.5f) * size,
                 (y + 0.25f + (float)random.NextDouble() * 0.5f) * size, 0);
-            var renderer = go.AddComponent<SpriteRenderer>();
-            renderer.sprite = sprites[(int)kind];
-            renderer.sortingOrder = 2;
-            nodes.Add(cell, new Node { Cell = cell, Kind = kind, Rich = random.Next(8) == 0, Object = go, Renderer = renderer });
+            if (ChestSystem.Instance && ChestSystem.Instance.IsReserved(position, 3f)) continue;
+            bool rich = random.Next(8) == 0;
+            bool flip = random.Next(2) == 0;
+            int variant = random.Next(rockSprites != null && rockSprites.Length > 0 ? rockSprites.Length : 1);
+            GameObject go;
+            SpriteRenderer renderer;
+            Vector3 baseScale;
+            if (kind == ResourceKind.Wood)
+            {
+                go = Instantiate(treePrefab, transform);
+                go.name = "Resource_Wood";
+                renderer = go.GetComponent<SpriteRenderer>();
+                baseScale = Vector3.one * treeScale;
+            }
+            else
+            {
+                go = new GameObject("Resource_" + kind);
+                go.transform.SetParent(transform, false);
+                renderer = go.AddComponent<SpriteRenderer>();
+                renderer.sprite = rockSprites[variant];
+                baseScale = Vector3.one * rockScale;
+            }
+            go.transform.position = position;
+            go.transform.localScale = baseScale;
+            renderer.flipX = flip;
+            AddCollider(go, renderer, kind, flip);
+            // Mesma camada do jogador, ordenado pela altura (eixo Y).
+            renderer.sortingOrder = 10;
+            renderer.spriteSortPoint = SpriteSortPoint.Pivot;
+            nodes.Add(cell, new Node { Cell = cell, Kind = kind, Rich = rich, Object = go, Renderer = renderer, BaseScale = baseScale });
         }
+    }
+
+    // Colisor estático (sem Rigidbody2D) na base do recurso.
+    void AddCollider(GameObject go, SpriteRenderer renderer, ResourceKind kind, bool flip)
+    {
+        var collider = go.GetComponent<CapsuleCollider2D>();
+        if (!collider) collider = go.AddComponent<CapsuleCollider2D>();
+        collider.direction = CapsuleDirection2D.Horizontal;
+        if (kind == ResourceKind.Wood)
+        {
+            collider.size = trunkColliderSize;
+            collider.offset = trunkColliderOffset;
+            return;
+        }
+        var bounds = renderer.sprite.bounds; // local, relativo ao pivô
+        var size = new Vector2(bounds.size.x * rockColliderFraction.x, bounds.size.y * rockColliderFraction.y);
+        collider.size = size;
+        collider.offset = new Vector2(flip ? -bounds.center.x : bounds.center.x, bounds.min.y + size.y * 0.5f + 0.05f);
     }
 
     void OnDestroy()
     {
         if (cycle) cycle.OnPeriodChanged -= PeriodChanged;
-        foreach (var sprite in sprites)
-            if (sprite) { Destroy(sprite.texture); Destroy(sprite); }
     }
 }
