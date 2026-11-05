@@ -16,6 +16,7 @@ Tudo em `Assets/Scripts/`:
 | `Pickups/` | XP, cura, ímã, ouro | `Pickup` |
 | `Resources/` | Coleta diurna e inventário | `DayResourceSystem`, `ResourceInventory`, `ResourceHUD` |
 | `Chests/` | Baús, chaves, recompensas | `ChestSystem`, `ChestOffer`, `ChestUI`, `ChestArt` |
+| `Camp/` | Acampamento: estruturas, pontos de construção, HUD e arte | `CampSystem`, `BuildSpot`, `Structure`, `CampHUD`, `CampArt` |
 | `UI/` | HUD e level up | `HUD`, `LevelUpPanel` |
 | `FX/` | Partículas, popups, shake | `FxManager`, `FxParticle`, `FxFade`, `FloatingText` |
 | `Audio/` | SFX e música | `AudioManager`, `SfxGenerator` |
@@ -47,7 +48,9 @@ MainMenu → Game (Playing) ⇄ Paused / LevelUp / Chest
 
 **Baús.** Três baús fixos por run, a distâncias crescentes do início. `IsReserved` impede que árvores e rochas nasçam sobre início, baús e chaves. A chave só é gasta quando a recompensa é escolhida.
 
-**Inicialização.** `GameManager.Start` adiciona `DayResourceSystem` e `ChestSystem` se faltarem na cena. `ChestUI` e `ResourceHUD` são criados por código pelos respectivos sistemas.
+**Acampamento.** `CampSystem` cria por código a fogueira, o anel de 16 pontos e 2 pontos de estação. `BuildSpot` conhece a próxima ação e seu custo; `Structure` guarda vida e destruição. Destruir a fogueira chama `GameManager.EndRun(motivo)`. Com ação disponível, o F é do acampamento e `ChestSystem` não abre baú. `IsReserved` mantém a área livre de recursos e decoração.
+
+**Inicialização.** `GameManager.Awake` chama `CampSystem.Ensure`, e `ChestSystem.Awake` também, pois baús são medidos a partir do centro do acampamento. `GameManager.Start` adiciona `DayResourceSystem` e `ChestSystem` se faltarem na cena. `ChestUI` e `ResourceHUD` são criados por código pelos respectivos sistemas.
 
 ## Convenções
 
@@ -60,7 +63,7 @@ MainMenu → Game (Playing) ⇄ Paused / LevelUp / Chest
 
 ## Gerador `SurvivorsSetup`
 
-O menu **Survivors > Gerar sprites, prefabs e cenas** recria `Assets/Generated` e **sobrescreve as duas cenas**. Alterações manuais em cenas ou prefabs gerados são perdidas ao rodá-lo. Valores definidos no gerador, como atributos de inimigos, também ficam salvos nos prefabs: para mudá-los, altere os dois ou confirme qual é usado.
+Durante o Play, **Survivors > Testes** adiciona materiais e causa dano na fogueira. O menu **Survivors > Gerar sprites, prefabs e cenas** recria `Assets/Generated` e **sobrescreve as duas cenas**. Alterações manuais em cenas ou prefabs gerados são perdidas ao rodá-lo. Valores definidos no gerador, como atributos de inimigos, também ficam salvos nos prefabs: para mudá-los, altere os dois ou confirme qual é usado.
 
 ## Como estender
 
@@ -68,4 +71,5 @@ O menu **Survivors > Gerar sprites, prefabs e cenas** recria `Assets/Generated` 
 - **Arma:** herde de `Weapon` (a `AuraWeapon` é a mais simples), crie o prefab e adicione em `GameSystems > UpgradeManager > Available Weapons`.
 - **Upgrade de atributo:** uma linha `AddStat(...)` em `UpgradeManager.RollOptions`.
 - **Recompensa de baú:** novo valor em `ChestReward`, com caso em `ChestOffer.Create` e `Apply`. O sorteio em `ChestSystem.Awake` usa `% 7` fixo: atualize junto.
+- **Arte do acampamento:** coloque `heart`, `fence`, `wall`, `gate`, `station_weapon`, `station_armor` ou `spot` em `Assets/Art/Resources/Camp/`; `CampArt` carrega sem mudar código e usa placeholder se faltar.
 - **Som:** arraste o `AudioClip` no `AudioManager`; sem clip, ele usa o som gerado.

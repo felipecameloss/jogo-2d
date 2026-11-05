@@ -9,13 +9,13 @@ public class ChestSystem : MonoBehaviour
     public static ChestSystem Instance { get; private set; }
 
     [Header("Baús")]
-    public float firstChestDistance = 5f;
+    public float firstChestDistance = 9f;
     public float chestSpacing = 3.5f;
     public float interactionRange = 2.2f;
 
     [Header("Chaves")]
     [Tooltip("A primeira chave nasce garantida a essa distância do início.")]
-    public float firstKeyDistance = 7f;
+    public float firstKeyDistance = 10f;
     public float keyCellSize = 14f;
     [Range(0f, 1f)] public float keyChancePerCell = 0.2f;
     public float keyPickupRange = 0.9f;
@@ -62,7 +62,9 @@ public class ChestSystem : MonoBehaviour
         player = FindAnyObjectByType<PlayerStats>();
         if (!player) { enabled = false; return; }
         controller = player.GetComponent<PlayerController>();
-        spawn = player.transform.position;
+        // Baús e chaves são medidos a partir do acampamento, para ficarem fora do anel.
+        var camp = CampSystem.Ensure(gameObject);
+        spawn = camp ? camp.Center : player.transform.position;
         runSeed = Random.Range(int.MinValue, int.MaxValue);
         var random = new System.Random(runSeed);
         keySprite = ChestArt.Key();
@@ -180,7 +182,8 @@ public class ChestSystem : MonoBehaviour
             ? $"[F / Y] Abrir {nearest.Name} • usa 1 chave"
             : $"{nearest.Name} trancado • encontre uma chave pelo mapa";
         if (GameManager.Instance.State != GameState.Playing || (controller && controller.IsDashing)) return;
-        if (GameInput.InteractPressed()) TryOpenNearest();
+        bool campAction = CampSystem.Instance && CampSystem.Instance.HasTarget;
+        if (!campAction && GameInput.InteractPressed()) TryOpenNearest();
     }
 
     // Chaves só aparecem enquanto ainda houver baú fechado sem chave guardada para ele.

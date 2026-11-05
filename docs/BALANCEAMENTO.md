@@ -100,13 +100,25 @@ XP para o próximo nível: `5 + 8 × (nível − 1)`. São 333 XP até o nível 
 | Passo Rápido | −15% recarga do dash | 5 |
 | Fôlego Extra | +1 carga de dash | 2 |
 
+### Acampamento
+
+| Estrutura | Custo | Vida |
+|---|---|---|
+| Fogueira | Inicial | 300 |
+| Cerca | 6 madeira | 60 |
+| Muro (melhoria da cerca) | 6 pedra | 150 |
+| Portão | 8 madeira | 100 |
+| Estação | 30 madeira e 20 pedra | 120 |
+
+Anel com 12 pontos de muralha e 4 de portão, em raio 5,5. Área livre de recursos em raio 7.
+
 ### Recursos, ouro e baús
 
 - **Coleta:** 1,1 s segurando E, alcance 1,9. Madeira rende 5, pedra 3. Pontos ricos (1 em 8) rendem o dobro.
 - **Distribuição:** células de 6,5 unidades; 25% têm árvore, 30% têm pedra, 45% ficam vazias. Tudo renova ao amanhecer.
 - **Drops por inimigo:** ouro 20% (1–2, com +20% por noite após a primeira), cura 1%, ímã 0,4%.
-- **Baús:** 3 por run, a 5; 8,5 e 12 unidades do início. Cada um oferece 3 recompensas de força ×1, ×2 e ×3, conforme o baú, e custa 1 chave.
-- **Chaves:** uma garantida a 7 unidades do início; demais em 20% das células de 14 unidades, somente enquanto faltarem chaves para os baús fechados.
+- **Baús:** 3 por run, a 9; 12,5 e 16 unidades do centro do acampamento. Cada um oferece 3 recompensas de força ×1, ×2 e ×3, conforme o baú, e custa 1 chave.
+- **Chaves:** uma garantida a 10 unidades do acampamento; demais em 20% das células de 14 unidades, somente enquanto faltarem chaves para os baús fechados.
 
 | Recompensa | Por ponto de força |
 |---|---|
@@ -143,4 +155,5 @@ Registre aqui cada sessão: data, quem jogou, versão, noite alcançada, causa d
 
 | Data | Valor | De → Para | Motivo |
 |---|---|---|---|
-| — | — | — | — |
+| 05/11/2026 | Distância do primeiro baú | 5 → 9 | Abrir espaço para o acampamento |
+| 05/11/2026 | Distância da primeira chave | 7 → 10 | Abrir espaço para o acampamento |

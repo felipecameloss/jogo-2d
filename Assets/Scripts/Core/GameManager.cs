@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
         Time.timeScale = 1f;
         Player = FindAnyObjectByType<PlayerStats>();
+        if (Player) CampSystem.Ensure(gameObject);
         if (pausePanel) pausePanel.SetActive(false);
         if (gameOverPanel) gameOverPanel.SetActive(false);
     }
@@ -111,7 +112,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public void EndRun()
+    public void EndRun(string reason = null)
     {
         if (State == GameState.GameOver) return;
         State = GameState.GameOver;
@@ -122,7 +123,7 @@ public class GameManager : MonoBehaviour
         var xp = Player ? Player.GetComponent<PlayerExperience>() : null;
         var cycle = DayNightCycle.Instance;
         if (gameOverTitle)
-            gameOverTitle.text = cycle && cycle.IsNight ? $"VOCÊ CAIU NA NOITE {cycle.NightNumber}..." : "VOCÊ CAIU...";
+            gameOverTitle.text = !string.IsNullOrEmpty(reason) ? reason : cycle && cycle.IsNight ? $"VOCÊ CAIU NA NOITE {cycle.NightNumber}..." : "VOCÊ CAIU...";
         if (gameOverStats)
         {
             string nights = cycle ? $"\nNoites enfrentadas: {cycle.NightNumber}" : "";
