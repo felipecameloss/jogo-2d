@@ -29,8 +29,17 @@ public class ChestSystem : MonoBehaviour
     public string Heading => selected == null ? "" : selected.Name;
     public IReadOnlyList<ChestOffer> Offers => selected == null ? null : selected.Offers;
     public bool IsOpen => selected != null && GameManager.Instance && GameManager.Instance.State == GameState.Chest;
+    // A janela espera a animação terminar; antes disso cobriria o baú abrindo.
+    public bool ShowOffers => IsOpen && selected.Lid == Lid.Open;
     public ResourceInventory Inventory { get; private set; }
     public int ClosedChests { get { int n = 0; foreach (var c in chests) if (!c.Opened) n++; return n; } }
+
+    // Quadros de chest.png: 0 fechado, 1 a 11 abrindo, 12 a 19 aberto em loop.
+    const int FirstOpenFrame = 12;
+    const float OpeningFrameTime = 0.07f;
+    const float OpenFrameTime = 0.13f;
+
+    enum Lid { Closed, Opening, Open, Closing }
 
     class Chest
     {
@@ -39,6 +48,9 @@ public class ChestSystem : MonoBehaviour
         public string Name;
         public bool Opened;
         public ChestOffer[] Offers;
+        public Lid Lid;
+        public int Frame;
+        public float Timer;
     }
 
     readonly List<Chest> chests = new List<Chest>();
@@ -51,6 +63,7 @@ public class ChestSystem : MonoBehaviour
     PlayerStats player;
     PlayerController controller;
     Sprite keySprite;
+    Sprite[] chestFrames;
     Vector3 spawn, starterKeyPosition;
     Vector2Int lastCell = new Vector2Int(int.MaxValue, int.MaxValue);
     int runSeed;
@@ -69,6 +82,7 @@ public class ChestSystem : MonoBehaviour
         var random = new System.Random(runSeed);
         keySprite = ChestArt.Key();
         ownedSprites.Add(keySprite);
+        chestFrames = ChestArt.ChestFrames();
 
         // Baús em direções diferentes, cada vez mais longe (e melhores).
         baseAngle = (float)random.NextDouble() * 360f;
@@ -95,6 +109,12 @@ public class ChestSystem : MonoBehaviour
         if (!Inventory) Inventory = player.gameObject.AddComponent<ResourceInventory>();
         gameObject.AddComponent<ChestUI>().source = this;
         keys[StarterKey] = SpawnKey(starterKeyPosition);
+    }
+
+    public void GetClosedChests(List<Vector3> positions)
+    {
+        foreach (var chest in chests)
+            if (!chest.Opened) positions.Add(chest.Object.transform.position);
     }
 
     public bool IsNearChest(Vector3 position, float radius)
@@ -138,9 +158,8 @@ public class ChestSystem : MonoBehaviour
         go.transform.SetParent(transform, false);
         go.transform.position = position;
         var renderer = go.AddComponent<SpriteRenderer>();
-        var sprite = ChestArt.Chest(tier);
-        ownedSprites.Add(sprite);
-        renderer.sprite = sprite;
+        renderer.sprite = chestFrames[0];
+        renderer.color = ChestArt.Tint(tier);
         renderer.sortingOrder = 10;
         renderer.spriteSortPoint = SpriteSortPoint.Pivot;
         // Sem Rigidbody2D: colisor estático, bloqueia jogador e inimigos.
@@ -165,6 +184,7 @@ public class ChestSystem : MonoBehaviour
     void Update()
     {
         if (!player || Inventory == null) return;
+        foreach (var chest in chests) Animate(chest);
         RefreshKeys();
         UpdateKeys();
         UpdateDirection();
@@ -184,6 +204,30 @@ public class ChestSystem : MonoBehaviour
         if (GameManager.Instance.State != GameState.Playing || (controller && controller.IsDashing)) return;
         bool campAction = CampSystem.Instance && CampSystem.Instance.HasTarget;
         if (!campAction && GameInput.InteractPressed()) TryOpenNearest();
+    }
+
+    // Usa tempo não escalado: o jogo já está pausado enquanto o baú abre.
+    void Animate(Chest chest)
+    {
+        if (chest.Lid == Lid.Closed) return;
+        chest.Timer += Time.unscaledDeltaTime;
+        float frameTime = chest.Lid == Lid.Open ? OpenFrameTime : OpeningFrameTime;
+        if (chest.Timer < frameTime) return;
+        chest.Timer -= frameTime;
+        switch (chest.Lid)
+        {
+            case Lid.Opening:
+                if (++chest.Frame >= FirstOpenFrame) chest.Lid = Lid.Open;
+                break;
+            case Lid.Open:
+                if (++chest.Frame >= chestFrames.Length) chest.Frame = FirstOpenFrame;
+                break;
+            case Lid.Closing:
+                chest.Frame = Mathf.Max(0, chest.Frame - 1);
+                if (chest.Frame == 0) chest.Lid = Lid.Closed;
+                break;
+        }
+        chest.Renderer.sprite = chestFrames[chest.Frame];
     }
 
     // Chaves só aparecem enquanto ainda houver baú fechado sem chave guardada para ele.
@@ -257,6 +301,8 @@ public class ChestSystem : MonoBehaviour
         if (nearest == null || nearest.Opened || player.IsDead || Inventory.Keys <= 0) return false;
         if (!GameManager.Instance.EnterChest()) return false;
         selected = nearest;
+        selected.Lid = Lid.Opening;
+        selected.Timer = 0f;
         AudioManager.Play(Sfx.Select, 0.5f);
         return true;
     }
@@ -268,8 +314,6 @@ public class ChestSystem : MonoBehaviour
         var offer = selected.Offers[index];
         offer.Apply(player);
         selected.Opened = true;
-        selected.Renderer.color = new Color(0.45f, 0.45f, 0.45f, 0.7f);
-        selected.Object.transform.localScale = new Vector3(1, 0.6f, 1);
         AudioManager.Play(Sfx.LevelUp, 0.6f);
         FxManager.Burst(selected.Object.transform.position, new Color(1f, 0.8f, 0.35f), 14, 4f);
         FxManager.Popup(player.transform.position + Vector3.up, offer.Title, new Color(1f, 0.85f, 0.35f));
@@ -279,6 +323,13 @@ public class ChestSystem : MonoBehaviour
 
     public void Close()
     {
+        // Desistiu da recompensa: o baú volta a fechar, sem passar pelo brilho do loop.
+        if (selected != null && !selected.Opened)
+        {
+            selected.Lid = Lid.Closing;
+            selected.Frame = Mathf.Min(selected.Frame, FirstOpenFrame - 1);
+            selected.Timer = 0f;
+        }
         selected = null;
         if (GameManager.Instance) GameManager.Instance.ExitChest();
     }

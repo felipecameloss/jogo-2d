@@ -28,7 +28,7 @@ public static class CampArt
         return frames;
     }
 
-    static Sprite[] Slice(Texture2D texture, Vector2 pivot, float pixelsPerUnit)
+    public static Sprite[] Slice(Texture2D texture, Vector2 pivot, float pixelsPerUnit)
     {
         int size = texture.height;
         var frames = new Sprite[Mathf.Max(1, texture.width / size)];

@@ -65,7 +65,7 @@ public class ChestUI : MonoBehaviour
     void Update()
     {
         if (!source || !GameManager.Instance || !modal) return;
-        bool open = source.IsOpen;
+        bool open = source.ShowOffers;
         modal.SetActive(open);
         bool playing = GameManager.Instance.State == GameState.Playing;
         nearby.gameObject.SetActive(playing);
