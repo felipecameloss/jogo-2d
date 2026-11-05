@@ -17,7 +17,7 @@ Tudo em `Assets/Scripts/`:
 | `Resources/` | Coleta diurna e inventário | `DayResourceSystem`, `ResourceInventory`, `ResourceHUD` |
 | `Chests/` | Baús, chaves, recompensas | `ChestSystem`, `ChestOffer`, `ChestUI`, `ChestArt` |
 | `Camp/` | Acampamento: estruturas, pontos de construção, HUD e arte | `CampSystem`, `BuildSpot`, `Structure`, `CampHUD`, `CampArt` |
-| `UI/` | HUD e level up | `HUD`, `LevelUpPanel` |
+| `UI/` | HUD, minimapa e level up | `HUD`, `Minimap`, `LevelUpPanel` |
 | `FX/` | Partículas, popups, shake | `FxManager`, `FxParticle`, `FxFade`, `FloatingText` |
 | `Audio/` | SFX e música | `AudioManager`, `SfxGenerator` |
 | `Editor/` | Gerador do protótipo | `SurvivorsSetup` |
@@ -46,11 +46,11 @@ MainMenu → Game (Playing) ⇄ Paused / LevelUp / Chest
 
 **Mundo procedural.** `DayResourceSystem`, `ChestSystem` e `DecorationScatter` dividem o mapa em células e usam sementes determinísticas por posição. Recursos também usam o dia; chaves usam a semente da run. Assim, sair e voltar a uma região reproduz o mesmo conteúdo, e o que foi consumido fica em conjuntos (`depleted`, `pickedKeys`).
 
-**Baús.** Três baús fixos por run, a distâncias crescentes do início. `IsReserved` impede que árvores e rochas nasçam sobre início, baús e chaves. A chave só é gasta quando a recompensa é escolhida.
+**Baús.** Três baús fixos por run, a distâncias crescentes do início. `IsReserved` impede que árvores e rochas nasçam sobre início, baús e chaves. A chave só é gasta quando a recompensa é escolhida. Ao abrir, o jogo pausa e a animação roda em tempo não escalado; `ChestUI` só mostra a janela depois dela (`ShowOffers`), porque o véu da janela cobriria o baú. Desistir toca a animação ao contrário. A arte vem de `Resources/Chests/chest.png`, e não pode ir para `ownedSprites`, que destrói a textura.
 
 **Acampamento.** `CampSystem` cria por código a fogueira, o anel de 16 pontos e 2 pontos de estação. `BuildSpot` conhece a próxima ação e seu custo; `Structure` guarda vida e destruição. Destruir a fogueira chama `GameManager.EndRun(motivo)`. Com ação disponível, o F é do acampamento e `ChestSystem` não abre baú. `IsReserved` mantém a área livre de recursos e decoração.
 
-**Inicialização.** `GameManager.Awake` chama `CampSystem.Ensure`, e `ChestSystem.Awake` também, pois baús são medidos a partir do centro do acampamento. `GameManager.Start` adiciona `DayResourceSystem` e `ChestSystem` se faltarem na cena. `ChestUI` e `ResourceHUD` são criados por código pelos respectivos sistemas.
+**Inicialização.** `GameManager.Awake` chama `CampSystem.Ensure`, e `ChestSystem.Awake` também, pois baús são medidos a partir do centro do acampamento. `GameManager.Start` adiciona `DayResourceSystem` e `ChestSystem` se faltarem na cena. `GameManager.Start` também adiciona `Minimap`. `ChestUI` e `ResourceHUD` são criados por código pelos respectivos sistemas.
 
 ## Convenções
 

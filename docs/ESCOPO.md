@@ -30,6 +30,7 @@ Sem negociação; ver `RUBRICA.md`.
 - Mapa infinito com decoração
 - Menu principal, pausa, game over, reinício
 - HUD
+- Minimapa de orientação, sem chaves nem inimigos (pedido em 05/11/2026; nada saiu do escopo por ele)
 
 ### Núcleo aprovado para a entrega
 

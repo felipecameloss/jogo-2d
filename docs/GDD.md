@@ -87,7 +87,8 @@ Valores detalhados em `BALANCEAMENTO.md`.
 
 ### 1.3 Interface
 
-- **HUD:** vida, XP, tempo, relógio do dia, ouro, materiais, chaves, direção do baú mais próximo e avisos de interação.
+- **HUD:** vida, XP, tempo, relógio do dia, ouro, materiais, chaves, direção do baú mais próximo, minimapa e avisos de interação.
+- **Minimapa:** radar centrado no jogador, com alcance fixo, que mostra a fogueira e os baús fechados; o que está além do alcance fica preso na borda, indicando a direção. Chaves e inimigos ficam de fora para manter a exploração.
 - **Menus:** principal, pausa, level up, baú e game over. Ainda não há opções.
 - **Feedback no mundo:** clarão e escala ao acertar; números de dano; tela tremendo e jogador piscando ao sofrer dano; recursos esgotados acinzentados; chaves pulsando; escuridão à noite com luz em volta do jogador.
 - **Som:** SFX gerados por código, ainda placeholder. **Sem música.**
@@ -114,6 +115,7 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
+| 05/11/2026 | Minimapa de orientação na HUD, com fogueira e baús fechados, sem chaves nem inimigos. | Evitar que o jogador se perca no mapa infinito sem tirar a busca por chaves |
 | 05/11/2026 | Level up deixa de dar armas; armas ficam medievais, sem magia, e serão de 4 a 6 em vez de 10. | Dar papel próprio às estações e reduzir o trabalho de arte |
 | 05/11/2026 | Conceito definido: defesa de um acampamento medieval, com construção, resgate de pessoas e estações de trabalho. | Dar propósito ao dia e aos recursos, e identidade ao jogo |
 | 04/11/2026 | Removidos mercador, compra de baús com ouro, renovação diária de baús e cristal. Baús passam a ser 3 por run, abertos com chaves encontradas no mapa. | Funcionalidades fora do que foi combinado para o jogo |

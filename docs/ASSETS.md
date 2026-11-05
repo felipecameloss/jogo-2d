@@ -16,11 +16,13 @@ Inventário dos assets do jogo. A rubrica exige referências e créditos no `REA
 
 | Arquivo | Uso | Origem | Autoria e licença |
 |---|---|---|---|
-| `character_men.png`, `character_women.png` | Jogador animado em 8 direções | Aseprite (`basic_sprites_character_*.ase`) | **A confirmar** |
+| `player.png` | Jogador animado em 8 direções, 192 quadros de 32 px | Aseprite (`player.ase`) | Pedro Nadotti (autoral) |
+| `character_women.png` | Sem uso no jogo; só é importada pelo gerador | Aseprite (`basic_sprites_character_women.ase`) | **A confirmar** |
 | `tree.png` | Árvore coletável | Aseprite (`tree_topdown.ase`) | **A confirmar** |
 | `bush_a.png`, `bush_b.png` | Decoração | Aseprite (`bush_*_topdown.ase`) | **A confirmar** |
 | `rock_1_small` a `rock_5_cluster.png` | Rochas coletáveis | Aseprite (`rock_*.ase`) | **A confirmar** |
 | `Resources/Camp/heart.png` | Fogueira animada, 16 quadros de 32 px | Aseprite (`campfire.ase`) | **A confirmar** |
+| `Resources/Chests/chest.png` | Baú animado, 20 quadros de 32 px | Aseprite (`chest.ase`) | **A confirmar** |
 
 ### Placeholders por substituir
 
@@ -29,7 +31,7 @@ Inventário dos assets do jogo. A rubrica exige referências e créditos no `REA
 | Inimigos (Slime, Bat, Golem) | Formas geradas e coloridas | Sprites finais animados |
 | Armas e projéteis | Formas geradas | Sprites finais ou efeitos |
 | XP, ouro, cura, ímã | Formas geradas | Sprites finais |
-| Baús e chave | Pixel art gerada por código em `ChestArt` | Avaliar se mantém |
+| Chave | Pixel art gerada por código em `ChestArt` | Avaliar se mantém |
 | Cerca, muro, portão, estações e marca de ponto | Gerados em `CampArt` | Sprites em `Assets/Art/Resources/Camp/` |
 | Chão | Textura gerada em `Assets/Generated/Sprites` | Sprite ou tileset final |
 | SFX | Sons 8-bit de `SfxGenerator` | `AudioClip` final no `AudioManager` |

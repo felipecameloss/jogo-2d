@@ -27,6 +27,11 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 - Pontos esgotados ficam menores e acinzentados, e se renovam ao amanhecer.
 - Árvores e rochas têm colisão na base.
 
+### Minimapa
+
+- O radar no canto da tela fica centrado em você (branco) e mostra a fogueira (laranja) e os baús fechados (losangos dourados).
+- O que está fora do alcance fica na borda, mais apagado, apontando a direção. Chaves não aparecem: é preciso procurá-las.
+
 ### Baús e chaves
 
 - Três baús ficam perto do início da run, cada um mais distante e mais forte. Eles não voltam depois de abertos.
@@ -101,5 +106,6 @@ File > Build Profiles > Web > Switch Platform > Build. Suba o .zip da pasta gera
 - Equipe: ver [Contribuindo](docs/CONTRIBUINDO.md).
 - Código-base do protótipo gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
 - Fonte: LegacyRuntime (fonte padrão do Unity).
-- Personagens, árvore, arbustos, rochas e fogueira: feitos no Aseprite (autoria a confirmar em [Assets](docs/ASSETS.md)).
+- Jogador: sprites feitos no Aseprite por Pedro Nadotti.
+- Árvore, arbustos, rochas, fogueira e baú: feitos no Aseprite (autoria a confirmar em [Assets](docs/ASSETS.md)).
 - Demais sprites e sons: placeholders gerados por código.
