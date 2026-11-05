@@ -88,15 +88,16 @@ public class PlayerController : MonoBehaviour
         dashDirection = MoveInput.sqrMagnitude > 0.01f ? MoveInput.normalized : LastDirection;
         dashTimer = dashDuration;
         afterimageTimer = 0f;
-        // Durante o dash o jogador atravessa os inimigos (e fica invencível, ver PlayerStats).
-        if (body) body.isTrigger = true;
+        // Durante o dash o jogador atravessa os inimigos (e fica invencível, ver PlayerStats),
+        // mas continua parando em muros, árvores e rochas.
+        if (body) body.excludeLayers = LayerMask.GetMask("Enemy");
         AudioManager.Play(Sfx.Select, 0.5f, 0.2f);
     }
 
     void EndDash()
     {
         dashTimer = 0f;
-        if (body) body.isTrigger = false;
+        if (body) body.excludeLayers = 0;
     }
 
     void SpawnAfterimage()

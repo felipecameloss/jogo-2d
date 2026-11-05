@@ -9,9 +9,9 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 | Ação | Teclado | Controle |
 |---|---|---|
 | Mover | WASD / Setas | Analógico |
-| Dash (invencível durante o movimento) | Left Shift | Indisponível |
+| Dash (invencível, atravessa monstros) | Left Shift | Indisponível |
 | Coletar materiais (segurar) | E | Botão oeste (X no Xbox, quadrado no PlayStation) |
-| Construir e abrir baú | F | Botão norte (Y no Xbox, triângulo no PlayStation) |
+| Construir, reparar e abrir baú | F | Botão norte (Y no Xbox, triângulo no PlayStation) |
 | Escolher upgrade ou recompensa | 1, 2, 3 ou clique | Não testado |
 | Pausar | Esc / P | Indisponível |
 
@@ -39,6 +39,9 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 
 - Você começa ao lado da fogueira, no centro do acampamento. **Se ela se apagar, a run termina**; a barra fica no topo da tela.
 - Perto de uma marca no chão, aperte **F** para construir cerca ou portão. Depois, F transforma a cerca em muro. O custo aparece na tela.
+- F também repara estruturas danificadas, inclusive a fogueira, a qualquer hora. Estruturas escurecem conforme levam dano.
+- Portões bloqueiam monstros e deixam você passar. O dash atravessa monstros, mas não construções, árvores ou rochas.
+- Monstros vão até a fogueira e destroem o que estiver no caminho. Longe da base, você é caçado enquanto ela é atacada. Os danos continuam após o amanhecer.
 - Estruturas destruídas deixam o ponto vazio, sem devolver materiais. Os pontos de estação abrem quando as pessoas forem resgatadas.
 
 ### Ouro

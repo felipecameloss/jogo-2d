@@ -6,6 +6,7 @@ public enum SpotKind { Heart, Wall, Gate, WeaponStation, ArmorStation }
 public class BuildSpot : MonoBehaviour
 {
     public const int FenceWood = 6, WallStone = 6, GateWood = 8, StationWood = 30, StationStone = 20;
+    public const float HealthPerMaterial = 10f;
     public const float FenceHealth = 60f, WallHealth = 150f, GateHealth = 100f, StationHealth = 120f;
 
     public SpotKind Kind { get; private set; }
@@ -42,6 +43,14 @@ public class BuildSpot : MonoBehaviour
         label = "";
         if (Current)
         {
+            if (Current.IsDamaged)
+            {
+                int cost = Mathf.CeilToInt(Current.Missing / HealthPerMaterial);
+                if (Current.Kind == StructureKind.Wall) stone = cost;
+                else wood = cost;
+                label = "Reparar";
+                return true;
+            }
             if (Current.Kind != StructureKind.Fence) return false;
             stone = WallStone;
             label = "Reforçar com muro";
@@ -75,11 +84,12 @@ public class BuildSpot : MonoBehaviour
     {
         if (Locked || !bag || !NextCost(out int wood, out int stone, out _)) return false;
         if (!bag.CanAfford(wood, stone)) { Warn("Materiais insuficientes"); return false; }
-        if (Kind != SpotKind.Gate && PlayerOnSpot()) { Warn("Saia do local para construir"); return false; }
+        if (!Current && Kind != SpotKind.Gate && PlayerOnSpot()) { Warn("Saia do local para construir"); return false; }
         if (!bag.TrySpend(wood, stone)) return false;
 
-        if (Current) Replace(StructureKind.Wall, "wall", WallHealth);
-        else Create();
+        if (!Current) Create();
+        else if (Current.IsDamaged) Current.RepairFull();
+        else Replace(StructureKind.Wall, "wall", WallHealth);
         FxManager.Burst(transform.position, new Color(0.9f, 0.75f, 0.45f), 10, 3f);
         AudioManager.Play(Sfx.Select, 0.8f);
         return true;
@@ -92,7 +102,11 @@ public class BuildSpot : MonoBehaviour
         var renderer = go.AddComponent<SpriteRenderer>();
         renderer.sortingOrder = 10;
         renderer.spriteSortPoint = SpriteSortPoint.Pivot;
-        go.AddComponent<BoxCollider2D>().size = size; // sem Rigidbody2D: colisor estático
+        var box = go.AddComponent<BoxCollider2D>(); // sem Rigidbody2D: colisor estático
+        box.size = size;
+        // Portão: bloqueia monstros e deixa o jogador passar, então ninguém fica preso na base.
+        if (Kind == SpotKind.Gate && CampSystem.Instance && CampSystem.Instance.PlayerCollider)
+            Physics2D.IgnoreCollision(box, CampSystem.Instance.PlayerCollider);
         Current = go.AddComponent<Structure>();
         Current.OnDestroyed += StructureDestroyed;
         mark.enabled = false;

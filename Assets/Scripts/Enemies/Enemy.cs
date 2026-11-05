@@ -28,11 +28,21 @@ public class Enemy : MonoBehaviour
     [Tooltip("Ouro extra por noite: na noite N o valor é multiplicado por 1 + (N - 1) x isso.")]
     public float goldBonusPerNight = 0.2f;
 
-    [Tooltip("Se ficar mais longe que isso do jogador, reaparece do outro lado (como no Vampire Survivors).")]
+    [Tooltip("Se ficar mais longe que isso do alvo, reaparece do outro lado.")]
     public float relocateDistance = 22f;
+
+    [Header("Ataque à base")]
+    [Tooltip("Persegue o jogador se ele estiver a essa distância; senão, vai até a fogueira.")]
+    public float aggroRadius = 7f;
+    [Tooltip("Segundos entre golpes em construções.")]
+    public float structureHitInterval = 2f;
+    [Tooltip("Fração do dano de contato aplicada em construções.")]
+    [Range(0f, 1f)] public float structureDamageFactor = 0.5f;
 
     public bool IsDead { get; private set; }
     public bool IsElite { get; private set; }
+    // Nasceu perto do jogador longe da base: persegue só ele, sem desviar para a fogueira.
+    public bool HuntsPlayer { get; private set; }
 
     float health;
     Rigidbody2D rb;
@@ -41,7 +51,16 @@ public class Enemy : MonoBehaviour
     Vector3 baseScale;
     float flashTimer;
     Vector2 knockbackVelocity;
+    Transform player;
+    Transform heart;
     Transform target;
+    float retargetTimer;
+    float nextStructureHit;
+    float lastStructureContact;
+    Vector2 stuckCheckPosition;
+    float stuckCheckTimer = 1f;
+    float sidestepTimer;
+    float sidestepSign = 1f;
     float slowTimer;
     float slowFactor = 1f;
 
@@ -50,6 +69,8 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        int layer = LayerMask.NameToLayer("Enemy");
+        if (layer >= 0) gameObject.layer = layer;
         sr = GetComponentInChildren<SpriteRenderer>();
         baseColor = sr.color;
         baseScale = transform.localScale;
@@ -61,12 +82,25 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        if (GameManager.Instance && GameManager.Instance.Player) target = GameManager.Instance.Player.transform;
+        if (GameManager.Instance && GameManager.Instance.Player) player = GameManager.Instance.Player.transform;
+        var camp = CampSystem.Instance;
+        if (camp && camp.Heart) heart = camp.Heart.transform;
+        ChooseTarget();
+        if (rb) stuckCheckPosition = rb.position;
+    }
+
+    void ChooseTarget()
+    {
+        target = player;
+        if (HuntsPlayer || !heart) return;
+        bool playerNear = player && ((Vector2)(player.position - transform.position)).sqrMagnitude <= aggroRadius * aggroRadius;
+        if (!playerNear) target = heart;
     }
 
     // Chamado pelo spawner logo depois de instanciar.
-    public void Init(float healthMultiplier, bool elite)
+    public void Init(float healthMultiplier, bool elite, bool huntsPlayer = false)
     {
+        HuntsPlayer = huntsPlayer;
         maxHealth *= healthMultiplier;
         if (elite)
         {
@@ -89,18 +123,47 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (IsDead || !target) return;
-
-        Vector2 toPlayer = (Vector2)target.position - rb.position;
-        if (toPlayer.sqrMagnitude > relocateDistance * relocateDistance)
+        if (IsDead) return;
+        retargetTimer -= Time.fixedDeltaTime;
+        if (retargetTimer <= 0f || !target)
         {
-            rb.position = (Vector2)target.position + toPlayer.normalized * (relocateDistance * 0.7f);
+            retargetTimer = 0.25f;
+            ChooseTarget();
+        }
+        if (!target) return;
+
+        Vector2 toTarget = (Vector2)target.position - rb.position;
+        if (toTarget.sqrMagnitude > relocateDistance * relocateDistance)
+        {
+            rb.position = (Vector2)target.position + toTarget.normalized * (relocateDistance * 0.7f);
             return;
         }
 
         float speed = slowTimer > 0f ? moveSpeed * slowFactor : moveSpeed;
-        rb.linearVelocity = toPlayer.normalized * speed + knockbackVelocity;
+        rb.linearVelocity = MoveDirection(toTarget) * speed + knockbackVelocity;
         knockbackVelocity = Vector2.MoveTowards(knockbackVelocity, Vector2.zero, 25f * Time.fixedDeltaTime);
+    }
+
+    // Sem pathfinding: anda reto e, se ficar parado contra árvore ou baú, desvia de lado por um instante.
+    Vector2 MoveDirection(Vector2 toTarget)
+    {
+        Vector2 direction = toTarget.normalized;
+        stuckCheckTimer -= Time.fixedDeltaTime;
+        if (stuckCheckTimer <= 0f)
+        {
+            stuckCheckTimer = 1f;
+            bool attacking = Time.time - lastStructureContact < 0.5f;
+            bool arrived = toTarget.sqrMagnitude < 2.25f;
+            if (!attacking && !arrived && (rb.position - stuckCheckPosition).sqrMagnitude < 0.04f)
+            {
+                sidestepTimer = 0.6f;
+                sidestepSign = Random.value < 0.5f ? -1f : 1f;
+            }
+            stuckCheckPosition = rb.position;
+        }
+        if (sidestepTimer <= 0f) return direction;
+        sidestepTimer -= Time.fixedDeltaTime;
+        return new Vector2(-direction.y, direction.x) * sidestepSign;
     }
 
     void Update()
@@ -159,7 +222,17 @@ public class Enemy : MonoBehaviour
     void OnCollisionStay2D(Collision2D collision)
     {
         if (IsDead) return;
-        if (collision.gameObject.TryGetComponent(out PlayerStats player)) player.TakeDamage(contactDamage);
+        if (collision.gameObject.TryGetComponent(out PlayerStats stats))
+        {
+            stats.TakeDamage(contactDamage);
+            return;
+        }
+        // Estruturas não têm Rigidbody2D: evita procurar componente a cada contato entre inimigos.
+        if (collision.rigidbody || !collision.gameObject.TryGetComponent(out Structure structure)) return;
+        lastStructureContact = Time.time;
+        if (Time.time < nextStructureHit) return;
+        nextStructureHit = Time.time + structureHitInterval;
+        structure.TakeDamage(contactDamage * structureDamageFactor);
     }
 
     void DropGold(Vector3 pos)
