@@ -112,6 +112,11 @@ XP para o próximo nível: `5 + 8 × (nível − 1)`. São 333 XP até o nível 
 
 Anel com 12 pontos de muralha e 4 de portão, em raio 5,5. Área livre de recursos em raio 7.
 
+- **Reparo:** 1 material a cada 10 de vida faltando, arredondado para cima. Muro usa pedra; as demais, madeira.
+- **Dano de monstros em estruturas:** 50% do dano de contato, a cada 2 s, por monstro.
+- **Alvo:** o jogador a até 7 unidades; senão, a fogueira.
+- **Jogador a mais de 15 unidades da fogueira:** metade dos monstros nasce a 16 unidades dela; o resto caça o jogador.
+
 ### Recursos, ouro e baús
 
 - **Coleta:** 1,1 s segurando E, alcance 1,9. Madeira rende 5, pedra 3. Pontos ricos (1 em 8) rendem o dobro.
@@ -155,5 +160,6 @@ Registre aqui cada sessão: data, quem jogou, versão, noite alcançada, causa d
 
 | Data | Valor | De → Para | Motivo |
 |---|---|---|---|
+| 05/11/2026 | Dano em estruturas | 100% a cada 1 s → 50% a cada 2 s | Em teste automático, 15 Slimes apagariam a fogueira em segundos. Com anel de cercas e sem jogador, ela resistiu 75 s na Noite 1 |
 | 05/11/2026 | Distância do primeiro baú | 5 → 9 | Abrir espaço para o acampamento |
 | 05/11/2026 | Distância da primeira chave | 7 → 10 | Abrir espaço para o acampamento |

@@ -25,6 +25,8 @@ Sem negociação; ver `RUBRICA.md`.
 - Dia e noite, com iluminação noturna
 - Coleta de madeira e pedra
 - 3 baús com chaves espalhadas
+- Fogueira, construção de cercas, muros e portões, e reparo
+- Monstros que atacam e destroem a base
 - Mapa infinito com decoração
 - Menu principal, pausa, game over, reinício
 - HUD

@@ -27,6 +27,7 @@ public class CampSystem : MonoBehaviour
     readonly List<BuildSpot> spots = new List<BuildSpot>();
     PlayerStats player;
     PlayerController controller;
+    public Collider2D PlayerCollider { get; private set; }
     float baseHeartScale = 1f;
 
     // Baús e recursos precisam do centro já no Awake, seja qual for a ordem dos componentes.
@@ -43,6 +44,7 @@ public class CampSystem : MonoBehaviour
         player = FindAnyObjectByType<PlayerStats>();
         if (!player) { enabled = false; return; }
         controller = player.GetComponent<PlayerController>();
+        PlayerCollider = player.GetComponent<Collider2D>();
         Center = player.transform.position + Vector3.up * CenterOffset;
         BuildHeart();
         BuildRing();

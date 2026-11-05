@@ -111,7 +111,7 @@ Valores iniciais, a ajustar em teste e registrar em `docs/BALANCEAMENTO.md`.
 Mudanças em `Enemy`:
 
 - **Alvo:** o jogador, se estiver a até 7 unidades; senão, a fogueira. Sem fogueira no jogo, sempre o jogador.
-- **Ataque:** ao colidir com uma `Structure`, causa `contactDamage` a cada 1 s.
+- **Ataque:** ao colidir com uma `Structure`, causa 50% de `contactDamage` a cada 2 s.
 - **Reposicionamento:** `relocateDistance` passa a usar a distância até o alvo atual.
 
 Mudanças em `EnemySpawner`:

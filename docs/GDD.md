@@ -52,11 +52,8 @@ Nome, protagonista e origem dos monstros: **a definir**.
 
 **Planejado.** Sistemas da visão do jogo que ainda não existem no código:
 
-- **Acampamento:** ponto de partida e espaço a defender.
-- **Construção:** cercas e muros feitos com madeira, pedra e outros materiais.
 - **Resgate:** pessoas perdidas pelo mapa podem ser levadas ao acampamento.
 - **Estações de trabalho:** cada pessoa resgatada opera uma estação (ferreiro de armadura, ferreiro de armas, reparador, construtor etc.) que libera itens melhores.
-- **Destruição da base:** com o tempo, os monstros conseguem destruir o acampamento.
 - **Baús com equipamento:** contêm armas básicas e gear para as primeiras noites.
 
 **Implementado hoje.** O restante desta seção descreve o jogo atual.
@@ -81,8 +78,10 @@ Nome, protagonista e origem dos monstros: **a definir**.
 - **Coleta:** de dia, segurar E junto a árvores e rochas rende madeira e pedra. Pontos ricos rendem o dobro e tudo renova ao amanhecer. **Os materiais ainda não têm uso.**
 - **Baús:** três por run, perto do início, cada vez mais distantes e mais fortes. Cada abertura consome uma chave encontrada no mapa, e o jogador escolhe 1 de 3 bônus permanentes.
 - **Ouro:** inimigos soltam ouro, mas **ainda não há onde gastá-lo**.
-- **Inimigos:** perseguem e causam dano por contato. Variam entre Slime (básico), Bat (rápido) e Golem (resistente), além de elites e anéis que cercam o jogador.
-- **Derrota:** vida zerada encerra a run e mostra as estatísticas.
+- **Acampamento:** o jogador começa ao lado da fogueira, cercada por um anel de 12 pontos de muralha e 4 de portão. Se ela for destruída, a run termina.
+- **Construção e reparo:** com F, em pontos fixos, pagando madeira e pedra. Cercas viram muros e estruturas danificadas podem ser reparadas. Portões bloqueiam monstros e deixam o jogador passar.
+- **Inimigos:** vão até a fogueira, atacam o que os bloqueia e perseguem o jogador se ele estiver perto. Longe da base, o jogador é caçado enquanto ela é atacada. Causam dano por contato. Variam entre Slime (básico), Bat (rápido) e Golem (resistente), além de elites e anéis que cercam o jogador.
+- **Derrota:** vida do jogador zerada ou fogueira destruída encerra a run e mostra as estatísticas.
 
 Valores detalhados em `BALANCEAMENTO.md`.
 

@@ -40,7 +40,7 @@ MainMenu → Game (Playing) ⇄ Paused / LevelUp / Chest
 
 **Dia e noite.** `DayNightCycle.periodDuration` é 180 s por período. O evento `OnPeriodChanged` avisa os interessados e `NightElapsed` acumula só o tempo de noite, que é o relógio da dificuldade. Ao amanhecer, `Enemy.VanishAll()` remove os inimigos restantes.
 
-**Inimigos.** `EnemySpawner` só gera à noite e avalia curvas por `NightElapsed`. Armas encontram alvos pela lista estática `Enemy.Active`, com `Enemy.FindNearest` e `Enemy.DamageInRadius`, sem `Find`.
+**Inimigos.** `EnemySpawner` só gera à noite e avalia curvas por `NightElapsed`. Monstros não usam pathfinding: `Enemy` reavalia o alvo a cada 0,25 s, anda reto, ataca a `Structure` que o bloqueia e desvia de lado se ficar parado. `HuntsPlayer` marca quem nasceu para caçar o jogador longe da base. Monstros ficam na layer `Enemy`, que o dash ignora por `Collider2D.excludeLayers`. Armas encontram alvos pela lista estática `Enemy.Active`, com `Enemy.FindNearest` e `Enemy.DamageInRadius`, sem `Find`.
 
 **Armas e upgrades.** `WeaponHolder` guarda as armas. Cada arma herda de `Weapon` e usa os multiplicadores de `PlayerStats`. `PlayerExperience` acumula level ups pendentes e `UpgradeManager` os consome quando o estado volta a `Playing`, para nenhum se perder durante uma pausa.
 
