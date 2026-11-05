@@ -10,6 +10,10 @@ public class CampSystem : MonoBehaviour
     public const int RingSpots = 16;
     public const float RingRadius = 5.5f;
     const float CenterOffset = 1.5f; // O jogador nasce ao lado da fogueira, não em cima dela.
+    const float HeartScale = 2f;
+    const float HeartFrameTime = 0.1f;
+    static readonly Vector2 HeartPivot = new Vector2(0.5f, 0.34f); // Centro do círculo de pedras.
+    const float HeartPixelsPerUnit = 24f;
 
     public static CampSystem Instance { get; private set; }
 
@@ -28,7 +32,6 @@ public class CampSystem : MonoBehaviour
     PlayerStats player;
     PlayerController controller;
     public Collider2D PlayerCollider { get; private set; }
-    float baseHeartScale = 1f;
 
     // Baús e recursos precisam do centro já no Awake, seja qual for a ordem dos componentes.
     public static CampSystem Ensure(GameObject host)
@@ -76,14 +79,21 @@ public class CampSystem : MonoBehaviour
         var go = new GameObject("Fogueira");
         go.transform.SetParent(spot.transform, false);
         var renderer = go.AddComponent<SpriteRenderer>();
-        renderer.sprite = CampArt.Get("heart");
+        var frames = CampArt.Frames("heart", HeartPivot, HeartPixelsPerUnit);
+        renderer.sprite = frames[0];
         renderer.sortingOrder = 10;
         renderer.spriteSortPoint = SpriteSortPoint.Pivot;
-        go.AddComponent<BoxCollider2D>().size = new Vector2(1.3f, 0.7f);
+        go.transform.localScale = Vector3.one * HeartScale;
+        if (frames.Length > 1)
+        {
+            var loop = go.AddComponent<SpriteLoop>();
+            loop.frames = frames;
+            loop.frameTime = HeartFrameTime;
+        }
+        go.AddComponent<BoxCollider2D>().size = new Vector2(1.7f, 0.9f) / HeartScale;
         Heart = go.AddComponent<Structure>();
         Heart.Init(StructureKind.Heart, HeartHealth);
         Heart.OnDestroyed += HeartDestroyed;
-        baseHeartScale = go.transform.localScale.x;
         spot.Adopt(Heart);
     }
 
@@ -125,7 +135,6 @@ public class CampSystem : MonoBehaviour
     void Update()
     {
         if (!player || !Inventory) return;
-        if (Heart) Heart.transform.localScale = Vector3.one * (baseHeartScale + Mathf.Sin(Time.time * 9f) * 0.04f);
 
         bool playing = GameManager.Instance && GameManager.Instance.State == GameState.Playing;
         NearestSpot = null;
