@@ -20,7 +20,7 @@ Tudo em `Assets/Scripts/`:
 | `UI/` | HUD, minimapa e level up | `HUD`, `Minimap`, `LevelUpPanel` |
 | `FX/` | Partículas, popups, shake | `FxManager`, `FxParticle`, `FxFade`, `FloatingText` |
 | `Audio/` | SFX e música | `AudioManager`, `SfxGenerator` |
-| `Editor/` | Gerador do protótipo | `SurvivorsSetup` |
+| `Editor/` | Gerador do protótipo, build WebGL e atalhos de teste | `SurvivorsSetup`, `WebGLBuild`, `CampDebug` |
 
 ## Fluxo e estados
 

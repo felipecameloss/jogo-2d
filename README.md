@@ -99,7 +99,13 @@ Menu **Survivors > Gerar sprites, prefabs e cenas**. **Atenção:** isso sobresc
 
 ## Build WebGL (entrega no itch.io)
 
-File > Build Profiles > Web > Switch Platform > Build. Suba o .zip da pasta gerada no itch.io marcando "This file will be played in the browser".
+1. No Editor, menu **Survivors > Gerar build WebGL**. Ou, com o Unity fechado:
+   `Unity -batchmode -quit -projectPath . -buildTarget WebGL -executeMethod WebGLBuild.Build -logFile build.log`
+2. O build sai em `Builds/WebGL` (fora do git). Compacte o **conteúdo** da pasta, com o `index.html` na raiz do .zip:
+   `cd Builds/WebGL && zip -r ../jogo-2d-webgl.zip .`
+3. No itch.io: Kind of project **HTML**, envie o .zip e marque **This file will be played in the browser**. Tamanho sugerido da janela: 960 × 600.
+
+O build usa Gzip com *decompression fallback* ligado, porque o itch.io não envia o cabeçalho de compressão dos arquivos `.unityweb`.
 
 ## Créditos
 

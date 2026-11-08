@@ -301,9 +301,9 @@ Hoje as curvas param de subir em `t = 600` e o dano de contato é fixo.
 
 Testar cedo para descobrir problemas de WebGL antes do prazo.
 
-- [ ] Gerar o build WebGL e publicar como rascunho no itch.io.
+- [x] Gerar o build WebGL (08/11: 9,4 MB, `Survivors > Gerar build WebGL`). Publicar como rascunho no itch.io: pendente.
 - [ ] Testar áudio, entrada, proporção da tela e desempenho no navegador.
-- [ ] Registrar o passo a passo no `README.md`.
+- [x] Registrar o passo a passo no `README.md`.
 
 ### Task 23: Validar rubricas com o professor
 
