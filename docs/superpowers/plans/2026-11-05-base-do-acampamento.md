@@ -40,9 +40,9 @@ Casos que o spec implica e que cada tarefa dona verifica:
 
 Todas as tarefas dependem do código de baús e chaves, que está só em `feat/mudancas-dia`.
 
-- [ ] Revisar e commitar as mudanças pendentes (`Chests/`, remoção de `Trading/`, rochas, cenas).
-- [ ] Abrir PR para `main`, testar e fazer merge.
-- [ ] Avisar a equipe para criar branches a partir da `main` atualizada.
+- [x] Revisar e commitar as mudanças pendentes (`Chests/`, remoção de `Trading/`, rochas, cenas).
+- [x] Abrir PR para `main`, testar e fazer merge.
+- [x] Avisar a equipe para criar branches a partir da `main` atualizada.
 
 ### Task 2: Fogueira, estruturas e derrota da base
 
@@ -58,12 +58,12 @@ Todas as tarefas dependem do código de baús e chaves, que está só em `feat/m
 - `CampArt.Get(string name)`: tenta `Resources.Load<Sprite>("Camp/" + name)` e, sem arquivo, devolve placeholder gerado
 - `GameManager.EndRun(string reason = null)`
 
-- [ ] Criar `Structure` com feedback ao levar dano: clarão, partículas e som.
-- [ ] Criar `CampSystem`, adicionado em `GameManager.Start` se faltar, com a fogueira de vida 300 no ponto inicial.
-- [ ] Fazer `IsReserved` proteger raio 7 em volta do centro; `DayResourceSystem` e chaves devem consultá-lo.
-- [ ] Destruir a fogueira chama `EndRun("A FOGUEIRA SE APAGOU NA NOITE N")`, com N real.
-- [ ] Criar `CampHUD` com a vida da fogueira e alerta abaixo de 30%.
-- [ ] Verificar no Editor: nada nasce na área reservada; dano de teste na fogueira até zerar mostra a derrota certa; Reiniciar volta com a vida cheia.
+- [x] Criar `Structure` com feedback ao levar dano: clarão, partículas e som.
+- [x] Criar `CampSystem`, adicionado em `GameManager.Start` se faltar, com a fogueira de vida 300 no ponto inicial.
+- [x] Fazer `IsReserved` proteger raio 7 em volta do centro; `DayResourceSystem` e chaves devem consultá-lo.
+- [x] Destruir a fogueira chama `EndRun("A FOGUEIRA SE APAGOU NA NOITE N")`, com N real.
+- [x] Criar `CampHUD` com a vida da fogueira e alerta abaixo de 30%.
+- [x] Verificar no Editor: nada nasce na área reservada; dano de teste na fogueira até zerar mostra a derrota certa; Reiniciar volta com a vida cheia.
 
 ### Task 3: Pontos de construção, cercas e muros
 
@@ -73,14 +73,14 @@ Todas as tarefas dependem do código de baús e chaves, que está só em `feat/m
 
 **Interfaces produzidas:** `BuildSpot`: `SpotKind`, `Structure Current`, `string ActionText`, `bool TryBuild(ResourceInventory bag)`; `CampSystem.NearestSpot`.
 
-- [ ] Em `ChestSystem`, mudar `firstChestDistance` para 9 e `firstKeyDistance` para 10.
-- [ ] Criar 16 pontos num círculo de raio 5,5: 12 de muralha e 4 de portão, nos pontos cardeais. Criar 2 pontos de estação dentro do anel, bloqueados até a Task 9.
-- [ ] Pontos vazios ficam visíveis como marcas no chão.
-- [ ] Mostrar ação e custo no `Prompt`; F executa sem pausar, usando `ResourceInventory.TrySpend`. Vale o ponto mais próximo.
-- [ ] Custos e vidas: cerca 6 madeira, 60; muro 6 pedra, 150; portão 8 madeira, 100.
-- [ ] Recusar construção com o jogador ou um NPC sobre o ponto, com aviso.
-- [ ] Estrutura destruída devolve o ponto ao estado vazio, sem reembolso.
-- [ ] Verificar no Editor: construir sem materiais não cobra; cerca evolui para muro; construir parado sobre o ponto é recusado; baús e chaves ficam fora do anel.
+- [x] Em `ChestSystem`, mudar `firstChestDistance` para 9 e `firstKeyDistance` para 10 (em 08/11: 10 e 11).
+- [x] Criar 16 pontos num círculo de raio 5,5 (em 08/11 virou quadrado, ver Task 12): 12 de muralha e 4 de portão, nos pontos cardeais. Criar 2 pontos de estação dentro do anel, bloqueados até a Task 9.
+- [x] Pontos vazios ficam visíveis como marcas no chão.
+- [x] Mostrar ação e custo no `Prompt`; F executa sem pausar, usando `ResourceInventory.TrySpend`. Vale o ponto mais próximo.
+- [x] Custos e vidas: cerca 6 madeira, 60; muro 6 pedra, 150; portão 8 madeira, 100.
+- [x] Recusar construção com o jogador ou um NPC sobre o ponto, com aviso.
+- [x] Estrutura destruída devolve o ponto ao estado vazio, sem reembolso.
+- [x] Verificar no Editor: construir sem materiais não cobra; cerca evolui para muro; construir parado sobre o ponto é recusado; baús e chaves ficam fora do anel.
 
 ### Task 4: Portões e dash
 
@@ -88,10 +88,10 @@ Todas as tarefas dependem do código de baús e chaves, que está só em `feat/m
 
 **Arquivos:** alterar `Camp/BuildSpot.cs`, `Player/PlayerController.cs`, `Enemies/EnemySpawner.cs`, `ProjectSettings/TagManager.asset`.
 
-- [ ] Portões usam `Physics2D.IgnoreCollision` com o colisor do jogador: ele passa, monstros não.
-- [ ] Criar a layer `Enemy` e aplicá-la ao instanciar monstros em `EnemySpawner.Spawn`.
-- [ ] Trocar o `isTrigger` do dash por ignorar colisão entre a layer do jogador e `Enemy`; o dash deve parar em estruturas, árvores e rochas.
-- [ ] Verificar no Editor: jogador passa pelos portões; monstro não passa; dash contra muro para; dash ainda atravessa monstros e dá invencibilidade.
+- [x] Portões usam `Physics2D.IgnoreCollision` com o colisor do jogador: ele passa, monstros não.
+- [x] Criar a layer `Enemy` e aplicá-la ao instanciar monstros em `EnemySpawner.Spawn`.
+- [x] Trocar o `isTrigger` do dash por ignorar colisão entre a layer do jogador e `Enemy`; o dash deve parar em estruturas, árvores e rochas.
+- [x] Verificar no Editor: jogador passa pelos portões; monstro não passa; dash contra muro para; dash ainda atravessa monstros e dá invencibilidade.
 
 ### Task 5: Monstros atacam a base
 
@@ -99,13 +99,13 @@ Todas as tarefas dependem do código de baús e chaves, que está só em `feat/m
 
 **Arquivos:** alterar `Enemies/Enemy.cs`, `Enemies/EnemySpawner.cs`.
 
-- [ ] Alvo: jogador se estiver a até 7 unidades; senão a fogueira; sem fogueira, o jogador.
-- [ ] Ao colidir com `Structure`, causar `contactDamage` a cada 1 s, por monstro.
-- [ ] `relocateDistance` passa a usar a distância até o alvo atual.
-- [ ] Com o jogador a mais de 15 unidades da fogueira, metade dos monstros nasce a 16 unidades dela e metade em volta da câmera. Anéis e elites seguem a câmera.
-- [ ] Monstro parado por mais de 1 s contra árvore ou baú desvia lateralmente.
-- [ ] Verificar no Editor: sem muros, monstros chegam à fogueira; com muros, atacam e derrubam; longe da base, ela é atacada; ao amanhecer somem e os danos ficam.
-- [ ] Verificar no build WebGL com muitos monstros atacando: desempenho aceitável.
+- [x] Alvo: jogador se estiver a até 7 unidades; senão a fogueira; sem fogueira, o jogador.
+- [x] Ao colidir com `Structure`, causar `contactDamage` a cada 1 s, por monstro.
+- [x] `relocateDistance` passa a usar a distância até o alvo atual.
+- [x] Com o jogador a mais de 15 unidades da fogueira, metade dos monstros nasce a 16 unidades dela e metade em volta da câmera. Anéis e elites seguem a câmera.
+- [x] Monstro parado por mais de 1 s contra árvore ou baú desvia lateralmente.
+- [x] Verificar no Editor: sem muros, monstros chegam à fogueira; com muros, atacam e derrubam; longe da base, ela é atacada; ao amanhecer somem e os danos ficam.
+- [x] Verificar no build WebGL com muitos monstros atacando: desempenho aceitável.
 
 ### Task 6: Reparo da base
 
@@ -113,11 +113,11 @@ Todas as tarefas dependem do código de baús e chaves, que está só em `feat/m
 
 **Arquivos:** alterar `Camp/BuildSpot.cs`, `Camp/CampSystem.cs`.
 
-- [ ] Perto de estrutura danificada, F restaura toda a vida.
-- [ ] Custo: 1 material a cada 10 de vida faltando, arredondado para cima. Muro usa pedra; as demais estruturas usam madeira.
-- [ ] Sem materiais suficientes, não repara nem cobra, e o aviso informa o custo.
-- [ ] Fogueira também é reparável, de dia ou de noite.
-- [ ] Verificar no Editor: custo correto; sem saldo, nada muda.
+- [x] Perto de estrutura danificada, F restaura toda a vida.
+- [x] Custo: 1 material a cada 10 de vida faltando, arredondado para cima. Muro usa pedra; as demais estruturas usam madeira.
+- [x] Sem materiais suficientes, não repara nem cobra, e o aviso informa o custo.
+- [x] Fogueira também é reparável, de dia ou de noite.
+- [x] Verificar no Editor: custo correto; sem saldo, nada muda.
 
 ## Bloco: pessoas e progressão
 
