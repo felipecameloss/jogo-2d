@@ -98,10 +98,11 @@ public class Enemy : MonoBehaviour
     }
 
     // Chamado pelo spawner logo depois de instanciar.
-    public void Init(float healthMultiplier, bool elite, bool huntsPlayer = false)
+    public void Init(float healthMultiplier, bool elite, bool huntsPlayer = false, float damageMultiplier = 1f)
     {
         HuntsPlayer = huntsPlayer;
         maxHealth *= healthMultiplier;
+        contactDamage *= damageMultiplier;
         if (elite)
         {
             IsElite = true;

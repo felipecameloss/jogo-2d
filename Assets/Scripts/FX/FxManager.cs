@@ -11,7 +11,7 @@ public class FxManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        if (!popupFont) popupFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        if (!popupFont || popupFont.name == "LegacyRuntime") popupFont = UIStyle.Font;
     }
 
     public static void Burst(Vector3 position, Color color, int count = 8, float speed = 4f, float size = 0.18f)

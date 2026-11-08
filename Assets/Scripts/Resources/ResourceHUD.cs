@@ -60,7 +60,7 @@ public class ResourceHUD : MonoBehaviour
         var go = new GameObject("Label", typeof(RectTransform), typeof(Text));
         go.transform.SetParent(parent, false);
         var text = go.GetComponent<Text>();
-        text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        text.font = UIStyle.Font;
         text.fontSize = fontSize;
         text.alignment = TextAnchor.MiddleCenter;
         text.color = Color.white;

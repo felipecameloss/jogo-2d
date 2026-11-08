@@ -258,19 +258,19 @@ Exportar para `Assets/Art/Resources/Camp/` a 24 px por unidade. `CampArt` carreg
 
 **Bloco:** acabamento · **Alvo:** 09/11 · **Depende de:** Task 3, Task 8
 
-- [ ] Guiar no primeiro dia: coletar, construir, procurar pessoas, preparar-se para a noite.
-- [ ] Mostrar as dicas como objetivos curtos, sem pausar o jogo.
-- [ ] Permitir pular.
-- [ ] Decidir se o primeiro dia dura menos que 180 s e registrar em `docs/BALANCEAMENTO.md`.
+- [x] Guiar no primeiro dia: coletar, construir, procurar pessoas, preparar-se para a noite.
+- [x] Mostrar as dicas como objetivos curtos, sem pausar o jogo.
+- [x] Permitir pular.
+- [x] Decidir se o primeiro dia dura menos que 180 s e registrar em `docs/BALANCEAMENTO.md`. (Mantido em 180 s.)
 
 ### Task 19: Menu de opções e identidade da UI
 
 **Bloco:** acabamento · **Alvo:** 09/11 · **Depende de:** Task 15
 
-- [ ] Opções com volume de música e SFX, acessíveis no menu e na pausa, salvas em `PlayerPrefs`.
-- [ ] Tela de controles.
-- [ ] Fonte e estilo medievais em HUD e menus.
-- [ ] Remover do HUD informações sem uso.
+- [x] Opções com volume de música e SFX, acessíveis no menu e na pausa, salvas em `PlayerPrefs`.
+- [x] Tela de controles (dentro das opções).
+- [x] Fonte medieval em HUD e menus (MedievalSharp, OFL). Cores dos painéis das cenas ainda são as do protótipo.
+- [ ] Remover do HUD informações sem uso. (Pendente: o ouro ainda aparece; depende da decisão sobre o ouro.)
 
 ### Task 20: Dificuldade após a Noite 4
 
@@ -278,10 +278,10 @@ Exportar para `Assets/Art/Resources/Camp/` a 24 px por unidade. `CampArt` carreg
 
 Hoje as curvas param de subir em `t = 600` e o dano de contato é fixo.
 
-- [ ] Estender `spawnsPerSecond` e `healthMultiplier` além de `t = 600`.
-- [ ] Escalar o dano de contato com o tempo.
-- [ ] Definir se a run é infinita ou tem noite final, no `docs/GDD.md`.
-- [ ] Registrar em `docs/BALANCEAMENTO.md`.
+- [x] Estender `spawnsPerSecond` e `healthMultiplier` além de `t = 600`.
+- [x] Escalar o dano de contato com o tempo.
+- [x] Definir se a run é infinita ou tem noite final, no `docs/GDD.md`.
+- [x] Registrar em `docs/BALANCEAMENTO.md`.
 
 ### Task 21: Testes de jogo e balanceamento
 

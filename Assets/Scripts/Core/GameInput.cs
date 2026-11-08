@@ -61,6 +61,19 @@ public static class GameInput
 #endif
     }
 
+    // Pula o tutorial: Enter ou Select/Back do controle.
+    public static bool SkipTutorialPressed()
+    {
+#if ENABLE_INPUT_SYSTEM
+        var k = Keyboard.current;
+        var g = Gamepad.current;
+        return (k != null && (k.enterKey.wasPressedThisFrame || k.numpadEnterKey.wasPressedThisFrame))
+            || (g != null && g.selectButton.wasPressedThisFrame);
+#else
+        return Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter);
+#endif
+    }
+
     public static bool DashPressed()
     {
 #if ENABLE_INPUT_SYSTEM

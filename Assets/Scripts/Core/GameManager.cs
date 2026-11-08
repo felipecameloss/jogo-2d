@@ -38,6 +38,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        UIStyle.ApplyToScene();
+        // Opções logo abaixo de "Continuar" na pausa, sem precisar regenerar a cena.
+        var resume = pausePanel ? pausePanel.GetComponentInChildren<Button>(true) : null;
+        if (resume) UIStyle.CloneButton(resume.gameObject, "Opções", resume.transform.GetSiblingIndex() + 1, () => OptionsMenu.Open());
         // Também funciona nas cenas já existentes: não é preciso regenerar o protótipo.
         if (Player && DayNightCycle.Instance && !GetComponent<DayResourceSystem>())
             gameObject.AddComponent<DayResourceSystem>();
@@ -45,6 +49,8 @@ public class GameManager : MonoBehaviour
             gameObject.AddComponent<ChestSystem>();
         if (Player && !GetComponent<Minimap>())
             gameObject.AddComponent<Minimap>();
+        if (Player && !Tutorial.Seen && !GetComponent<Tutorial>())
+            gameObject.AddComponent<Tutorial>();
     }
 
     void OnDestroy()
@@ -54,6 +60,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (OptionsMenu.BlocksInput) return;
         if (State == GameState.Menu)
         {
             if (GameInput.PausePressed()) closeMenu?.Invoke();

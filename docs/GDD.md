@@ -30,6 +30,8 @@ Organizado pelo framework **DDE** (Design, Dynamics, Experience), como pede a ru
 - **Pessoas (05/11/2026):** dois NPCs, ferreiro de armas e ferreira de armaduras. Nunca morrem: derrotados, voltam a ficar perdidos longe do acampamento e precisam de novo resgate; a estação fecha até lá.
 - **Armas (05/11/2026):** Besta (inicial), Espada, Facas, Machado de arremesso e Bombas. Quanto mais pessoas no acampamento, melhores as armas à venda.
 - **Baús (05/11/2026):** mantêm chaves e oferecem armas e gear.
+- **Tutorial (08/11/2026):** objetivos curtos no primeiro dia, sem pausar: coletar, construir, resgatar e abrir um baú. Termina ao anoitecer com um aviso para defender a fogueira. Pode ser pulado e só aparece na primeira run; as opções o reativam.
+- **Duração da run (08/11/2026):** infinita. A dificuldade cresce sem limite a partir da Noite 4, e o objetivo é sobreviver a mais noites.
 
 Detalhes em `docs/superpowers/specs/2026-11-05-base-do-acampamento-design.md`. A ideia pode ser refinada durante o desenvolvimento: registre cada mudança no histórico ao final.
 
@@ -37,9 +39,8 @@ Detalhes em `docs/superpowers/specs/2026-11-05-base-do-acampamento-design.md`. A
 
 1. Ouro continua no jogo? Com qual uso?
 2. Quais são os "outros materiais" além de madeira e pedra?
-3. A run é infinita ou existe uma noite final?
-4. Nome do jogo, protagonista e origem dos monstros
-5. Como ensinar o jogo e qual o incentivo para jogar de novo
+3. Nome do jogo, protagonista e origem dos monstros
+4. Qual o incentivo para jogar de novo
 
 ## 1. Design
 
@@ -94,7 +95,8 @@ Valores detalhados em `BALANCEAMENTO.md`.
 
 - **HUD:** vida, XP, tempo, relógio do dia, ouro, materiais, chaves, direção do baú mais próximo, direção da pessoa perdida mais próxima (de dia), minimapa e avisos de interação.
 - **Minimapa:** radar centrado no jogador, com alcance fixo, que mostra a fogueira e os baús fechados; o que está além do alcance fica preso na borda, indicando a direção. Chaves e inimigos ficam de fora para manter a exploração.
-- **Menus:** principal, pausa, level up, baú, ferraria, armaria e game over. Ainda não há opções.
+- **Menus:** principal, pausa, opções (volume de música e efeitos, controles), level up, baú, ferraria, armaria e game over.
+- **Identidade visual:** fonte medieval (MedievalSharp) em toda a interface; janelas de estação em tons de madeira.
 - **Feedback no mundo:** clarão e escala ao acertar; números de dano; tela tremendo e jogador piscando ao sofrer dano; recursos esgotados acinzentados; chaves pulsando; escuridão à noite com luz em volta do jogador.
 - **Som:** SFX gerados por código, ainda placeholder. **Sem música.**
 
@@ -120,6 +122,8 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
+| 08/11/2026 | Tutorial do primeiro dia e tela de opções com volume e controles; fonte medieval na interface. | Ensinar o laço do jogo e dar identidade à UI |
+| 08/11/2026 | Run infinita confirmada; a dificuldade (quantidade, vida e dano dos monstros) continua crescendo depois da Noite 4. | A partir da Noite 4 a run estabilizava |
 | 08/11/2026 | Implementados resgate do ferreiro e da ferreira, ferraria e armaria, armas medievais (5) e baús com 1 arma e 2 equipamentos. Level up só dá atributos. | Núcleo aprovado em 05/11 |
 | 08/11/2026 | Anel do acampamento passa de círculo a quadrado; portão de madeira pode ser reforçado com pedra; portões abrem ao ver o jogador. | A arte final de cercas, muros e portões é top-down, em peças horizontais, verticais e de canto, e veio com portão de pedra |
 | 05/11/2026 | Minimapa de orientação na HUD, com fogueira e baús fechados, sem chaves nem inimigos. | Evitar que o jogador se perca no mapa infinito sem tirar a busca por chaves |
