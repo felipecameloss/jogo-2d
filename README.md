@@ -61,6 +61,10 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 
 Inimigos têm chance de dropar ouro, e o valor cresce a cada noite. O ouro ainda não tem uso no jogo (ver `docs/GDD.md`).
 
+### Tutorial
+
+Na primeira run, o canto esquerdo mostra um objetivo por vez durante o primeiro dia: coletar, construir, resgatar e abrir um baú. **Enter** pula. Para ver de novo, use **Opções > Tutorial na próxima run**.
+
 ### Opções
 
 No menu principal ou na pausa, **Opções** ajusta o volume da música e dos efeitos (fica salvo para a próxima vez) e mostra os controles.

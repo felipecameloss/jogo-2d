@@ -258,10 +258,10 @@ Exportar para `Assets/Art/Resources/Camp/` a 24 px por unidade. `CampArt` carreg
 
 **Bloco:** acabamento · **Alvo:** 09/11 · **Depende de:** Task 3, Task 8
 
-- [ ] Guiar no primeiro dia: coletar, construir, procurar pessoas, preparar-se para a noite.
-- [ ] Mostrar as dicas como objetivos curtos, sem pausar o jogo.
-- [ ] Permitir pular.
-- [ ] Decidir se o primeiro dia dura menos que 180 s e registrar em `docs/BALANCEAMENTO.md`.
+- [x] Guiar no primeiro dia: coletar, construir, procurar pessoas, preparar-se para a noite.
+- [x] Mostrar as dicas como objetivos curtos, sem pausar o jogo.
+- [x] Permitir pular.
+- [x] Decidir se o primeiro dia dura menos que 180 s e registrar em `docs/BALANCEAMENTO.md`. (Mantido em 180 s.)
 
 ### Task 19: Menu de opções e identidade da UI
 

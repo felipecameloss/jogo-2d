@@ -49,6 +49,8 @@ public class GameManager : MonoBehaviour
             gameObject.AddComponent<ChestSystem>();
         if (Player && !GetComponent<Minimap>())
             gameObject.AddComponent<Minimap>();
+        if (Player && !Tutorial.Seen && !GetComponent<Tutorial>())
+            gameObject.AddComponent<Tutorial>();
     }
 
     void OnDestroy()

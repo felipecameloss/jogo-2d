@@ -70,24 +70,38 @@ public class OptionsMenu : MonoBehaviour
         shade.rectTransform.anchorMin = Vector2.zero;
         shade.rectTransform.anchorMax = Vector2.one;
         shade.raycastTarget = true;
-        var window = Box(shade.transform, Vector2.zero, new Vector2(1100, 800), UIStyle.PanelColor);
+        var window = Box(shade.transform, Vector2.zero, new Vector2(1100, 880), UIStyle.PanelColor);
 
-        Label(window.transform, "OPÇÕES", new Vector2(0, 330), new Vector2(1000, 80), 60).color = UIStyle.Gold;
-        var music = VolumeRow(window.transform, "Música", 220, GameSettings.MusicVolume, v => GameSettings.MusicVolume = v, out musicValue);
-        VolumeRow(window.transform, "Efeitos", 140, GameSettings.SfxVolume, v => { GameSettings.SfxVolume = v; AudioManager.Play(Sfx.Pickup, 0.6f); }, out sfxValue);
-        Label(window.transform, "CONTROLES", new Vector2(0, 50), new Vector2(1000, 60), 40).color = UIStyle.Gold;
-        var controls = Label(window.transform, Controls, new Vector2(0, -120), new Vector2(1000, 270), 28);
+        Label(window.transform, "OPÇÕES", new Vector2(0, 370), new Vector2(1000, 80), 60).color = UIStyle.Gold;
+        var music = VolumeRow(window.transform, "Música", 260, GameSettings.MusicVolume, v => GameSettings.MusicVolume = v, out musicValue);
+        VolumeRow(window.transform, "Efeitos", 180, GameSettings.SfxVolume, v => { GameSettings.SfxVolume = v; AudioManager.Play(Sfx.Pickup, 0.6f); }, out sfxValue);
+        Label(window.transform, "CONTROLES", new Vector2(0, 90), new Vector2(1000, 60), 40).color = UIStyle.Gold;
+        var controls = Label(window.transform, Controls, new Vector2(0, -75), new Vector2(1000, 260), 28);
         controls.lineSpacing = 1.15f;
 
-        var back = Box(window.transform, new Vector2(0, -330), new Vector2(360, 70), UIStyle.ButtonColor);
-        back.raycastTarget = true;
-        var button = back.gameObject.AddComponent<Button>();
-        button.targetGraphic = back;
-        button.onClick.AddListener(Close);
-        Label(back.transform, "Voltar  [Esc]", Vector2.zero, new Vector2(340, 64), 34);
+        Text tutorialLabel = null;
+        MakeButton(window.transform, new Vector2(0, -265), new Vector2(560, 60), "", 28, out tutorialLabel).onClick.AddListener(() =>
+        {
+            Tutorial.Seen = !Tutorial.Seen;
+            tutorialLabel.text = TutorialText();
+        });
+        tutorialLabel.text = TutorialText();
+        MakeButton(window.transform, new Vector2(0, -365), new Vector2(360, 70), "Voltar  [Esc]", 34, out _).onClick.AddListener(Close);
         Refresh();
 
         if (EventSystem.current) EventSystem.current.SetSelectedGameObject(music.gameObject);
+    }
+
+    static string TutorialText() => Tutorial.Seen ? "Tutorial na próxima run: não" : "Tutorial na próxima run: sim";
+
+    static Button MakeButton(Transform parent, Vector2 position, Vector2 size, string content, int fontSize, out Text label)
+    {
+        var box = Box(parent, position, size, UIStyle.ButtonColor);
+        box.raycastTarget = true;
+        var button = box.gameObject.AddComponent<Button>();
+        button.targetGraphic = box;
+        label = Label(box.transform, content, Vector2.zero, size - new Vector2(20, 6), fontSize);
+        return button;
     }
 
     Slider VolumeRow(Transform parent, string name, float y, float value, Action<float> onChange, out Text valueText)

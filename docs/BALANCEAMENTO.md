@@ -35,7 +35,7 @@ Fonte: código e `Assets/Scenes/Game.unity`, em 05/11/2026.
 
 ### Ritmo e dificuldade
 
-Cada dia ou noite dura 180 s. A dificuldade depende de `t`, o total de segundos de noite já passados. Durante o dia, nada avança.
+Cada dia ou noite dura 180 s, inclusive o primeiro dia: o tutorial não o encurta, porque ele já é curto para coletar, construir e procurar pessoas. A dificuldade depende de `t`, o total de segundos de noite já passados. Durante o dia, nada avança.
 
 | Noite | `t` (s) | Inimigos/s | Multiplicador de vida | Multiplicador de dano |
 |---|---|---|---|---|
