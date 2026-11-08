@@ -1,14 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// O acampamento: fogueira no centro, anel de muralhas com portões e pontos de estação.
+// O acampamento: fogueira no centro, anel quadrado de muralhas com portões e pontos de estação.
 // Tudo é criado por código, sem depender da cena.
 public class CampSystem : MonoBehaviour
 {
-    public const float ReservedRadius = 7f;
+    public const float ReservedRadius = 8f; // cobre os cantos do quadrado, a ~7,5 do centro
     public const float HeartHealth = 300f;
-    public const int RingSpots = 16;
-    public const float RingRadius = 5.5f;
+    // Lado do quadrado, em células de 32 px: canto, 3 peças, portão, 3 peças, canto.
+    public const int RingCells = 8;
+    // Faixa de colisão das peças: a parede é fina e fica em volta do pé do poste.
+    const float WallHalfThickness = 0.3f, WallLift = 0.15f;
     const float CenterOffset = 1.5f; // O jogador nasce ao lado da fogueira, não em cima dela.
     const float HeartScale = 2f;
     const float HeartFrameTime = 0.1f;
@@ -62,20 +64,22 @@ public class CampSystem : MonoBehaviour
         gameObject.AddComponent<CampHUD>().source = this;
     }
 
-    BuildSpot NewSpot(SpotKind kind, Vector3 position, float rotation, Vector2 size)
+    BuildSpot NewSpot(SpotKind kind, Vector3 position, SpotPiece[] pieces, params Rect[] areas)
     {
         var go = new GameObject("BuildSpot_" + kind);
         go.transform.SetParent(transform, false);
-        go.transform.SetPositionAndRotation(position, Quaternion.Euler(0f, 0f, rotation));
+        go.transform.position = position;
         var spot = go.AddComponent<BuildSpot>();
-        spot.Setup(kind, size);
+        spot.Setup(kind, pieces, areas);
         spots.Add(spot);
         return spot;
     }
 
+    static SpotPiece[] One(int index) => new[] { new SpotPiece(Vector2.zero, index) };
+
     void BuildHeart()
     {
-        var spot = NewSpot(SpotKind.Heart, Center, 0f, new Vector2(1.3f, 0.7f));
+        var spot = NewSpot(SpotKind.Heart, Center, One(0), new Rect(-0.65f, -0.35f, 1.3f, 0.7f));
         var go = new GameObject("Fogueira");
         go.transform.SetParent(spot.transform, false);
         var renderer = go.AddComponent<SpriteRenderer>();
@@ -97,23 +101,71 @@ public class CampSystem : MonoBehaviour
         spot.Adopt(Heart);
     }
 
+    // Nó (i, j) da grade do anel, de 0 a RingCells, com a fogueira no meio.
+    Vector3 Node(int i, int j) => Center + new Vector3(i - RingCells / 2, j - RingCells / 2, 0f) * CampArt.Cell;
+
+    // 12 pontos de muralha (4 cantos e 8 trechos de 3 peças) e 4 portões, no meio de cada lado.
     void BuildRing()
     {
-        var size = new Vector2(2.2f, 0.6f);
-        for (int i = 0; i < RingSpots; i++)
+        int n = RingCells, half = RingCells / 2;
+        Corner(0, n, 11);  // ┌
+        Corner(n, n, 10);  // ┐
+        Corner(0, 0, 9);   // └
+        Corner(n, 0, 8);   // ┘
+        foreach (int j in new[] { 0, n })
         {
-            float degrees = i * 360f / RingSpots;
-            float radians = degrees * Mathf.Deg2Rad;
-            var position = Center + new Vector3(Mathf.Cos(radians), Mathf.Sin(radians), 0f) * RingRadius;
-            NewSpot(i % 4 == 0 ? SpotKind.Gate : SpotKind.Wall, position, degrees + 90f, size);
+            HorizontalRun(2, j);
+            HorizontalRun(half + 2, j);
+            NewSpot(SpotKind.Gate, Node(half, j), One(0), HorizontalArea(0.5f));
+        }
+        foreach (int i in new[] { 0, n })
+        {
+            VerticalRun(i, 2);
+            VerticalRun(i, half + 2);
+            NewSpot(SpotKind.Gate, Node(i, half), One(1), VerticalArea(-0.5f, 0.5f));
         }
     }
 
+    // Três peças com centro no nó (i, j). Cada lado tem o seu quadro, que casa com o braço dos cantos:
+    // topo 0, base 1, esquerda 3, direita 2.
+    void HorizontalRun(int i, int j)
+    {
+        int index = j == RingCells ? 0 : 1;
+        var pieces = new SpotPiece[3];
+        for (int k = -1; k <= 1; k++) pieces[k + 1] = new SpotPiece(new Vector2(k * CampArt.Cell, 0f), index);
+        NewSpot(SpotKind.Wall, Node(i, j), pieces, HorizontalArea(1.5f));
+    }
+
+    void VerticalRun(int i, int j)
+    {
+        int index = i == 0 ? 3 : 2;
+        var pieces = new SpotPiece[3];
+        for (int k = -1; k <= 1; k++) pieces[k + 1] = new SpotPiece(new Vector2(0f, k * CampArt.Cell), index);
+        NewSpot(SpotKind.Wall, Node(i, j), pieces, VerticalArea(-1.5f, 1.5f));
+    }
+
+    // Canto: um braço horizontal e um vertical, ambos apontando para dentro do quadrado.
+    void Corner(int i, int j, int index)
+    {
+        float arm = 0.5f * CampArt.Cell;
+        float x = i == 0 ? arm : -arm, y = j == 0 ? 0.5f : -0.5f;
+        var horizontal = Rect.MinMaxRect(Mathf.Min(-WallHalfThickness, x), WallLift - WallHalfThickness,
+            Mathf.Max(WallHalfThickness, x), WallLift + WallHalfThickness);
+        NewSpot(SpotKind.Wall, Node(i, j), One(index), horizontal, VerticalArea(Mathf.Min(0f, y), Mathf.Max(0f, y)));
+    }
+
+    // Faixas de colisão; os limites ao longo da parede são medidos em células a partir do nó.
+    static Rect HorizontalArea(float cells) => new Rect(-cells * CampArt.Cell, WallLift - WallHalfThickness,
+        2f * cells * CampArt.Cell, 2f * WallHalfThickness);
+
+    static Rect VerticalArea(float fromCells, float toCells) => Rect.MinMaxRect(-WallHalfThickness,
+        fromCells * CampArt.Cell + WallLift, WallHalfThickness, toCells * CampArt.Cell + WallLift);
+
     void BuildStations()
     {
-        var size = new Vector2(1.7f, 1f);
-        var weapon = NewSpot(SpotKind.WeaponStation, Center + new Vector3(-2.7f, 1.3f, 0f), 0f, size);
-        var armor = NewSpot(SpotKind.ArmorStation, Center + new Vector3(2.7f, 1.3f, 0f), 0f, size);
+        var area = new Rect(-1.1f, 0f, 2.2f, 0.9f);
+        var weapon = NewSpot(SpotKind.WeaponStation, Center + new Vector3(-2.7f, 1.3f, 0f), One(0), area);
+        var armor = NewSpot(SpotKind.ArmorStation, Center + new Vector3(2.7f, 1.3f, 0f), One(0), area);
         weapon.Locked = armor.Locked = true;
         weapon.LockedText = "Ferraria: resgate o ferreiro para construir";
         armor.LockedText = "Armaria: resgate a ferreira para construir";
@@ -145,7 +197,7 @@ public class CampSystem : MonoBehaviour
         foreach (var spot in spots)
         {
             if (!spot.Locked && !spot.HasAction) continue;
-            float distance = ((Vector2)(spot.transform.position - player.transform.position)).sqrMagnitude;
+            float distance = spot.SqrDistance(player.transform.position);
             if (distance < best) { best = distance; NearestSpot = spot; }
         }
         if (!NearestSpot) return;

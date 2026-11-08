@@ -16,7 +16,7 @@ Tudo em `Assets/Scripts/`:
 | `Pickups/` | XP, cura, ímã, ouro | `Pickup` |
 | `Resources/` | Coleta diurna e inventário | `DayResourceSystem`, `ResourceInventory`, `ResourceHUD` |
 | `Chests/` | Baús, chaves, recompensas | `ChestSystem`, `ChestOffer`, `ChestUI`, `ChestArt` |
-| `Camp/` | Acampamento: estruturas, pontos de construção, HUD e arte | `CampSystem`, `BuildSpot`, `Structure`, `CampHUD`, `CampArt` |
+| `Camp/` | Acampamento: estruturas, pontos de construção, HUD e arte | `CampSystem`, `BuildSpot`, `Structure`, `GateVisual`, `CampHUD`, `CampArt` |
 | `UI/` | HUD, minimapa e level up | `HUD`, `Minimap`, `LevelUpPanel` |
 | `FX/` | Partículas, popups, shake | `FxManager`, `FxParticle`, `FxFade`, `FloatingText` |
 | `Audio/` | SFX e música | `AudioManager`, `SfxGenerator` |
@@ -48,7 +48,7 @@ MainMenu → Game (Playing) ⇄ Paused / LevelUp / Chest
 
 **Baús.** Três baús fixos por run, a distâncias crescentes do início. `IsReserved` impede que árvores e rochas nasçam sobre início, baús e chaves. A chave só é gasta quando a recompensa é escolhida. Ao abrir, o jogo pausa e a animação roda em tempo não escalado; `ChestUI` só mostra a janela depois dela (`ShowOffers`), porque o véu da janela cobriria o baú. Desistir toca a animação ao contrário. A arte vem de `Resources/Chests/chest.png`, e não pode ir para `ownedSprites`, que destrói a textura.
 
-**Acampamento.** `CampSystem` cria por código a fogueira, o anel de 16 pontos e 2 pontos de estação. `BuildSpot` conhece a próxima ação e seu custo; `Structure` guarda vida e destruição. Destruir a fogueira chama `GameManager.EndRun(motivo)`. Com ação disponível, o F é do acampamento e `ChestSystem` não abre baú. `IsReserved` mantém a área livre de recursos e decoração.
+**Acampamento.** `CampSystem` cria por código a fogueira, o anel quadrado de 16 pontos e 2 pontos de estação. O anel é uma grade de nós a cada `CampArt.Cell` (32 px); cada `BuildSpot` recebe suas peças (`SpotPiece`: posição e quadro da folha) e seus retângulos de colisão, e desenha uma peça por nó. `BuildSpot` conhece a próxima ação e seu custo; `Structure` guarda vida e destruição e escurece todas as peças com o dano. `GateVisual` anima o portão conforme o lado do jogador, sem mexer na colisão. Destruir a fogueira chama `GameManager.EndRun(motivo)`. Com ação disponível, o F é do acampamento e `ChestSystem` não abre baú. `IsReserved` mantém a área livre de recursos e decoração.
 
 **Inicialização.** `GameManager.Awake` chama `CampSystem.Ensure`, e `ChestSystem.Awake` também, pois baús são medidos a partir do centro do acampamento. `GameManager.Start` adiciona `DayResourceSystem` e `ChestSystem` se faltarem na cena. `GameManager.Start` também adiciona `Minimap`. `ChestUI` e `ResourceHUD` são criados por código pelos respectivos sistemas.
 
@@ -71,5 +71,5 @@ Durante o Play, **Survivors > Testes** adiciona materiais e causa dano na foguei
 - **Arma:** herde de `Weapon` (a `AuraWeapon` é a mais simples), crie o prefab e adicione em `GameSystems > UpgradeManager > Available Weapons`.
 - **Upgrade de atributo:** uma linha `AddStat(...)` em `UpgradeManager.RollOptions`.
 - **Recompensa de baú:** novo valor em `ChestReward`, com caso em `ChestOffer.Create` e `Apply`. O sorteio em `ChestSystem.Awake` usa `% 7` fixo: atualize junto.
-- **Arte do acampamento:** coloque `heart`, `fence`, `wall`, `gate`, `station_weapon`, `station_armor` ou `spot` em `Assets/Art/Resources/Camp/`; `CampArt` carrega sem mudar código e usa placeholder se faltar. Arte animada é uma spritesheet horizontal de quadros quadrados, sem compressão, importada como sprite único e fatiada por `CampArt.Frames`.
+- **Arte do acampamento:** fica em `Assets/Art/Resources/Camp/`, sem compressão e importada como sprite único; `CampArt` usa placeholder se faltar. A fogueira é uma tira de quadros quadrados (`CampArt.Frames`). Cerca, muro, portões e estações são folhas em grade fatiadas por `CampArt.Sheet`: `fence` e `wall` têm 13 quadros de 48 × 64 na ordem descrita em `CampArt`; `gate_wood` e `gate_stone`, 4 linhas de 6 quadros, uma por sentido de abertura; `station_*_npc`, 8 quadros de 64 × 68. O pivô das peças é o pé do poste, que fica sobre o nó da grade.
 - **Som:** arraste o `AudioClip` no `AudioManager`; sem clip, ele usa o som gerado.

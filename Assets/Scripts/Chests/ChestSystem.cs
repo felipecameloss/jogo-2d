@@ -9,13 +9,13 @@ public class ChestSystem : MonoBehaviour
     public static ChestSystem Instance { get; private set; }
 
     [Header("Baús")]
-    public float firstChestDistance = 9f;
+    public float firstChestDistance = 10f;
     public float chestSpacing = 3.5f;
     public float interactionRange = 2.2f;
 
     [Header("Chaves")]
     [Tooltip("A primeira chave nasce garantida a essa distância do início.")]
-    public float firstKeyDistance = 10f;
+    public float firstKeyDistance = 11f;
     public float keyCellSize = 14f;
     [Range(0f, 1f)] public float keyChancePerCell = 0.2f;
     public float keyPickupRange = 0.9f;

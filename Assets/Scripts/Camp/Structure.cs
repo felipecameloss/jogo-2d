@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum StructureKind { Heart, Fence, Wall, Gate, Station }
+public enum StructureKind { Heart, Fence, Wall, Gate, StoneGate, Station }
 
 // Qualquer construção do acampamento que tem vida e pode ser destruída.
 public class Structure : MonoBehaviour
@@ -20,10 +20,9 @@ public class Structure : MonoBehaviour
 
     static readonly Color DamagedTint = new Color(0.45f, 0.38f, 0.34f);
 
-    SpriteRenderer sr;
+    SpriteRenderer[] renderers = new SpriteRenderer[0];
     float flashTimer;
 
-    void Awake() => sr = GetComponent<SpriteRenderer>();
     void OnEnable() => Active.Add(this);
     void OnDisable() => Active.Remove(this);
 
@@ -33,6 +32,7 @@ public class Structure : MonoBehaviour
         Kind = kind;
         MaxHealth = maxHealth;
         Health = maxHealth;
+        renderers = GetComponentsInChildren<SpriteRenderer>(); // Muros têm uma peça por nó da grade.
     }
 
     public void TakeDamage(float amount)
@@ -58,14 +58,15 @@ public class Structure : MonoBehaviour
 
     void Update()
     {
-        if (!sr) return;
+        Color color;
         if (flashTimer > 0f)
         {
             flashTimer -= Time.deltaTime;
-            sr.color = Color.white * 1.5f;
-            return;
+            color = Color.white * 1.5f;
         }
         // Quanto mais danificada, mais escura: o estado aparece no próprio mundo.
-        sr.color = Color.Lerp(DamagedTint, Color.white, MaxHealth > 0f ? Health / MaxHealth : 1f);
+        else color = Color.Lerp(DamagedTint, Color.white, MaxHealth > 0f ? Health / MaxHealth : 1f);
+        foreach (var piece in renderers)
+            if (piece) piece.color = color;
     }
 }

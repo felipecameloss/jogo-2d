@@ -3674,10 +3674,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c722665fd81f62cb41a0b99a871cdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChestSystem
-  firstChestDistance: 9
+  firstChestDistance: 10
   chestSpacing: 3.5
   interactionRange: 2.2
-  firstKeyDistance: 10
+  firstKeyDistance: 11
   keyCellSize: 14
   keyChancePerCell: 0.2
   keyPickupRange: 0.9

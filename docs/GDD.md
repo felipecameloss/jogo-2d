@@ -23,6 +23,7 @@ Organizado pelo framework **DDE** (Design, Dynamics, Experience), como pede a ru
 - **Progressão (05/11/2026):** XP e level up dão apenas atributos e passivas. Armas e armaduras vêm de baús e estações.
 - **Combate (05/11/2026):** armas automáticas e sem magia. Serão 4 a 6 armas medievais, escolhidas entre as atuais e adaptadas.
 - **Construção (05/11/2026):** em pontos fixos do acampamento. O jogador se aproxima, aperta F e paga os materiais.
+- **Forma do acampamento (08/11/2026):** anel quadrado, com um portão no meio de cada lado. Portões de madeira podem ser reforçados com pedra.
 
 - **Coração da base (05/11/2026):** uma fogueira no centro do acampamento.
 - **Monstros (05/11/2026):** vão até a fogueira, atacam o que os bloqueia e perseguem o jogador a até 7 unidades. Os danos persistem entre noites.
@@ -78,8 +79,8 @@ Nome, protagonista e origem dos monstros: **a definir**.
 - **Coleta:** de dia, segurar E junto a árvores e rochas rende madeira e pedra. Pontos ricos rendem o dobro e tudo renova ao amanhecer. **Os materiais ainda não têm uso.**
 - **Baús:** três por run, perto do início, cada vez mais distantes e mais fortes. Cada abertura consome uma chave encontrada no mapa, e o jogador escolhe 1 de 3 bônus permanentes.
 - **Ouro:** inimigos soltam ouro, mas **ainda não há onde gastá-lo**.
-- **Acampamento:** o jogador começa ao lado da fogueira, cercada por um anel de 12 pontos de muralha e 4 de portão. Se ela for destruída, a run termina.
-- **Construção e reparo:** com F, em pontos fixos, pagando madeira e pedra. Cercas viram muros e estruturas danificadas podem ser reparadas. Portões bloqueiam monstros e deixam o jogador passar.
+- **Acampamento:** o jogador começa ao lado da fogueira, cercada por um anel quadrado de 12 pontos de muralha (4 cantos e 2 trechos por lado) e 4 de portão, um no meio de cada lado. Se ela for destruída, a run termina.
+- **Construção e reparo:** com F, em pontos fixos, pagando madeira e pedra. Cercas viram muros, portões de madeira viram portões de pedra e estruturas danificadas podem ser reparadas. Portões bloqueiam monstros e deixam o jogador passar; eles se abrem quando o jogador chega perto, para o lado oposto ao dele.
 - **Inimigos:** vão até a fogueira, atacam o que os bloqueia e perseguem o jogador se ele estiver perto. Longe da base, o jogador é caçado enquanto ela é atacada. Causam dano por contato. Variam entre Slime (básico), Bat (rápido) e Golem (resistente), além de elites e anéis que cercam o jogador.
 - **Derrota:** vida do jogador zerada ou fogueira destruída encerra a run e mostra as estatísticas.
 
@@ -115,6 +116,7 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
+| 08/11/2026 | Anel do acampamento passa de círculo a quadrado; portão de madeira pode ser reforçado com pedra; portões abrem ao ver o jogador. | A arte final de cercas, muros e portões é top-down, em peças horizontais, verticais e de canto, e veio com portão de pedra |
 | 05/11/2026 | Minimapa de orientação na HUD, com fogueira e baús fechados, sem chaves nem inimigos. | Evitar que o jogador se perca no mapa infinito sem tirar a busca por chaves |
 | 05/11/2026 | Level up deixa de dar armas; armas ficam medievais, sem magia, e serão de 4 a 6 em vez de 10. | Dar papel próprio às estações e reduzir o trabalho de arte |
 | 05/11/2026 | Conceito definido: defesa de um acampamento medieval, com construção, resgate de pessoas e estações de trabalho. | Dar propósito ao dia e aos recursos, e identidade ao jogo |
