@@ -13,7 +13,7 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 | Coletar materiais (segurar) | E | Botão oeste (X no Xbox, quadrado no PlayStation) |
 | Construir, reparar, resgatar, abrir baú e estação | F | Botão norte (Y no Xbox, triângulo no PlayStation) |
 | Escolher upgrade, recompensa ou compra | 1 a 5 ou clique | Não testado |
-| Pausar | Esc / P | Indisponível |
+| Pausar | Esc / P | Start |
 
 - As armas atacam sozinhas. Você começa com a Besta; Espada, Facas, Machado de arremesso e Bombas vêm de baús e da ferraria.
 - Colete as gemas que os inimigos derrubam para subir de nível e escolher atributos.
@@ -60,6 +60,10 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 ### Ouro
 
 Inimigos têm chance de dropar ouro, e o valor cresce a cada noite. O ouro ainda não tem uso no jogo (ver `docs/GDD.md`).
+
+### Opções
+
+No menu principal ou na pausa, **Opções** ajusta o volume da música e dos efeitos (fica salvo para a próxima vez) e mostra os controles.
 
 ### Atalho de teste
 
@@ -119,7 +123,7 @@ O build usa Gzip com *decompression fallback* ligado, porque o itch.io não envi
 
 - Equipe: ver [Contribuindo](docs/CONTRIBUINDO.md).
 - Código-base do protótipo gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
-- Fonte: LegacyRuntime (fonte padrão do Unity).
+- Fonte: MedievalSharp, de wmk69, sob a SIL Open Font License 1.1 ([licença](docs/licencas/MedievalSharp-OFL.txt)).
 - Jogador: sprites feitos no Aseprite por Pedro Nadotti.
 - Cercas, muros, portões e estações do acampamento: sprites feitos no Aseprite por Pedro Nadotti.
 - Árvore, arbustos, rochas, fogueira e baú: feitos no Aseprite (autoria a confirmar em [Assets](docs/ASSETS.md)).

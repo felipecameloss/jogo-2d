@@ -267,10 +267,10 @@ Exportar para `Assets/Art/Resources/Camp/` a 24 px por unidade. `CampArt` carreg
 
 **Bloco:** acabamento · **Alvo:** 09/11 · **Depende de:** Task 15
 
-- [ ] Opções com volume de música e SFX, acessíveis no menu e na pausa, salvas em `PlayerPrefs`.
-- [ ] Tela de controles.
-- [ ] Fonte e estilo medievais em HUD e menus.
-- [ ] Remover do HUD informações sem uso.
+- [x] Opções com volume de música e SFX, acessíveis no menu e na pausa, salvas em `PlayerPrefs`.
+- [x] Tela de controles (dentro das opções).
+- [x] Fonte medieval em HUD e menus (MedievalSharp, OFL). Cores dos painéis das cenas ainda são as do protótipo.
+- [ ] Remover do HUD informações sem uso. (Pendente: o ouro ainda aparece; depende da decisão sobre o ouro.)
 
 ### Task 20: Dificuldade após a Noite 4
 

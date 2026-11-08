@@ -9,8 +9,7 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
 
-    [Range(0f, 1f)] public float sfxVolume = 0.5f;
-    [Range(0f, 1f)] public float musicVolume = 0.4f;
+    // Volumes vêm de GameSettings (tela de opções), salvos entre sessões.
     public AudioClip music;
 
     [Header("Opcional: substitui os sons gerados")]
@@ -25,7 +24,7 @@ public class AudioManager : MonoBehaviour
     [Tooltip("Tempo mínimo entre dois sons iguais (evita estourar o áudio com 50 acertos no mesmo frame).")]
     public float minRepeatInterval = 0.04f;
 
-    AudioSource sfxSource;
+    AudioSource sfxSource, musicSource;
     readonly Dictionary<Sfx, AudioClip> clips = new Dictionary<Sfx, AudioClip>();
     readonly Dictionary<Sfx, float> lastPlayed = new Dictionary<Sfx, float>();
 
@@ -45,12 +44,24 @@ public class AudioManager : MonoBehaviour
 
         if (music)
         {
-            var musicSource = gameObject.AddComponent<AudioSource>();
+            musicSource = gameObject.AddComponent<AudioSource>();
             musicSource.clip = music;
             musicSource.loop = true;
-            musicSource.volume = musicVolume;
+            musicSource.volume = GameSettings.MusicVolume;
             musicSource.Play();
         }
+        GameSettings.Changed += ApplyVolumes;
+    }
+
+    void OnDestroy()
+    {
+        GameSettings.Changed -= ApplyVolumes;
+        if (Instance == this) Instance = null;
+    }
+
+    void ApplyVolumes()
+    {
+        if (musicSource) musicSource.volume = GameSettings.MusicVolume;
     }
 
     public static void Play(Sfx sfx, float volume = 1f, float pitchVariation = 0.1f)
@@ -65,6 +76,6 @@ public class AudioManager : MonoBehaviour
         lastPlayed[sfx] = now;
 
         sfxSource.pitch = 1f + Random.Range(-pitchVariation, pitchVariation);
-        sfxSource.PlayOneShot(clips[sfx], volume * sfxVolume);
+        sfxSource.PlayOneShot(clips[sfx], volume * GameSettings.SfxVolume);
     }
 }

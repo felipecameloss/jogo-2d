@@ -26,6 +26,7 @@ Inventário dos assets do jogo. A rubrica exige referências e créditos no `REA
 | `Resources/Camp/gate_wood.png`, `gate_stone.png` | Portões de madeira e de pedra abrindo nos 4 sentidos, 24 quadros de 48 × 64 | Aseprite (`gate_wood.ase`, `gate_stone.ase`) | Pedro Nadotti (autoral) |
 | `Resources/Camp/station_weapon_npc.png`, `station_armor_npc.png` | Ferraria e armaria com o NPC trabalhando, 8 quadros de 64 × 68 | Aseprite (`station_*_npc.ase`) | Pedro Nadotti (autoral) |
 | `Resources/Camp/station_weapon.png`, `station_armor.png` | Estações vazias e fechadas, enquanto o NPC está perdido | Aseprite (`station_weapons.ase`, `station_armor.ase`) | Pedro Nadotti (autoral) |
+| `Resources/Fonts/MedievalSharp.ttf` | Fonte de toda a interface e dos números de dano | [Google Fonts](https://github.com/google/fonts/tree/main/ofl/medievalsharp) | wmk69, SIL Open Font License 1.1: uso, modificação e distribuição livres, inclusive comercial; não pode ser vendida sozinha. Licença em `docs/licencas/MedievalSharp-OFL.txt` |
 | `Resources/Chests/chest.png` | Baú animado, 20 quadros de 32 px | Aseprite (`chest.ase`) | **A confirmar** |
 
 ### Placeholders por substituir
@@ -40,7 +41,6 @@ Inventário dos assets do jogo. A rubrica exige referências e créditos no `REA
 | Chão | Textura gerada em `Assets/Generated/Sprites` | Sprite ou tileset final |
 | SFX | Sons 8-bit de `SfxGenerator` | `AudioClip` final no `AudioManager` |
 | Música | **Nenhuma** (`music` vazio em `Game.unity`) | Trilha de dia e de noite |
-| Fonte | LegacyRuntime | Fonte com identidade do jogo |
 
 ## Disponível, sem uso no jogo
 
@@ -50,5 +50,5 @@ Inventário dos assets do jogo. A rubrica exige referências e créditos no `REA
 
 Mantenha esta lista igual à seção Créditos do `README.md`.
 
-- Fonte: LegacyRuntime, fonte padrão do Unity.
+- Fonte: MedievalSharp, de wmk69, licença SIL Open Font License 1.1 (`docs/licencas/MedievalSharp-OFL.txt`).
 - Código-base do protótipo: gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.

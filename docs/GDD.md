@@ -94,7 +94,8 @@ Valores detalhados em `BALANCEAMENTO.md`.
 
 - **HUD:** vida, XP, tempo, relógio do dia, ouro, materiais, chaves, direção do baú mais próximo, direção da pessoa perdida mais próxima (de dia), minimapa e avisos de interação.
 - **Minimapa:** radar centrado no jogador, com alcance fixo, que mostra a fogueira e os baús fechados; o que está além do alcance fica preso na borda, indicando a direção. Chaves e inimigos ficam de fora para manter a exploração.
-- **Menus:** principal, pausa, level up, baú, ferraria, armaria e game over. Ainda não há opções.
+- **Menus:** principal, pausa, opções (volume de música e efeitos, controles), level up, baú, ferraria, armaria e game over.
+- **Identidade visual:** fonte medieval (MedievalSharp) em toda a interface; janelas de estação em tons de madeira.
 - **Feedback no mundo:** clarão e escala ao acertar; números de dano; tela tremendo e jogador piscando ao sofrer dano; recursos esgotados acinzentados; chaves pulsando; escuridão à noite com luz em volta do jogador.
 - **Som:** SFX gerados por código, ainda placeholder. **Sem música.**
 
