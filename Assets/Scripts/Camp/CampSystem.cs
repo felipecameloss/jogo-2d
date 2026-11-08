@@ -126,18 +126,21 @@ public class CampSystem : MonoBehaviour
         }
     }
 
-    // Três peças com centro no nó (i, j); horizontais alternam os quadros 0 e 1, verticais 2 e 3.
+    // Três peças com centro no nó (i, j). Cada lado tem o seu quadro, que casa com o braço dos cantos:
+    // topo 0, base 1, esquerda 3, direita 2.
     void HorizontalRun(int i, int j)
     {
+        int index = j == RingCells ? 0 : 1;
         var pieces = new SpotPiece[3];
-        for (int k = -1; k <= 1; k++) pieces[k + 1] = new SpotPiece(new Vector2(k * CampArt.Cell, 0f), (i + k) % 2);
+        for (int k = -1; k <= 1; k++) pieces[k + 1] = new SpotPiece(new Vector2(k * CampArt.Cell, 0f), index);
         NewSpot(SpotKind.Wall, Node(i, j), pieces, HorizontalArea(1.5f));
     }
 
     void VerticalRun(int i, int j)
     {
+        int index = i == 0 ? 3 : 2;
         var pieces = new SpotPiece[3];
-        for (int k = -1; k <= 1; k++) pieces[k + 1] = new SpotPiece(new Vector2(0f, k * CampArt.Cell), 2 + (j + k) % 2);
+        for (int k = -1; k <= 1; k++) pieces[k + 1] = new SpotPiece(new Vector2(0f, k * CampArt.Cell), index);
         NewSpot(SpotKind.Wall, Node(i, j), pieces, VerticalArea(-1.5f, 1.5f));
     }
 

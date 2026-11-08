@@ -3,7 +3,8 @@ using UnityEngine;
 
 // Sprites do acampamento. Procura a arte final em Assets/Art/Resources/Camp/<nome>.png
 // e, se não existir, gera um placeholder.
-// Cerca e muro: 13 quadros de 48x64 na mesma ordem — 0-1 horizontal, 2-3 vertical, 4-7 diagonais,
+// Cerca e muro: 13 quadros de 48x64 na mesma ordem — 0 horizontal de cima, 1 de baixo, 2 vertical da direita,
+// 3 da esquerda, 4-7 diagonais,
 // 8 ┘, 9 └, 10 ┐, 11 ┌, 12 poste. Portões: 4 linhas de 6 quadros (abrindo para sul, oeste, norte, leste).
 public static class CampArt
 {
