@@ -19,8 +19,8 @@ public class ResourceHUD : MonoBehaviour
         canvasObject = canvas.gameObject;
 
         // Logo abaixo do painel de nível.
-        var panel = UIStyle.Panel(canvas, "Materiais", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -150f), new Vector2(460f, 140f));
-        var title = UIStyle.Label(panel, "MATERIAIS", UIStyle.Body, TextAnchor.UpperLeft, UIStyle.Gold);
+        var panel = UIStyle.Panel(canvas, "Materiais", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -154f), new Vector2(UIStyle.ColumnWidth, 150f));
+        var title = UIStyle.Bold(UIStyle.Label(panel, "MATERIAIS", UIStyle.Body, TextAnchor.UpperLeft, UIStyle.Gold));
         UIStyle.Stretch(title.rectTransform, UIStyle.Padding);
         left = UIStyle.Label(panel, "", UIStyle.Body, TextAnchor.LowerLeft, Color.white);
         UIStyle.Stretch(left.rectTransform, UIStyle.Padding);
@@ -29,7 +29,7 @@ public class ResourceHUD : MonoBehaviour
 
         var box = UIStyle.Panel(canvas, "Coleta", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 90f), new Vector2(PromptWidth, 76f));
         prompt = box.parent.gameObject;
-        promptText = UIStyle.Label(box, "", UIStyle.Body, Vector2.zero, new Vector2(PromptWidth - 30f, 50f));
+        promptText = UIStyle.Label(box, "", UIStyle.Large, Vector2.zero, new Vector2(PromptWidth - 30f, 50f));
         promptText.rectTransform.anchorMin = promptText.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
         promptText.rectTransform.anchoredPosition = new Vector2(0f, 4f);
         var track = UIStyle.Image(box, "Barra", new Color(0.05f, 0.03f, 0.02f));

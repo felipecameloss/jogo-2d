@@ -129,7 +129,7 @@ O build usa Gzip com *decompression fallback* ligado, porque o itch.io não envi
 
 - Equipe: ver [Contribuindo](docs/CONTRIBUINDO.md).
 - Código-base do protótipo gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
-- Fonte: Jersey 10, de The Soft Type Project, sob a SIL Open Font License 1.1 ([licença](docs/licencas/Jersey10-OFL.txt)).
+- Fonte: Pixel Operator, de Jayvee Enaguas (HarvettFox96), sob CC0 1.0 ([licença](docs/licencas/PixelOperator-CC0.txt)).
 - Jogador: sprites feitos no Aseprite por Pedro Nadotti.
 - Cercas, muros, portões e estações do acampamento: sprites feitos no Aseprite por Pedro Nadotti.
 - Árvore, arbustos, rochas, fogueira e baú: feitos no Aseprite (autoria a confirmar em [Assets](docs/ASSETS.md)).

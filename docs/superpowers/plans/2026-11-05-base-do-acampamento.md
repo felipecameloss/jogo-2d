@@ -269,7 +269,7 @@ Exportar para `Assets/Art/Resources/Camp/` a 24 px por unidade. `CampArt` carreg
 
 - [x] Opções com volume de música e SFX, acessíveis no menu e na pausa, salvas em `PlayerPrefs`.
 - [x] Tela de controles (dentro das opções).
-- [x] Fonte pixelada (Jersey 10, OFL) e painéis opacos com moldura em HUD, janelas e menus.
+- [x] Fonte pixelada (Pixel Operator, CC0) e painéis opacos com moldura em HUD, janelas e menus.
 - [ ] Remover do HUD informações sem uso. (Pendente: o ouro ainda aparece; depende da decisão sobre o ouro.)
 
 ### Task 20: Dificuldade após a Noite 4

@@ -11,7 +11,7 @@ public class OptionsMenu : MonoBehaviour
         "Mover: WASD ou setas  •  analógico\n" +
         "Dash: Shift\n" +
         "Coletar (segurar): E  •  botão oeste\n" +
-        "Construir, reparar, resgatar, abrir baú e estação: F  •  botão norte\n" +
+        "Construir, reparar, resgatar e abrir: F  •  botão norte\n" +
         "Escolher opção: 1 a 5 ou clique\n" +
         "Pausar: Esc ou P";
 
@@ -67,7 +67,7 @@ public class OptionsMenu : MonoBehaviour
         var music = VolumeRow(window, "Música", 260, GameSettings.MusicVolume, v => GameSettings.MusicVolume = v, out musicValue);
         VolumeRow(window, "Efeitos", 180, GameSettings.SfxVolume, v => { GameSettings.SfxVolume = v; AudioManager.Play(Sfx.Pickup, 0.6f); }, out sfxValue);
         Label(window, "CONTROLES", new Vector2(0, 90), new Vector2(1000, 60), 40).color = UIStyle.Gold;
-        var controls = Label(window, Controls, new Vector2(0, -75), new Vector2(1000, 260), 30);
+        var controls = Label(window, Controls, new Vector2(0, -75), new Vector2(1040, 260), 32);
         controls.lineSpacing = 0.95f;
 
         Text tutorialLabel = null;

@@ -2,8 +2,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-// Identidade visual da interface: fonte pixelada (Jersey 10, licença OFL), painéis opacos com
-// moldura e tamanhos de texto em múltiplos de 10, que caem no grid de pixels da fonte.
+// Identidade visual da interface: fonte pixelada Pixel Operator (CC0), painéis opacos com moldura.
+// A fonte é desenhada numa grade de 16 px: os textos usam 32 (corpo) e 64 (títulos), que ficam
+// nítidos tanto em 1920x1080 quanto na janela de 960x540 do navegador.
 public static class UIStyle
 {
     public static readonly Color PanelColor = new Color(0.11f, 0.075f, 0.05f);
@@ -17,19 +18,37 @@ public static class UIStyle
     public static readonly Color Info = new Color(0.65f, 0.85f, 1f);
     public static readonly Color Veil = new Color(0.03f, 0.02f, 0.01f, 0.85f); // atrás das janelas
 
-    public const int Small = 20, Body = 30, Large = 40, Title = 60, Huge = 80;
+    public const int Body = 32, Large = 32, Title = 64, Huge = 64;
     public const float Border = 4f, Padding = 14f;
+    // Largura da coluna da esquerda (nível, materiais e missões).
+    public const float ColumnWidth = 520f;
 
-    static Font font;
+    static Font font, bold;
 
     public static Font Font
     {
         get
         {
-            if (!font) font = Resources.Load<Font>("Fonts/Jersey10");
+            if (!font) font = Resources.Load<Font>("Fonts/PixelOperator");
             if (!font) font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             return font;
         }
+    }
+
+    public static Font BoldFont
+    {
+        get
+        {
+            if (!bold) bold = Resources.Load<Font>("Fonts/PixelOperator-Bold");
+            return bold ? bold : Font;
+        }
+    }
+
+    // Destaque: a versão em negrito da fonte (o negrito sintético do Unity borra os pixels).
+    public static Text Bold(Text text)
+    {
+        text.font = BoldFont;
+        return text;
     }
 
     // Canvas de tela no padrão do jogo: 1920x1080 de referência e pixel perfect.
@@ -107,11 +126,13 @@ public static class UIStyle
         rect.offsetMax = new Vector2(-inset, -inset);
     }
 
-    // Fonte, tamanho no grid e sombra dura de 2 px, sem transparência.
+    // Fonte, tamanho no grid e sombra dura de 2 px, sem transparência. Títulos vão em negrito.
     public static void Style(Text text, int size)
     {
-        text.font = Font;
         text.fontSize = Snap(size);
+        // Quem já pediu negrito continua em negrito ao reestilizar a cena.
+        if (text.font != BoldFont) text.font = text.fontSize >= Title ? BoldFont : Font;
+        text.fontStyle = FontStyle.Normal;
         var shadow = text.GetComponent<Shadow>();
         if (!shadow) shadow = text.gameObject.AddComponent<Shadow>();
         shadow.effectDistance = new Vector2(2f, -2f);
@@ -120,11 +141,7 @@ public static class UIStyle
 
     public static int Snap(int size)
     {
-        if (size <= 24) return Small;
-        if (size <= 34) return Body;
-        if (size <= 50) return Large;
-        if (size <= 70) return Title;
-        return Huge;
+        return size <= 44 ? Body : Title;
     }
 
     // Botão no padrão do jogo: moldura, fundo opaco e realce claro ao passar o mouse.

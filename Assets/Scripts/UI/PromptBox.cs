@@ -15,7 +15,7 @@ public class PromptBox
     {
         var inner = UIStyle.Panel(canvas, "Aviso", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, y), new Vector2(MinWidth, Height));
         frame = (RectTransform)inner.parent;
-        text = UIStyle.Label(inner, "", UIStyle.Body, TextAnchor.MiddleCenter, new Color(1f, 0.92f, 0.7f));
+        text = UIStyle.Bold(UIStyle.Label(inner, "", UIStyle.Body, TextAnchor.MiddleCenter, new Color(1f, 0.92f, 0.7f)));
         text.horizontalOverflow = HorizontalWrapMode.Overflow;
         UIStyle.Stretch(text.rectTransform);
         frame.gameObject.SetActive(false);

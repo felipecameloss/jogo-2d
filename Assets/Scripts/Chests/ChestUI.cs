@@ -6,7 +6,7 @@ using UnityEngine.UI;
 // A direção do baú mais próximo fica nas missões (QuestLog).
 public class ChestUI : MonoBehaviour
 {
-    const float CardWidth = 360f, CardHeight = 260f, CardSpacing = 390f;
+    const float CardWidth = 380f, CardHeight = 300f, CardSpacing = 410f;
 
     public ChestSystem source;
     GameObject modal, hud;
@@ -27,21 +27,21 @@ public class ChestUI : MonoBehaviour
         UIStyle.Stretch(veil.rectTransform);
         veil.raycastTarget = true;
         modal = veil.gameObject;
-        var window = UIStyle.Panel(modal.transform, "Janela", Vector2.one * 0.5f, Vector2.one * 0.5f, Vector2.zero, new Vector2(1240f, 600f));
-        heading = UIStyle.Label(window, "", UIStyle.Title, new Vector2(0f, 230f), new Vector2(1180f, 70f));
+        var window = UIStyle.Panel(modal.transform, "Janela", Vector2.one * 0.5f, Vector2.one * 0.5f, Vector2.zero, new Vector2(1300f, 660f));
+        heading = UIStyle.Label(window, "", UIStyle.Title, new Vector2(0f, 265f), new Vector2(1240f, 80f));
         heading.color = UIStyle.Gold;
-        var hint = UIStyle.Label(window, "Escolha UMA recompensa (1, 2, 3 ou clique). A chave só é gasta ao escolher.", UIStyle.Body, new Vector2(0f, 170f), new Vector2(1180f, 44f));
+        var hint = UIStyle.Label(window, "Escolha UMA recompensa (1, 2, 3 ou clique). A chave só é gasta ao escolher.", UIStyle.Body, new Vector2(0f, 205f), new Vector2(1240f, 44f));
         hint.color = UIStyle.Muted;
         for (int i = 0; i < 3; i++)
         {
             int index = i;
             buttons[i] = UIStyle.Button(window, "", UIStyle.Body, new Vector2((i - 1) * CardSpacing, -20f), new Vector2(CardWidth, CardHeight), () => source.Choose(index), out var unused);
             unused.gameObject.SetActive(false);
-            titles[i] = UIStyle.Label(buttons[i].transform, "", UIStyle.Large, new Vector2(0f, 80f), new Vector2(CardWidth - 30f, 70f));
+            titles[i] = UIStyle.Bold(UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, 95f), new Vector2(CardWidth - 30f, 80f)));
             titles[i].color = UIStyle.Gold;
-            descriptions[i] = UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, -30f), new Vector2(CardWidth - 40f, 140f));
+            descriptions[i] = UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, -35f), new Vector2(CardWidth - 40f, 170f));
         }
-        UIStyle.Button(window, "Fechar sem abrir  [Esc]", UIStyle.Body, new Vector2(0f, -240f), new Vector2(440f, 60f), source.Close, out _);
+        UIStyle.Button(window, "Fechar sem abrir  [Esc]", UIStyle.Body, new Vector2(0f, -270f), new Vector2(460f, 64f), source.Close, out _);
         modal.SetActive(false);
     }
 

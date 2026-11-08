@@ -42,8 +42,8 @@ public class FxManager : MonoBehaviour
         tm.font = Instance.popupFont;
         tm.text = text;
         tm.color = color;
-        tm.fontSize = 40; // múltiplo de 10: grid da fonte pixelada
-        tm.characterSize = 0.072f;
+        tm.fontSize = 32; // múltiplo de 16: grid da fonte pixelada
+        tm.characterSize = 0.09f;
         tm.anchor = TextAnchor.MiddleCenter;
         tm.alignment = TextAlignment.Center;
         var mr = go.GetComponent<MeshRenderer>();
