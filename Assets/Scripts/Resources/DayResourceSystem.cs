@@ -99,19 +99,19 @@ public class DayResourceSystem : MonoBehaviour
         {
             Progress = 0;
             target = null;
-            Prompt = cycle.IsNight ? "A coleta volta ao amanhecer. Sobreviva!" : "";
+            Prompt = ""; // A dica de coleta fica nas missões, no canto da tela.
             return;
         }
         if (nearest != target) Progress = 0;
         target = nearest;
         if (target == null)
         {
-            Prompt = "Explore: árvores e rochas • Segure E para coletar";
+            Prompt = "";
             return;
         }
         target.Renderer.color = Color.Lerp(Color.white, Tint(target.Kind), 0.3f + 0.2f * Mathf.Sin(Time.time * 5f));
         int amount = Yield(target.Kind) * (target.Rich ? 2 : 1);
-        Prompt = $"Segure E / X (controle)  •  {Label(target.Kind)} +{amount}" + (target.Rich ? "  •  VEIO RICO!" : "");
+        Prompt = $"Segure [E]  •  {Label(target.Kind)} +{amount}" + (target.Rich ? "  •  VEIO RICO!" : "");
         if (!GameInput.CollectHeld()) { Progress = 0; return; }
         float duration = Mathf.Max(0.1f, collectSeconds);
         Progress = Mathf.Min(1f, Progress + Time.deltaTime / duration);

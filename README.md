@@ -38,7 +38,7 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 - Cada baú precisa de uma chave. A primeira nasce perto do início; as demais ficam espalhadas pelo mapa e são coletadas ao passar por cima.
 - Perto do baú, aperte **F** e escolha **uma** de três recompensas: uma arma e dois equipamentos. A chave só é gasta ao confirmar a escolha.
 - **Esc / P** ou Voltar fecha a janela sem gastar a chave. As opções continuam as mesmas ao reabrir.
-- O canto da tela indica a direção do baú fechado mais próximo.
+- As missões, no canto esquerdo, indicam a distância e a direção do baú fechado mais próximo.
 
 ### Acampamento
 
@@ -51,7 +51,7 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 
 ### Pessoas perdidas e estações
 
-- O ferreiro e a ferreira estão perdidos longe do acampamento. De dia, o canto da tela aponta o mais próximo.
+- O ferreiro e a ferreira estão perdidos longe do acampamento. As missões, no canto esquerdo, mostram a distância e a direção de cada um.
 - Perto da pessoa, aperte **F** para resgatá-la. Ela anda sozinha até o acampamento.
 - Cada residente libera um ponto de estação: **ferraria** (ferreiro) e **armaria** (ferreira), por 30 madeira e 20 pedra.
 - Perto da estação, **F** abre as compras: a ferraria ensina e melhora armas; a armaria dá armadura e vida. Pague com madeira e pedra (1 a 5 ou clique; Esc fecha).
@@ -63,7 +63,9 @@ Inimigos têm chance de dropar ouro, e o valor cresce a cada noite. O ouro ainda
 
 ### Tutorial
 
-Na primeira run, o canto esquerdo mostra um objetivo por vez durante o primeiro dia: coletar, construir, resgatar e abrir um baú. **Enter** pula. Para ver de novo, use **Opções > Tutorial na próxima run**.
+Na primeira run, o topo das **missões** (canto esquerdo) mostra um objetivo por vez durante o primeiro dia: coletar, construir, resgatar e abrir um baú. **Enter** pula. Para ver de novo, use **Opções > Tutorial na próxima run**.
+
+As missões também mostram, o tempo todo, quem falta resgatar e o baú mais próximo, com distância e direção.
 
 ### Opções
 
@@ -127,7 +129,7 @@ O build usa Gzip com *decompression fallback* ligado, porque o itch.io não envi
 
 - Equipe: ver [Contribuindo](docs/CONTRIBUINDO.md).
 - Código-base do protótipo gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
-- Fonte: MedievalSharp, de wmk69, sob a SIL Open Font License 1.1 ([licença](docs/licencas/MedievalSharp-OFL.txt)).
+- Fonte: Jersey 10, de The Soft Type Project, sob a SIL Open Font License 1.1 ([licença](docs/licencas/Jersey10-OFL.txt)).
 - Jogador: sprites feitos no Aseprite por Pedro Nadotti.
 - Cercas, muros, portões e estações do acampamento: sprites feitos no Aseprite por Pedro Nadotti.
 - Árvore, arbustos, rochas, fogueira e baú: feitos no Aseprite (autoria a confirmar em [Assets](docs/ASSETS.md)).

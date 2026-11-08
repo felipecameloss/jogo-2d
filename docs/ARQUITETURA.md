@@ -17,7 +17,7 @@ Tudo em `Assets/Scripts/`:
 | `Resources/` | Coleta diurna e inventário | `DayResourceSystem`, `ResourceInventory`, `ResourceHUD` |
 | `Chests/` | Baús, chaves, recompensas | `ChestSystem`, `ChestOffer`, `ChestUI`, `ChestArt` |
 | `Camp/` | Acampamento: estruturas, pontos de construção, HUD e arte | `CampSystem`, `BuildSpot`, `Structure`, `GateVisual`, `CampHUD`, `CampArt` |
-| `UI/` | HUD, minimapa, level up, opções e estilo | `HUD`, `Minimap`, `LevelUpPanel`, `OptionsMenu`, `UIStyle`, `Tutorial` |
+| `UI/` | HUD, minimapa, level up, opções e estilo | `HUD`, `Minimap`, `LevelUpPanel`, `OptionsMenu`, `UIStyle`, `Tutorial`, `QuestLog`, `PromptBox` |
 | `FX/` | Partículas, popups, shake | `FxManager`, `FxParticle`, `FxFade`, `FloatingText` |
 | `Audio/` | SFX e música | `AudioManager`, `SfxGenerator` |
 | `Editor/` | Gerador do protótipo, build WebGL e atalhos de teste | `SurvivorsSetup`, `WebGLBuild`, `CampDebug` |
@@ -76,6 +76,8 @@ Durante o Play, **Survivors > Testes** adiciona materiais e causa dano na foguei
 - **Arte do acampamento:** fica em `Assets/Art/Resources/Camp/`, sem compressão e importada como sprite único; `CampArt` usa placeholder se faltar. A fogueira é uma tira de quadros quadrados (`CampArt.Frames`). Cerca, muro, portões e estações são folhas em grade fatiadas por `CampArt.Sheet`: `fence` e `wall` têm 13 quadros de 48 × 64 na ordem descrita em `CampArt`; `gate_wood` e `gate_stone`, 4 linhas de 6 quadros, uma por sentido de abertura; `station_*_npc`, 8 quadros de 64 × 68. O pivô das peças é o pé do poste, que fica sobre o nó da grade.
 - **Som:** arraste o `AudioClip` no `AudioManager`; sem clip, ele usa o som gerado.
 
-**Opções e estilo.** `GameSettings` guarda os volumes em `PlayerPrefs`, salvos ao fechar as opções; `AudioManager` escuta `GameSettings.Changed`. `OptionsMenu.Open` cria a tela por cima do menu ou da pausa; enquanto `OptionsMenu.BlocksInput`, o `GameManager` ignora Esc para não despausar junto. O botão Opções é clonado em tempo de execução (`UIStyle.CloneButton`), sem editar as cenas. `UIStyle.Font` (MedievalSharp, em `Resources/Fonts`) é usada por toda interface criada por código, e `UIStyle.ApplyToScene` troca a fonte dos textos das cenas geradas.
+**Opções e estilo.** `GameSettings` guarda os volumes em `PlayerPrefs`, salvos ao fechar as opções; `AudioManager` escuta `GameSettings.Changed`. `OptionsMenu.Open` cria a tela por cima do menu ou da pausa; enquanto `OptionsMenu.BlocksInput`, o `GameManager` ignora Esc para não despausar junto. O botão Opções é clonado em tempo de execução (`UIStyle.CloneButton`), sem editar as cenas.
+
+**Interface.** `UIStyle` concentra a identidade: fonte Jersey 10 (`Resources/Fonts`, importada em *Hinted Raster*), tamanhos `Small/Body/Large/Title/Huge` em múltiplos de 10 para cair no grid da fonte, paleta, `Panel` (moldura + miolo opaco), `Button`, `Label` e `Canvas` (1920×1080 de referência, *pixel perfect*). `UIStyle.ApplyToScene` reestiliza textos, botões e canvases das cenas geradas. `HUD.Layout` reorganiza em painéis os textos da cena. `QuestLog` monta as missões a cada frame a partir de `Tutorial.Current`, `CampSystem.Persons`, estações livres e `ChestSystem.TryGetClosest`. `PromptBox` é a caixa de aviso de interação que some sem texto.
 
 **Tutorial.** `GameManager.Start` adiciona `Tutorial` se `Tutorial.Seen` for falso. Cada passo é um texto e uma condição verificada a cada frame (materiais coletados, estrutura construída, pessoa resgatada, baú aberto). Ao anoitecer, mostra o aviso da noite e termina; Enter (`GameInput.SkipTutorialPressed`) pula. `Seen` fica em `PlayerPrefs`.

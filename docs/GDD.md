@@ -93,10 +93,11 @@ Valores detalhados em `BALANCEAMENTO.md`.
 
 ### 1.3 Interface
 
-- **HUD:** vida, XP, tempo, relógio do dia, ouro, materiais, chaves, direção do baú mais próximo, direção da pessoa perdida mais próxima (de dia), minimapa e avisos de interação.
+- **HUD:** painéis opacos com moldura. Canto superior esquerdo: nível, abates e barra de XP rotulada; abaixo, materiais (madeira, pedra, chaves, ouro) e **missões**. Topo: relógio, período e vida da fogueira. Canto superior direito: minimapa. Embaixo: avisos de interação, barra de coleta (só perto de árvore ou rocha) e dash.
+- **Missões:** lista no canto esquerdo com o passo do tutorial, as pessoas a resgatar (distância e direção), estações a construir, o baú mais próximo e a meta do período (coletar de dia, defender a fogueira à noite).
 - **Minimapa:** radar centrado no jogador, com alcance fixo, que mostra a fogueira e os baús fechados; o que está além do alcance fica preso na borda, indicando a direção. Chaves e inimigos ficam de fora para manter a exploração.
 - **Menus:** principal, pausa, opções (volume de música e efeitos, controles), level up, baú, ferraria, armaria e game over.
-- **Identidade visual:** fonte medieval (MedievalSharp) em toda a interface; janelas de estação em tons de madeira.
+- **Identidade visual:** fonte pixelada (Jersey 10) em toda a interface, sem suavização; painéis e botões opacos em tons de madeira com moldura.
 - **Feedback no mundo:** clarão e escala ao acertar; números de dano; tela tremendo e jogador piscando ao sofrer dano; recursos esgotados acinzentados; chaves pulsando; escuridão à noite com luz em volta do jogador.
 - **Som:** SFX gerados por código, ainda placeholder. **Sem música.**
 
@@ -122,6 +123,7 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
+| 08/11/2026 | UI refeita: fonte pixelada, painéis opacos, missões no canto esquerdo (com o tutorial e as direções de pessoas e baús), XP rotulada junto do nível, minimapa sozinho no canto direito. | Pedido da equipe: textos borrados, minimapa sobreposto e caixa de coleta sempre visível |
 | 08/11/2026 | Tutorial do primeiro dia e tela de opções com volume e controles; fonte medieval na interface. | Ensinar o laço do jogo e dar identidade à UI |
 | 08/11/2026 | Run infinita confirmada; a dificuldade (quantidade, vida e dano dos monstros) continua crescendo depois da Noite 4. | A partir da Noite 4 a run estabilizava |
 | 08/11/2026 | Implementados resgate do ferreiro e da ferreira, ferraria e armaria, armas medievais (5) e baús com 1 arma e 2 equipamentos. Level up só dá atributos. | Núcleo aprovado em 05/11 |

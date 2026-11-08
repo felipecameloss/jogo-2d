@@ -57,36 +57,27 @@ public class OptionsMenu : MonoBehaviour
 
     void Build()
     {
-        var canvas = gameObject.AddComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 300;
-        var scaler = gameObject.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080);
-        scaler.matchWidthOrHeight = 0.5f;
-        gameObject.AddComponent<GraphicRaycaster>();
-
-        var shade = Box(transform, Vector2.zero, Vector2.zero, new Color(0.03f, 0.02f, 0.01f, 0.85f));
-        shade.rectTransform.anchorMin = Vector2.zero;
-        shade.rectTransform.anchorMax = Vector2.one;
+        var canvas = UIStyle.Canvas(transform, "Opcoes", 300, true);
+        var shade = UIStyle.Image(canvas, "Veu", UIStyle.Veil);
+        UIStyle.Stretch(shade.rectTransform);
         shade.raycastTarget = true;
-        var window = Box(shade.transform, Vector2.zero, new Vector2(1100, 880), UIStyle.PanelColor);
+        var window = UIStyle.Panel(shade.transform, "Janela", Vector2.one * 0.5f, Vector2.one * 0.5f, Vector2.zero, new Vector2(1100, 880));
 
-        Label(window.transform, "OPÇÕES", new Vector2(0, 370), new Vector2(1000, 80), 60).color = UIStyle.Gold;
-        var music = VolumeRow(window.transform, "Música", 260, GameSettings.MusicVolume, v => GameSettings.MusicVolume = v, out musicValue);
-        VolumeRow(window.transform, "Efeitos", 180, GameSettings.SfxVolume, v => { GameSettings.SfxVolume = v; AudioManager.Play(Sfx.Pickup, 0.6f); }, out sfxValue);
-        Label(window.transform, "CONTROLES", new Vector2(0, 90), new Vector2(1000, 60), 40).color = UIStyle.Gold;
-        var controls = Label(window.transform, Controls, new Vector2(0, -75), new Vector2(1000, 260), 28);
-        controls.lineSpacing = 1.15f;
+        Label(window, "OPÇÕES", new Vector2(0, 370), new Vector2(1000, 80), 60).color = UIStyle.Gold;
+        var music = VolumeRow(window, "Música", 260, GameSettings.MusicVolume, v => GameSettings.MusicVolume = v, out musicValue);
+        VolumeRow(window, "Efeitos", 180, GameSettings.SfxVolume, v => { GameSettings.SfxVolume = v; AudioManager.Play(Sfx.Pickup, 0.6f); }, out sfxValue);
+        Label(window, "CONTROLES", new Vector2(0, 90), new Vector2(1000, 60), 40).color = UIStyle.Gold;
+        var controls = Label(window, Controls, new Vector2(0, -75), new Vector2(1000, 260), 30);
+        controls.lineSpacing = 0.95f;
 
         Text tutorialLabel = null;
-        MakeButton(window.transform, new Vector2(0, -265), new Vector2(560, 60), "", 28, out tutorialLabel).onClick.AddListener(() =>
+        MakeButton(window, new Vector2(0, -265), new Vector2(560, 60), "", 30, out tutorialLabel).onClick.AddListener(() =>
         {
             Tutorial.Seen = !Tutorial.Seen;
             tutorialLabel.text = TutorialText();
         });
         tutorialLabel.text = TutorialText();
-        MakeButton(window.transform, new Vector2(0, -365), new Vector2(360, 70), "Voltar  [Esc]", 34, out _).onClick.AddListener(Close);
+        MakeButton(window, new Vector2(0, -365), new Vector2(360, 70), "Voltar  [Esc]", 40, out _).onClick.AddListener(Close);
         Refresh();
 
         if (EventSystem.current) EventSystem.current.SetSelectedGameObject(music.gameObject);
@@ -94,21 +85,14 @@ public class OptionsMenu : MonoBehaviour
 
     static string TutorialText() => Tutorial.Seen ? "Tutorial na próxima run: não" : "Tutorial na próxima run: sim";
 
-    static Button MakeButton(Transform parent, Vector2 position, Vector2 size, string content, int fontSize, out Text label)
-    {
-        var box = Box(parent, position, size, UIStyle.ButtonColor);
-        box.raycastTarget = true;
-        var button = box.gameObject.AddComponent<Button>();
-        button.targetGraphic = box;
-        label = Label(box.transform, content, Vector2.zero, size - new Vector2(20, 6), fontSize);
-        return button;
-    }
+    static Button MakeButton(Transform parent, Vector2 position, Vector2 size, string content, int fontSize, out Text label) =>
+        UIStyle.Button(parent, content, fontSize, position, size, null, out label);
 
     Slider VolumeRow(Transform parent, string name, float y, float value, Action<float> onChange, out Text valueText)
     {
-        var label = Label(parent, name, new Vector2(-330, y), new Vector2(260, 60), 36);
+        var label = Label(parent, name, new Vector2(-380, y), new Vector2(220, 60), 40);
         label.alignment = TextAnchor.MiddleRight;
-        valueText = Label(parent, "", new Vector2(390, y), new Vector2(140, 60), 34);
+        valueText = Label(parent, "", new Vector2(390, y), new Vector2(140, 60), 40);
         var slider = MakeSlider(parent, new Vector2(40, y), value);
         slider.onValueChanged.AddListener(v => { onChange(v); Refresh(); });
         return slider;
@@ -168,20 +152,6 @@ public class OptionsMenu : MonoBehaviour
         return image;
     }
 
-    static Text Label(Transform parent, string content, Vector2 position, Vector2 size, int fontSize)
-    {
-        var go = new GameObject("Label", typeof(RectTransform), typeof(Text));
-        go.transform.SetParent(parent, false);
-        var text = go.GetComponent<Text>();
-        text.font = UIStyle.Font;
-        text.text = content;
-        text.fontSize = fontSize;
-        text.alignment = TextAnchor.MiddleCenter;
-        text.color = Color.white;
-        text.raycastTarget = false;
-        text.rectTransform.anchorMin = text.rectTransform.anchorMax = Vector2.one * 0.5f;
-        text.rectTransform.anchoredPosition = position;
-        text.rectTransform.sizeDelta = size;
-        return text;
-    }
+    static Text Label(Transform parent, string content, Vector2 position, Vector2 size, int fontSize) =>
+        UIStyle.Label(parent, content, fontSize, position, size);
 }

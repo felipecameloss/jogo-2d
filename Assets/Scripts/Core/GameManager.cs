@@ -51,6 +51,8 @@ public class GameManager : MonoBehaviour
             gameObject.AddComponent<Minimap>();
         if (Player && !Tutorial.Seen && !GetComponent<Tutorial>())
             gameObject.AddComponent<Tutorial>();
+        if (Player && !GetComponent<QuestLog>())
+            gameObject.AddComponent<QuestLog>();
     }
 
     void OnDestroy()

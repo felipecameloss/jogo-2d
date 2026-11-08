@@ -2,16 +2,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Radar de orientação centrado no jogador. O mapa é infinito, então o alcance é fixo: o que
-// está além dele fica preso na borda, mais apagado, indicando a direção. Mostra só a fogueira
-// e os baús fechados; as chaves continuam tendo de ser achadas.
+// Radar de orientação centrado no jogador, sozinho no canto superior direito. O mapa é infinito,
+// então o alcance é fixo: o que está além dele fica preso na borda, menor, indicando a direção.
+// Mostra só a fogueira e os baús fechados; as chaves continuam tendo de ser achadas.
 public class Minimap : MonoBehaviour
 {
-    const float PanelSize = 220f;
+    const float PanelSize = 240f;
     const float EdgeMargin = 10f;
     const float MarkerSize = 12f;
     const float WorldRange = 24f; // Unidades do centro até a borda; cobre os baús vistos da fogueira.
-    const float FarAlpha = 0.55f;
+    const float FarScale = 0.65f;
 
     static readonly Color CampColor = new Color(1f, 0.42f, 0.12f);
     static readonly Color ChestColor = new Color(1f, 0.85f, 0.3f);
@@ -24,21 +24,11 @@ public class Minimap : MonoBehaviour
 
     void Start()
     {
-        root = new GameObject("MinimapUI", typeof(Canvas), typeof(CanvasScaler));
-        root.transform.SetParent(transform, false);
-        var canvas = root.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = -1; // Os menus continuam por cima.
-        var scaler = root.GetComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080);
-        scaler.matchWidthOrHeight = 0.5f;
-
-        // Abaixo do ouro e da direção do baú.
-        var background = NewImage("Panel", root.transform, new Color(0.04f, 0.09f, 0.12f, 0.8f), PanelSize);
-        panel = background.rectTransform;
-        panel.anchorMin = panel.anchorMax = Vector2.one;
-        panel.anchoredPosition = new Vector2(-130f, -325f);
+        var canvas = UIStyle.Canvas(transform, "MinimapUI", -1); // Os menus continuam por cima.
+        root = canvas.gameObject;
+        var inner = UIStyle.Panel(canvas, "Minimapa", Vector2.one, Vector2.one, new Vector2(-20f, -20f), Vector2.one * (PanelSize + UIStyle.Border * 2f));
+        inner.GetComponent<Image>().color = new Color(0.16f, 0.21f, 0.12f); // chão
+        panel = inner;
         camp = NewImage("Camp", panel, CampColor, MarkerSize * 1.4f);
         player = NewImage("Player", panel, Color.white, MarkerSize);
     }
@@ -73,9 +63,7 @@ public class Minimap : MonoBehaviour
         bool far = distance > edge;
         if (far) position *= edge / distance; // Mantém a direção ao prender na borda.
         marker.rectTransform.anchoredPosition = position;
-        var color = marker.color;
-        color.a = far ? FarAlpha : 1f;
-        marker.color = color;
+        marker.rectTransform.localScale = Vector3.one * (far ? FarScale : 1f);
     }
 
     Image NewChestMarker()
