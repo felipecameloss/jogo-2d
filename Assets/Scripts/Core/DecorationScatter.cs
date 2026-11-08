@@ -71,7 +71,7 @@ public class DecorationScatter : MonoBehaviour
             var pos = new Vector3((key.x + (float)rng.NextDouble()) * chunkSize, (key.y + (float)rng.NextDouble()) * chunkSize, 0f);
             bool flip = rng.NextDouble() < 0.5;
             if (!prefab || ((Vector2)pos).magnitude < clearRadiusAtStart) continue;
-            if (CampSystem.Instance && CampSystem.Instance.IsReserved(pos, 0f)) continue;
+            if (CampSystem.Instance && (CampSystem.Instance.IsReserved(pos, 0f) || CampSystem.Instance.IsNearPerson(pos, 1.5f))) continue;
 
             var go = Get(prefab);
             go.transform.position = pos;

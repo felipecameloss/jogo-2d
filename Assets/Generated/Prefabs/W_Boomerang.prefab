@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451232a97f405cd46a47aa8f94c42576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoomerangWeapon
-  weaponName: Bumerangue
+  weaponName: Machado de arremesso
   description: "Vai at\xE9 o inimigo e volta, acertando duas vezes."
   maxLevel: 5
   damage: 9

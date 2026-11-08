@@ -129,9 +129,9 @@ Todas as tarefas dependem do código de baús e chaves, que está só em `feat/m
 
 **Interfaces produzidas:** `WeaponHolder.Unlock(Weapon prefab)`: adiciona a arma ou, se já existir, sobe um nível; `WeaponHolder.AvailablePrefabs`.
 
-- [ ] Renomear: Orbe Arcano → Besta (inicial), Chicote → Espada, Bumerangue → Machado de arremesso. Facas e Bombas continuam.
-- [ ] Mudar `UpgradeManager.RollOptions` para só oferecer atributos e o aviso "Duplicação" citar apenas armas existentes.
-- [ ] Tirar as outras 5 armas de `availableWeapons`.
+- [x] Renomear: Orbe Arcano → Besta (inicial), Chicote → Espada, Bumerangue → Machado de arremesso. Facas e Bombas continuam.
+- [x] Mudar `UpgradeManager.RollOptions` para só oferecer atributos e o aviso "Duplicação" citar apenas armas existentes.
+- [x] Tirar as outras 5 armas de `availableWeapons`.
 - [ ] Verificar no Editor: run começa com Besta; level up só mostra atributos; "Lanche" aparece com tudo no máximo.
 
 ### Task 8: Pessoas perdidas e resgate
@@ -142,10 +142,10 @@ Todas as tarefas dependem do código de baús e chaves, que está só em `feat/m
 
 **Interfaces produzidas:** `enum PersonRole { WeaponSmith, ArmorSmith }`, `enum PersonState { Lost, Returning, Resident }`; `LostPerson`: `Role`, `State`, `event Action<LostPerson> OnStateChanged`, `Rescue()`, `Defeat()`; `CampSystem.Residents`.
 
-- [ ] Criar 2 NPCs por run, em direções separadas, a 25–40 unidades da fogueira e validados contra colisões.
-- [ ] Usar `character_men` e `character_women` com cor diferente, por `CharacterAnimator`.
-- [ ] HUD indica a direção do perdido mais próximo durante o dia.
-- [ ] F resgata; o NPC anda sozinho até o acampamento sem bloquear e sem levar dano. Ele atravessa muros e portões.
+- [x] Criar 2 NPCs por run, em direções separadas, a 25–40 unidades da fogueira e validados contra colisões.
+- [x] Usar `character_men` e `character_women` com cor diferente, por `CharacterAnimator`.
+- [x] HUD indica a direção do perdido mais próximo durante o dia.
+- [x] F resgata; o NPC anda sozinho até o acampamento sem bloquear e sem levar dano. Ele atravessa muros e portões.
 - [ ] Verificar no Editor: dois NPCs alcançáveis em várias runs; resgate chega ao acampamento; Reiniciar volta ao estado inicial.
 
 ### Task 9: Estações de trabalho
@@ -156,13 +156,13 @@ Todas as tarefas dependem do código de baús e chaves, que está só em `feat/m
 
 Relacionada à issue #5: quanto mais pessoas no acampamento, melhores as armas.
 
-- [ ] Renomear `GameState.Chest` para `Menu`, com `EnterMenu` e `ExitMenu`.
-- [ ] Ponto de estação libera após o resgate do NPC correspondente. Custo 30 madeira e 20 pedra; vida 120.
-- [ ] Criar `StationUI`, no modelo de `ChestUI`: 1, 2, 3 ou clique; Esc fecha.
-- [ ] Ferreiro de armas: Besta sempre; Espada e Facas com 1 residente; Machado e Bombas com 2. Custo 10 madeira e 10 pedra, +5 de cada por nível.
-- [ ] Ferreira de armaduras: até 5 níveis, +1 armadura e +10 de vida. Custo 15 pedra, +5 por nível.
-- [ ] Sem ofertas, mostrar "Nada mais a ensinar".
-- [ ] Estação destruída mantém as compras feitas.
+- [x] Renomear `GameState.Chest` para `Menu`, com `EnterMenu` e `ExitMenu`.
+- [x] Ponto de estação libera após o resgate do NPC correspondente. Custo 30 madeira e 20 pedra; vida 120.
+- [x] Criar `StationUI`, no modelo de `ChestUI`: 1, 2, 3 ou clique; Esc fecha.
+- [x] Ferreiro de armas: Besta sempre; Espada e Facas com 1 residente; Machado e Bombas com 2. Custo 10 madeira e 10 pedra, +5 de cada por nível.
+- [x] Ferreira de armaduras: até 5 níveis, +1 armadura e +10 de vida. Custo 15 pedra, +5 por nível.
+- [x] Sem ofertas, mostrar "Nada mais a ensinar".
+- [x] Estação destruída mantém as compras feitas.
 - [ ] Verificar no Editor: comprar cobra uma vez; sem saldo não cobra; ofertas de 2 residentes só aparecem com 2; destruir e reconstruir mantém as compras.
 
 ### Task 10: NPC derrotado volta a ficar perdido
@@ -171,11 +171,11 @@ Relacionada à issue #5: quanto mais pessoas no acampamento, melhores as armas.
 
 **Arquivos:** alterar `Camp/LostPerson.cs`, `Enemies/Enemy.cs`, `Camp/StationSystem.cs`.
 
-- [ ] NPC residente tem 40 de vida e recebe dano por contato de monstros, que não o procuram.
-- [ ] Vida zerada chama `Defeat()`: aviso, efeito e nova posição a 25–40 unidades, validada contra colisões.
-- [ ] Estação fica construída e fechada, com o motivo no aviso. Ofertas que exigem 2 residentes somem.
-- [ ] Novo resgate restaura a vida e reabre a estação.
-- [ ] Derrota com janela aberta não ocorre, pois o jogo pausa. NPC em `Returning` não recebe dano.
+- [x] NPC residente tem 40 de vida e recebe dano por contato de monstros, que não o procuram.
+- [x] Vida zerada chama `Defeat()`: aviso, efeito e nova posição a 25–40 unidades, validada contra colisões.
+- [x] Estação fica construída e fechada, com o motivo no aviso. Ofertas que exigem 2 residentes somem.
+- [x] Novo resgate restaura a vida e reabre a estação.
+- [x] Derrota com janela aberta não ocorre, pois o jogo pausa. NPC em `Returning` não recebe dano.
 - [ ] Verificar no Editor: derrotar NPC, achar pelo HUD, resgatar, estação reabre com compras mantidas.
 
 ### Task 11: Baús com armas e gear
@@ -184,10 +184,10 @@ Relacionada à issue #5: quanto mais pessoas no acampamento, melhores as armas.
 
 **Arquivos:** alterar `Chests/ChestOffer.cs`, `Chests/ChestSystem.cs`.
 
-- [ ] Adicionar `ChestReward.Weapon`; `Apply` chama `WeaponHolder.Unlock`.
-- [ ] Trocar o `% 7` fixo por `Enum.GetValues(...).Length`.
-- [ ] Dar nomes medievais às recompensas atuais.
-- [ ] Decidir com o responsável pelo ouro se Moeda da fortuna sai do sorteio.
+- [x] Adicionar `ChestReward.Weapon`; `Apply` chama `WeaponHolder.Unlock`.
+- [x] Trocar o `% 7` fixo por `Enum.GetValues(...).Length`.
+- [x] Dar nomes medievais às recompensas atuais.
+- [ ] Decidir com o responsável pelo ouro se Moeda da fortuna sai do sorteio. (Por ora, fica.)
 - [ ] Verificar no Editor: arma nova entra; arma repetida sobe de nível; fechar e reabrir mantém as opções.
 
 ## Bloco: arte
@@ -301,9 +301,9 @@ Hoje as curvas param de subir em `t = 600` e o dano de contato é fixo.
 
 Testar cedo para descobrir problemas de WebGL antes do prazo.
 
-- [ ] Gerar o build WebGL e publicar como rascunho no itch.io.
+- [x] Gerar o build WebGL (08/11: 9,4 MB, `Survivors > Gerar build WebGL`). Publicar como rascunho no itch.io: pendente.
 - [ ] Testar áudio, entrada, proporção da tela e desempenho no navegador.
-- [ ] Registrar o passo a passo no `README.md`.
+- [x] Registrar o passo a passo no `README.md`.
 
 ### Task 23: Validar rubricas com o professor
 

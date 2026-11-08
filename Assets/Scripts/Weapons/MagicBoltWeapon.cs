@@ -53,9 +53,9 @@ public class MagicBoltWeapon : Weapon
     {
         switch (Level + 1)
         {
-            case 2: return "+1 projétil";
+            case 2: return "+1 virote";
             case 3: return "+30% de dano";
-            case 4: return "+1 projétil";
+            case 4: return "+1 virote";
             case 5: return "Atravessa 2 inimigos e atira 20% mais rápido";
             default: return "";
         }

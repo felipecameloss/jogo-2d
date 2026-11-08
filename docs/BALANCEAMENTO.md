@@ -31,7 +31,7 @@ Fonte: código e `Assets/Scenes/Game.unity`, em 05/11/2026.
 | Raio de coleta de drops | 2 |
 | Dash | velocidade 17 · 0,16 s · 1 carga · recarga 1,2 s · invencível |
 | Crítico | 0% · dano ×2 |
-| Arma inicial | Orbe Arcano |
+| Arma inicial | Besta |
 
 ### Ritmo e dificuldade
 
@@ -63,24 +63,19 @@ O dano de contato não cresce com o tempo.
 
 ### Armas
 
-Dano e recarga base; todas vão até o nível 5. O jogador tem no máximo 6 armas.
+Dano e recarga base; todas vão até o nível 5. As cinco armas vêm de baús e da ferraria. Lâminas Orbitais, Aura Sagrada, Raio Celeste, Frasco Venenoso e Nova Gélida ainda existem como prefabs, mas saíram do jogo.
 
-| Arma | Dano | Recarga (s) |
-|---|---|---|
-| Orbe Arcano | 10 | 0,9 |
-| Lâminas Orbitais | 8 | contínua |
-| Aura Sagrada | 5 | 0,6 |
-| Facas | 7 | 0,6 |
-| Raio Celeste | 14 | 1,8 |
-| Bumerangue | 9 | 1,6 |
-| Frasco Venenoso | 4 | 2,5 |
-| Chicote | 13 | 1,3 |
-| Nova Gélida | 8 | 4,0 |
-| Bombas | 30 | 3,0 |
+| Arma | Dano | Recarga (s) | Ferraria libera com |
+|---|---|---|---|
+| Besta (inicial) | 10 | 0,9 | sempre |
+| Espada | 13 | 1,3 | 1 residente |
+| Facas | 7 | 0,6 | 1 residente |
+| Machado de arremesso | 9 | 1,6 | 2 residentes |
+| Bombas | 30 | 3,0 | 2 residentes |
 
 ### XP e level up
 
-XP para o próximo nível: `5 + 8 × (nível − 1)`. São 333 XP até o nível 10 e 1.463 até o nível 20. Cada nível oferece 3 opções entre armas e 15 atributos.
+XP para o próximo nível: `5 + 8 × (nível − 1)`. São 333 XP até o nível 10 e 1.463 até o nível 20. Cada nível oferece 3 opções entre 15 atributos; armas não aparecem no level up.
 
 | Upgrade | Efeito por nível | Máx. |
 |---|---|---|
@@ -91,7 +86,7 @@ XP para o próximo nível: `5 + 8 × (nível − 1)`. São 333 XP até o nível 
 | Expansão | +12% área | 5 |
 | Ímã | +30% alcance de coleta | 5 |
 | Regeneração | +0,5 vida/s | 5 |
-| Duplicação | +1 projétil | 2 |
+| Duplicação | +1 virote, faca, machado e bomba | 2 |
 | Sabedoria | +15% XP | 5 |
 | Armadura | −1 dano por golpe, mínimo 1 | 5 |
 | Olho Afiado | +8% crítico | 5 |
@@ -126,15 +121,25 @@ Anel quadrado de 8 × 8 células de 1,33 unidade (32 px), com lado de 10,7 unida
 - **Baús:** 3 por run, a 10; 13,5 e 17 unidades do centro do acampamento. Cada um oferece 3 recompensas de força ×1, ×2 e ×3, conforme o baú, e custa 1 chave.
 - **Chaves:** uma garantida a 11 unidades do acampamento; demais em 20% das células de 14 unidades, somente enquanto faltarem chaves para os baús fechados.
 
+Cada baú oferece 1 arma (diferente em cada baú, sem a Besta) e 2 equipamentos.
+
 | Recompensa | Por ponto de força |
 |---|---|
-| Coração de âmbar | +15 vida máxima e cura |
-| Pólvora solar | +10% dano |
-| Escamas do guardião | +1 armadura |
-| Engrenagem de vento | −5% recarga |
-| Bússola magnética | +1 alcance de coleta |
-| Musgo da aurora | +0,3 vida/s |
-| Moeda da fortuna | +15% ouro |
+| Arma | aprende a arma; cada ponto além do primeiro sobe 1 nível. Se já tiver, +1 nível por ponto |
+| Amuleto de carvalho | +15 vida máxima e cura |
+| Pedra de amolar | +10% dano |
+| Cota de malha | +1 armadura |
+| Luvas de couro | −5% recarga |
+| Alforje | +1 alcance de coleta |
+| Ervas do curandeiro | +0,3 vida/s |
+| Moeda da fortuna | +15% ouro (fica até decidirem o destino do ouro) |
+
+### Pessoas e estações
+
+- **Pessoas perdidas:** 2 por run (ferreiro e ferreira), em direções opostas (180° ± 40°), a 25–40 unidades da fogueira, em ponto sem colisão. Andam até o acampamento a 3,5 unidades/s.
+- **Residentes:** 40 de vida. Monstros encostados (raio 0,6) causam 50% do dano de contato a cada 2 s. Derrotado, volta a ficar perdido a 25–40 unidades; o novo resgate restaura a vida.
+- **Ferraria:** aprender ou subir uma arma para o nível N custa `10 + 5 × (N − 1)` de madeira e o mesmo de pedra.
+- **Armaria:** 5 níveis; cada um dá +1 de armadura e +10 de vida máxima, e custa `15 + 5 × (nível atual)` de pedra (15, 20, 25, 30, 35).
 
 ## Problemas conhecidos
 

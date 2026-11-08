@@ -63,7 +63,7 @@ public static class SurvivorsSetup
         // ---------- Arte (Aseprite) ----------
         // Pivô nos pés / base do tronco, para ordenar pela altura (quem está mais embaixo fica na frente).
         var playerFrames = ImportSheet($"{ArtDir}/player.png", 32, 32, new Vector2(0.5f, 0.25f));
-        ImportSheet($"{ArtDir}/character_women.png", 32, 32, new Vector2(0.5f, 0.25f));
+        ImportSheet("Assets/Art/Resources/Characters/character_women.png", 32, 32, new Vector2(0.5f, 0.25f)); // NPC: carregada em jogo por Resources
         var bushAFrames = ImportSheet($"{ArtDir}/bush_a.png", 32, 32, new Vector2(0.5f, 0.15f));
         var bushBFrames = ImportSheet($"{ArtDir}/bush_b.png", 32, 32, new Vector2(0.5f, 0.15f));
         var treeFrames = ImportSheet($"{ArtDir}/tree.png", 64, 80, new Vector2(0.5f, 0.12f));
@@ -104,8 +104,8 @@ public static class SurvivorsSetup
 
         var boltGo = new GameObject("W_MagicBolt");
         var bolt = boltGo.AddComponent<MagicBoltWeapon>();
-        bolt.weaponName = "Orbe Arcano";
-        bolt.description = "Dispara no inimigo mais próximo.";
+        bolt.weaponName = "Besta";
+        bolt.description = "Dispara virotes no inimigo mais próximo.";
         bolt.damage = 10f;
         bolt.cooldown = 0.9f;
         bolt.projectilePrefab = projectile;
@@ -149,7 +149,7 @@ public static class SurvivorsSetup
 
         var boomerangGo = new GameObject("W_Boomerang");
         var boomerang = boomerangGo.AddComponent<BoomerangWeapon>();
-        boomerang.weaponName = "Bumerangue";
+        boomerang.weaponName = "Machado de arremesso";
         boomerang.description = "Vai até o inimigo e volta, acertando duas vezes.";
         boomerang.damage = 9f;
         boomerang.cooldown = 1.6f;
@@ -167,8 +167,8 @@ public static class SurvivorsSetup
 
         var whipGo = new GameObject("W_Whip");
         var whip = whipGo.AddComponent<WhipWeapon>();
-        whip.weaponName = "Chicote";
-        whip.description = "Golpe horizontal forte na sua frente.";
+        whip.weaponName = "Espada";
+        whip.description = "Golpe de espada forte na sua frente.";
         whip.damage = 13f;
         whip.cooldown = 1.3f;
         whip.slashSprite = sDiamond;
@@ -194,7 +194,7 @@ public static class SurvivorsSetup
         bomb = SavePrefab<BombWeapon>(bombGo, "W_Bomb");
 
         // ---------- Cenas ----------
-        BuildGameScene(sSquare, sPlain, sGround, playerFrames, decorations, resourceTree, rockSprites, new[] { slime, bat, golem }, bolt, new Weapon[] { bolt, orbit, aura, knifeW, lightning, boomerang, flask, whip, nova, bomb });
+        BuildGameScene(sSquare, sPlain, sGround, playerFrames, decorations, resourceTree, rockSprites, new[] { slime, bat, golem }, bolt, new Weapon[] { bolt, whip, knifeW, boomerang, bomb });
         BuildMenuScene();
 
         EditorBuildSettings.scenes = new[]
@@ -296,7 +296,6 @@ public static class SurvivorsSetup
         var upgrades = systems.AddComponent<UpgradeManager>();
         upgrades.panel = levelUp;
         upgrades.availableWeapons = allWeapons;
-        upgrades.maxWeapons = 6;
         systems.AddComponent<FxManager>().particleSprite = sSquare;
         systems.AddComponent<AudioManager>();
         systems.AddComponent<DayNightCycle>().ground = groundSr;

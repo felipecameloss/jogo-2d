@@ -11,6 +11,11 @@ public class CampSystem : MonoBehaviour
     public const int RingCells = 8;
     // Faixa de colisão das peças: a parede é fina e fica em volta do pé do poste.
     const float WallHalfThickness = 0.3f, WallLift = 0.15f;
+    // Pessoas perdidas: longe o bastante para exigir uma expedição durante o dia.
+    public const float PersonMinDistance = 25f, PersonMaxDistance = 40f;
+    // O ferreiro usa o mesmo desenho do jogador: a cor diferencia.
+    static readonly Color SmithTint = new Color(1f, 0.72f, 0.55f);
+    static readonly Color ArmorerTint = Color.white;
     const float CenterOffset = 1.5f; // O jogador nasce ao lado da fogueira, não em cima dela.
     const float HeartScale = 2f;
     const float HeartFrameTime = 0.1f;
@@ -26,11 +31,28 @@ public class CampSystem : MonoBehaviour
     public BuildSpot NearestSpot { get; private set; }
     public string Prompt { get; private set; } = "";
     public ResourceInventory Inventory { get; private set; }
+    public LostPerson NearestPerson { get; private set; }
+    // Direção da pessoa perdida mais próxima, só de dia.
+    public string PersonDirection { get; private set; } = "";
+    public StationSystem Stations { get; private set; }
     // Quando há ação disponível, o F é do acampamento e não abre baús próximos.
-    public bool HasTarget => NearestSpot && NearestSpot.HasAction;
+    public bool HasTarget => NearestPerson || (NearestSpot && (NearestSpot.HasAction || NearestSpot.IsBuiltStation));
     public IReadOnlyList<BuildSpot> Spots => spots;
+    public IReadOnlyList<LostPerson> Persons => persons;
+
+    public int Residents
+    {
+        get
+        {
+            int count = 0;
+            foreach (var person in persons) if (person && person.State == PersonState.Resident) count++;
+            return count;
+        }
+    }
 
     readonly List<BuildSpot> spots = new List<BuildSpot>();
+    readonly List<LostPerson> persons = new List<LostPerson>();
+    bool personsSpawned;
     PlayerStats player;
     PlayerController controller;
     public Collider2D PlayerCollider { get; private set; }
@@ -62,6 +84,108 @@ public class CampSystem : MonoBehaviour
         Inventory = player.GetComponent<ResourceInventory>();
         if (!Inventory) Inventory = player.gameObject.AddComponent<ResourceInventory>();
         gameObject.AddComponent<CampHUD>().source = this;
+        Stations = gameObject.AddComponent<StationSystem>();
+        Stations.camp = this;
+    }
+
+    public LostPerson Person(PersonRole role)
+    {
+        foreach (var person in persons) if (person && person.Role == role) return person;
+        return null;
+    }
+
+    BuildSpot StationSpot(PersonRole role)
+    {
+        var kind = role == PersonRole.WeaponSmith ? SpotKind.WeaponStation : SpotKind.ArmorStation;
+        foreach (var spot in spots) if (spot.Kind == kind) return spot;
+        return null;
+    }
+
+    // Criadas no primeiro Update, quando os baús já existem e podem ser evitados.
+    void SpawnPersons()
+    {
+        personsSpawned = true;
+        var animator = player.GetComponent<CharacterAnimator>();
+        var manFrames = animator ? animator.frames : null;
+        var womanFrames = LoadFrames("Characters/character_women");
+        float angle = Random.Range(0f, 360f);
+        persons.Add(NewPerson(PersonRole.WeaponSmith, manFrames, SmithTint, angle));
+        persons.Add(NewPerson(PersonRole.ArmorSmith, womanFrames ?? manFrames, ArmorerTint, angle + 180f + Random.Range(-40f, 40f)));
+    }
+
+    LostPerson NewPerson(PersonRole role, Sprite[] frames, Color tint, float angle)
+    {
+        var go = new GameObject(role == PersonRole.WeaponSmith ? "Ferreiro" : "Ferreira");
+        go.transform.SetParent(transform, false);
+        go.transform.position = FindLostPosition(angle);
+        var person = go.AddComponent<LostPerson>();
+        person.Setup(role, frames, tint);
+        var home = StationSpot(role);
+        person.Home = (home ? home.transform.position : Center) + Vector3.down * 0.5f;
+        return person;
+    }
+
+    // Spritesheet fatiada no import (Multiple): ordena os quadros pelo número do nome.
+    static Sprite[] LoadFrames(string path)
+    {
+        var frames = Resources.LoadAll<Sprite>(path);
+        if (frames == null || frames.Length == 0) return null;
+        System.Array.Sort(frames, (a, b) => Index(a.name).CompareTo(Index(b.name)));
+        return frames;
+    }
+
+    static int Index(string name)
+    {
+        int underscore = name.LastIndexOf('_');
+        return underscore >= 0 && int.TryParse(name.Substring(underscore + 1), out int value) ? value : 0;
+    }
+
+    // Ponto livre a 25-40 unidades da fogueira, perto do ângulo pedido.
+    Vector3 FindLostPosition(float angle)
+    {
+        Vector3 fallback = Center;
+        for (int attempt = 0; attempt < 40; attempt++)
+        {
+            float radians = (angle + Random.Range(-30f, 30f)) * Mathf.Deg2Rad;
+            var position = Center + new Vector3(Mathf.Cos(radians), Mathf.Sin(radians), 0f) * Random.Range(PersonMinDistance, PersonMaxDistance);
+            if (attempt == 0) fallback = position;
+            if (Physics2D.OverlapCircle(position, 0.8f)) continue;
+            if (ChestSystem.Instance && ChestSystem.Instance.IsReserved(position, 2f)) continue;
+            return position;
+        }
+        return fallback;
+    }
+
+    // Residente derrotado volta a ficar perdido em outro ponto do mapa.
+    public void DefeatPerson(LostPerson person)
+    {
+        if (person) person.Defeat(FindLostPosition(Random.Range(0f, 360f)));
+    }
+
+    // Recursos e decoração não nascem em cima de quem está perdido.
+    public bool IsNearPerson(Vector3 position, float radius)
+    {
+        foreach (var person in persons)
+            if (person && person.State == PersonState.Lost && ((Vector2)(person.transform.position - position)).sqrMagnitude < radius * radius) return true;
+        return false;
+    }
+
+    void UpdatePersonDirection()
+    {
+        PersonDirection = "";
+        if (DayNightCycle.Instance && DayNightCycle.Instance.IsNight) return;
+        LostPerson closest = null;
+        float best = float.MaxValue;
+        foreach (var person in persons)
+        {
+            if (!person || person.State != PersonState.Lost) continue;
+            float sqr = ((Vector2)(person.transform.position - player.transform.position)).sqrMagnitude;
+            if (sqr < best) { best = sqr; closest = person; }
+        }
+        if (!closest) return;
+        var d = closest.transform.position - player.transform.position;
+        string heading = Mathf.Abs(d.x) > Mathf.Abs(d.y) ? (d.x > 0 ? "leste >" : "< oeste") : (d.y > 0 ? "norte ^" : "sul v");
+        PersonDirection = $"{closest.Title} perdid{closest.Ending}: {Mathf.Sqrt(best):0} m • {heading}";
     }
 
     BuildSpot NewSpot(SpotKind kind, Vector3 position, SpotPiece[] pieces, params Rect[] areas)
@@ -188,22 +312,46 @@ public class CampSystem : MonoBehaviour
     {
         if (!player || !Inventory) return;
 
+        if (!personsSpawned) SpawnPersons();
         bool playing = GameManager.Instance && GameManager.Instance.State == GameState.Playing;
         NearestSpot = null;
+        NearestPerson = null;
         Prompt = "";
         if (!playing || player.IsDead) return;
+        UpdatePersonDirection();
+        bool pressed = !(controller && controller.IsDashing) && GameInput.InteractPressed();
+
+        float range = interactionRange * interactionRange;
+        foreach (var person in persons)
+        {
+            if (!person || person.State != PersonState.Lost) continue;
+            float sqr = ((Vector2)(person.transform.position - player.transform.position)).sqrMagnitude;
+            if (sqr < range) { range = sqr; NearestPerson = person; }
+        }
+        if (NearestPerson)
+        {
+            Prompt = $"[F / Y] Resgatar {NearestPerson.Name}";
+            if (pressed) NearestPerson.Rescue();
+            return;
+        }
 
         float best = interactionRange * interactionRange;
         foreach (var spot in spots)
         {
-            if (!spot.Locked && !spot.HasAction) continue;
+            if (!spot.Locked && !spot.HasAction && !spot.IsBuiltStation) continue;
             float distance = spot.SqrDistance(player.transform.position);
             if (distance < best) { best = distance; NearestSpot = spot; }
         }
         if (!NearestSpot) return;
+        // Estação inteira: F abre a janela de compras. Danificada, F repara primeiro.
+        if (!NearestSpot.HasAction && NearestSpot.IsBuiltStation && Stations)
+        {
+            Prompt = Stations.PromptFor(NearestSpot);
+            if (pressed) Stations.TryOpen(NearestSpot);
+            return;
+        }
         Prompt = NearestSpot.ActionText(Inventory);
-        if (NearestSpot.HasAction && !(controller && controller.IsDashing) && GameInput.InteractPressed())
-            NearestSpot.TryBuild(Inventory);
+        if (NearestSpot.HasAction && pressed) NearestSpot.TryBuild(Inventory);
     }
 
     void OnDestroy()

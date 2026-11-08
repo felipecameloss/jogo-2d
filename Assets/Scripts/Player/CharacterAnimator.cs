@@ -65,7 +65,7 @@ public class CharacterAnimator : MonoBehaviour
         if (index < frames.Length) target.sprite = frames[index];
     }
 
-    static int DirectionIndex(Vector2 v)
+    public static int DirectionIndex(Vector2 v)
     {
         float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
         int sector = Mathf.RoundToInt(angle / 45f);

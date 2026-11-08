@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public enum GameState { Playing, Paused, LevelUp, GameOver, Chest }
+// Menu: janela de jogo aberta (baú ou estação), com o tempo parado.
+public enum GameState { Playing, Paused, LevelUp, GameOver, Menu }
 
 // Controla o estado da run (infinita): tempo, abates, pausa, level up e derrota.
 public class GameManager : MonoBehaviour
@@ -21,6 +23,8 @@ public class GameManager : MonoBehaviour
     public float ElapsedTime { get; private set; }
     public int Kills { get; private set; }
     public PlayerStats Player { get; private set; }
+
+    Action closeMenu;
 
     void Awake()
     {
@@ -50,9 +54,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (State == GameState.Chest)
+        if (State == GameState.Menu)
         {
-            if (GameInput.PausePressed()) GetComponent<ChestSystem>()?.Close();
+            if (GameInput.PausePressed()) closeMenu?.Invoke();
             return;
         }
         if (GameInput.PausePressed())
@@ -67,18 +71,21 @@ public class GameManager : MonoBehaviour
         ElapsedTime += Time.deltaTime;
     }
 
-    public bool EnterChest()
+    // Abre uma janela de jogo; Esc / P / Start chamam onClose, que deve terminar em ExitMenu.
+    public bool EnterMenu(Action onClose)
     {
         if (State != GameState.Playing) return false;
-        State = GameState.Chest;
+        State = GameState.Menu;
+        closeMenu = onClose;
         Time.timeScale = 0f;
         return true;
     }
 
-    public void ExitChest()
+    public void ExitMenu()
     {
-        if (State != GameState.Chest) return;
+        if (State != GameState.Menu) return;
         State = GameState.Playing;
+        closeMenu = null;
         Time.timeScale = 1f;
     }
 

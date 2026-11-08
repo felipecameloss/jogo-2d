@@ -18,6 +18,20 @@ public class WeaponHolder : MonoBehaviour
 
     public bool Has(Weapon prefab) => instancesByPrefab.ContainsKey(prefab);
 
+    // Instância que o jogador tem desse prefab, ou null.
+    public Weapon Get(Weapon prefab) => prefab && instancesByPrefab.TryGetValue(prefab, out var weapon) ? weapon : null;
+
+    // Arma nova entra no nível 1; arma repetida sobe um nível. Devolve false se já estava no máximo.
+    public bool Unlock(Weapon prefab)
+    {
+        if (!prefab) return false;
+        var owned = Get(prefab);
+        if (!owned) { AddWeapon(prefab); return true; }
+        if (owned.IsMaxLevel) return false;
+        owned.LevelUp();
+        return true;
+    }
+
     public Weapon AddWeapon(Weapon prefab)
     {
         if (instancesByPrefab.TryGetValue(prefab, out var existing)) return existing;

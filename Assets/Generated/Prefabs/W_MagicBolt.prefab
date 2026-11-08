@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83e325b2bde27754e9d30b09cafaae68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MagicBoltWeapon
-  weaponName: Orbe Arcano
-  description: "Dispara no inimigo mais pr\xF3ximo."
+  weaponName: Besta
+  description: "Dispara virotes no inimigo mais pr\xF3ximo."
   maxLevel: 5
   damage: 10
   cooldown: 0.9

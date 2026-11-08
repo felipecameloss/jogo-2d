@@ -53,13 +53,11 @@ Nome, protagonista e origem dos monstros: **a definir**.
 
 **Planejado.** Sistemas da visão do jogo que ainda não existem no código:
 
-- **Resgate:** pessoas perdidas pelo mapa podem ser levadas ao acampamento.
-- **Estações de trabalho:** cada pessoa resgatada opera uma estação (ferreiro de armadura, ferreiro de armas, reparador, construtor etc.) que libera itens melhores.
-- **Baús com equipamento:** contêm armas básicas e gear para as primeiras noites.
+- **Mais estações (se sobrar tempo):** reparador e construtor operados por NPCs.
 
 **Implementado hoje.** O restante desta seção descreve o jogo atual.
 
-**Laço principal.** Planejado: de dia, explorar, coletar, resgatar e construir; de noite, defender o acampamento; a cada noite, enfrentar uma horda mais forte. Hoje: coleta de dia, sobrevivência à noite e inimigos que somem ao amanhecer.
+**Laço principal.** De dia, explorar, coletar, resgatar pessoas e construir; de noite, defender o acampamento; a cada noite, enfrentar uma horda mais forte. Os inimigos somem ao amanhecer, e os danos na base ficam.
 
 **Controles**
 
@@ -68,8 +66,8 @@ Nome, protagonista e origem dos monstros: **a definir**.
 | Mover | WASD / setas | Analógico |
 | Dash | Left Shift | Indisponível |
 | Coletar (segurar) | E | Oeste (X no Xbox) |
-| Interagir com baú | F | Norte (Y no Xbox) |
-| Escolher opção | 1, 2, 3 ou clique | Não testado |
+| Interagir: construir, reparar, resgatar, abrir baú e estação | F | Norte (Y no Xbox) |
+| Escolher opção | 1 a 5 ou clique | Não testado |
 | Pausar | Esc / P | Indisponível |
 
 **Sistemas**
@@ -81,6 +79,12 @@ Nome, protagonista e origem dos monstros: **a definir**.
 - **Ouro:** inimigos soltam ouro, mas **ainda não há onde gastá-lo**.
 - **Acampamento:** o jogador começa ao lado da fogueira, cercada por um anel quadrado de 12 pontos de muralha (4 cantos e 2 trechos por lado) e 4 de portão, um no meio de cada lado. Se ela for destruída, a run termina.
 - **Construção e reparo:** com F, em pontos fixos, pagando madeira e pedra. Cercas viram muros, portões de madeira viram portões de pedra e estruturas danificadas podem ser reparadas. Portões bloqueiam monstros e deixam o jogador passar; eles se abrem quando o jogador chega perto, para o lado oposto ao dele.
+- **Armas:** cinco armas medievais e automáticas: Besta (inicial), Espada, Facas, Machado de arremesso e Bombas. Vêm de baús e da ferraria; o level up não dá armas.
+- **Level up:** 3 opções entre 15 atributos e passivas.
+- **Baús com equipamento:** cada baú oferece 1 arma e 2 equipamentos (amuleto, pedra de amolar, cota de malha, luvas, alforje, ervas, moeda); a força cresce com a distância do baú.
+- **Pessoas perdidas:** o ferreiro e a ferreira começam perdidos, em direções opostas, longe do acampamento. De dia, o HUD aponta o mais próximo. Com F, a pessoa é resgatada e anda sozinha até o acampamento.
+- **Estações:** cada residente libera a construção da sua estação. A ferraria ensina e melhora armas (Besta sempre; Espada e Facas com 1 residente; Machado e Bombas com os 2). A armaria dá até 5 níveis de armadura e vida. Compras são pagas com madeira e pedra e continuam valendo se a estação cair.
+- **Residentes em perigo:** monstros não procuram os residentes, mas ferem quem estiver encostado. Derrotado, o residente volta a ficar perdido em outro ponto do mapa; a estação fica fechada, e as armas que dependem dos dois residentes somem da ferraria até o novo resgate.
 - **Inimigos:** vão até a fogueira, atacam o que os bloqueia e perseguem o jogador se ele estiver perto. Longe da base, o jogador é caçado enquanto ela é atacada. Causam dano por contato. Variam entre Slime (básico), Bat (rápido) e Golem (resistente), além de elites e anéis que cercam o jogador.
 - **Derrota:** vida do jogador zerada ou fogueira destruída encerra a run e mostra as estatísticas.
 
@@ -88,9 +92,9 @@ Valores detalhados em `BALANCEAMENTO.md`.
 
 ### 1.3 Interface
 
-- **HUD:** vida, XP, tempo, relógio do dia, ouro, materiais, chaves, direção do baú mais próximo, minimapa e avisos de interação.
+- **HUD:** vida, XP, tempo, relógio do dia, ouro, materiais, chaves, direção do baú mais próximo, direção da pessoa perdida mais próxima (de dia), minimapa e avisos de interação.
 - **Minimapa:** radar centrado no jogador, com alcance fixo, que mostra a fogueira e os baús fechados; o que está além do alcance fica preso na borda, indicando a direção. Chaves e inimigos ficam de fora para manter a exploração.
-- **Menus:** principal, pausa, level up, baú e game over. Ainda não há opções.
+- **Menus:** principal, pausa, level up, baú, ferraria, armaria e game over. Ainda não há opções.
 - **Feedback no mundo:** clarão e escala ao acertar; números de dano; tela tremendo e jogador piscando ao sofrer dano; recursos esgotados acinzentados; chaves pulsando; escuridão à noite com luz em volta do jogador.
 - **Som:** SFX gerados por código, ainda placeholder. **Sem música.**
 
@@ -99,12 +103,12 @@ Valores detalhados em `BALANCEAMENTO.md`.
 Comportamentos esperados quando as regras se combinam:
 
 - **Kiting:** com armas automáticas, a habilidade está em se mover, abrir caminho com dash e agrupar inimigos.
-- **Montagem de build:** o jogador combina armas e atributos a partir de opções sorteadas, adaptando-se ao que surge.
+- **Montagem de build:** o jogador combina atributos sorteados no level up com as armas e equipamentos que escolhe em baús e na ferraria.
 - **Risco e recompensa no mapa:** buscar chaves e baús mais distantes.
 - **Tensão crescente:** noites cada vez mais cheias, alternadas com a calma do dia.
-- **Gestão do tempo do dia (planejado):** o dia é curto para tudo; o jogador escolhe entre coletar, explorar em busca de pessoas e construir.
-- **Prioridades da base (planejado):** reparar o que foi danificado ou investir em novas estações e defesas.
-- **Crescimento da comunidade (planejado):** cada resgate abre novas opções e aumenta o que há a perder.
+- **Gestão do tempo do dia:** o dia é curto para tudo; o jogador escolhe entre coletar, explorar em busca de pessoas e construir.
+- **Prioridades da base:** reparar o que foi danificado ou investir em novas estações e defesas.
+- **Crescimento da comunidade:** cada resgate abre novas opções e aumenta o que há a perder.
 
 ## 3. Experience
 
@@ -116,6 +120,7 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
+| 08/11/2026 | Implementados resgate do ferreiro e da ferreira, ferraria e armaria, armas medievais (5) e baús com 1 arma e 2 equipamentos. Level up só dá atributos. | Núcleo aprovado em 05/11 |
 | 08/11/2026 | Anel do acampamento passa de círculo a quadrado; portão de madeira pode ser reforçado com pedra; portões abrem ao ver o jogador. | A arte final de cercas, muros e portões é top-down, em peças horizontais, verticais e de canto, e veio com portão de pedra |
 | 05/11/2026 | Minimapa de orientação na HUD, com fogueira e baús fechados, sem chaves nem inimigos. | Evitar que o jogador se perca no mapa infinito sem tirar a busca por chaves |
 | 05/11/2026 | Level up deixa de dar armas; armas ficam medievais, sem magia, e serão de 4 a 6 em vez de 10. | Dar papel próprio às estações e reduzir o trabalho de arte |

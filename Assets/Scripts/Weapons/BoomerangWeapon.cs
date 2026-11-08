@@ -52,9 +52,9 @@ public class BoomerangWeapon : Weapon
     {
         switch (Level + 1)
         {
-            case 2: return "+1 bumerangue";
+            case 2: return "+1 machado";
             case 3: return "+30% de dano";
-            case 4: return "+1 bumerangue";
+            case 4: return "+1 machado";
             case 5: return "+30% de dano, maior e mais rápido";
             default: return "";
         }
