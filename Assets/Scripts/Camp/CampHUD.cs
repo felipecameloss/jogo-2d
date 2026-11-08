@@ -5,7 +5,7 @@ using UnityEngine.UI;
 // A direção das pessoas perdidas fica nas missões (QuestLog).
 public class CampHUD : MonoBehaviour
 {
-    const float BarWidth = 432f, LowHealth = 0.3f;
+    const float BarWidth = 492f, LowHealth = 0.3f;
     static readonly Color FireColor = new Color(1f, 0.55f, 0.15f);
     static readonly Color AlertColor = new Color(1f, 0.2f, 0.15f);
 
@@ -20,7 +20,7 @@ public class CampHUD : MonoBehaviour
         var canvas = UIStyle.Canvas(transform, "CampHUD", -1); // Os menus continuam por cima.
         root = canvas.gameObject;
 
-        var panel = UIStyle.Panel(canvas, "Fogueira", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -150f), new Vector2(460f, 84f));
+        var panel = UIStyle.Panel(canvas, "Fogueira", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -154f), new Vector2(520f, 90f));
         label = UIStyle.Label(panel, "", UIStyle.Body, TextAnchor.UpperCenter, Color.white);
         UIStyle.Stretch(label.rectTransform, 4f);
         var track = UIStyle.Image(panel, "Barra", new Color(0.05f, 0.03f, 0.02f));

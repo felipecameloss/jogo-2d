@@ -42,12 +42,13 @@ public class HUD : MonoBehaviour
     {
         var root = transform;
         // Nível, abates e barra de XP rotulada.
-        var player = UIStyle.Panel(root, "Jogador", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -20f), new Vector2(460f, 120f));
+        var player = UIStyle.Panel(root, "Jogador", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -20f), new Vector2(UIStyle.ColumnWidth, 124f));
         if (levelText)
         {
             Place(levelText, player, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(UIStyle.Padding, -56f), new Vector2(-UIStyle.Padding, -6f));
             levelText.alignment = TextAnchor.MiddleLeft;
             UIStyle.Style(levelText, UIStyle.Large);
+            UIStyle.Bold(levelText);
             levelText.color = UIStyle.Gold;
         }
         if (killsText)
@@ -64,7 +65,7 @@ public class HUD : MonoBehaviour
             bar.anchorMax = new Vector2(1f, 0f);
             bar.pivot = new Vector2(0.5f, 0f);
             bar.offsetMin = new Vector2(UIStyle.Padding, UIStyle.Padding);
-            bar.offsetMax = new Vector2(-UIStyle.Padding, UIStyle.Padding + 36f);
+            bar.offsetMax = new Vector2(-UIStyle.Padding, UIStyle.Padding + 40f);
             var background = bar.GetComponent<Image>();
             if (background) { background.sprite = null; background.color = new Color(0.05f, 0.03f, 0.02f); }
             // Preenchimento pela âncora: funciona sem depender do sprite da cena.
@@ -81,16 +82,16 @@ public class HUD : MonoBehaviour
         }
 
         // Relógio e período no topo.
-        var clock = UIStyle.Panel(root, "Relogio", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -20f), new Vector2(460f, 120f));
+        var clock = UIStyle.Panel(root, "Relogio", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -20f), new Vector2(520f, 124f));
         if (timerText)
         {
-            Place(timerText, clock, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -64f), new Vector2(0f, -4f));
+            Place(timerText, clock, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -72f), new Vector2(0f, -4f));
             timerText.alignment = TextAnchor.MiddleCenter;
             UIStyle.Style(timerText, UIStyle.Title);
         }
         if (periodText)
         {
-            Place(periodText, clock, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 8f), new Vector2(0f, 48f));
+            Place(periodText, clock, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 6f), new Vector2(0f, 46f));
             periodText.alignment = TextAnchor.MiddleCenter;
             UIStyle.Style(periodText, UIStyle.Body);
         }
@@ -127,8 +128,8 @@ public class HUD : MonoBehaviour
     {
         if (!bannerText || !cycle) return;
         bool night = period == DayPeriod.Night;
-        bannerText.text = night ? $"NOITE {cycle.NightNumber}\n<size=40>Os monstros estão chegando...</size>"
-                                : $"DIA {cycle.DayNumber}\n<size=40>Prepare-se para a noite</size>";
+        bannerText.text = night ? $"NOITE {cycle.NightNumber}\n<size=32>Os monstros estão chegando...</size>"
+                                : $"DIA {cycle.DayNumber}\n<size=32>Prepare-se para a noite</size>";
         bannerText.color = night ? NightColor : DayColor;
         bannerText.gameObject.SetActive(true);
         bannerTimer = bannerDuration;

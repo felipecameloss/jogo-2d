@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class StationUI : MonoBehaviour
 {
     const int MaxCards = 5;
-    const float CardWidth = 310f, CardHeight = 290f, CardSpacing = 330f;
+    const float CardWidth = 310f, CardHeight = 350f, CardSpacing = 330f;
 
     public StationSystem source;
     GameObject modal;
@@ -23,10 +23,10 @@ public class StationUI : MonoBehaviour
         UIStyle.Stretch(veil.rectTransform);
         veil.raycastTarget = true;
         modal = veil.gameObject;
-        var window = UIStyle.Panel(modal.transform, "Janela", Vector2.one * 0.5f, Vector2.one * 0.5f, Vector2.zero, new Vector2(1720f, 660f));
-        heading = UIStyle.Label(window, "", UIStyle.Title, new Vector2(0f, 260f), new Vector2(1600f, 70f));
+        var window = UIStyle.Panel(modal.transform, "Janela", Vector2.one * 0.5f, Vector2.one * 0.5f, Vector2.zero, new Vector2(1720f, 760f));
+        heading = UIStyle.Label(window, "", UIStyle.Title, new Vector2(0f, 310f), new Vector2(1600f, 80f));
         heading.color = UIStyle.Gold;
-        materials = UIStyle.Label(window, "", UIStyle.Body, new Vector2(0f, 200f), new Vector2(1600f, 44f));
+        materials = UIStyle.Label(window, "", UIStyle.Body, new Vector2(0f, 245f), new Vector2(1600f, 44f));
         materials.color = UIStyle.Muted;
         for (int i = 0; i < MaxCards; i++)
         {
@@ -34,15 +34,15 @@ public class StationUI : MonoBehaviour
             buttons[i] = UIStyle.Button(window, "", UIStyle.Body, new Vector2((i - (MaxCards - 1) / 2f) * CardSpacing, -10f), new Vector2(CardWidth, CardHeight), () => source.Buy(index), out var unused);
             unused.gameObject.SetActive(false);
             cards[i] = buttons[i].gameObject;
-            titles[i] = UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, 95f), new Vector2(CardWidth - 30f, 70f));
+            titles[i] = UIStyle.Bold(UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, 120f), new Vector2(CardWidth - 30f, 80f)));
             titles[i].color = UIStyle.Gold;
-            descriptions[i] = UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, -5f), new Vector2(CardWidth - 30f, 120f));
-            costs[i] = UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, -110f), new Vector2(CardWidth - 30f, 40f));
+            descriptions[i] = UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, 0f), new Vector2(CardWidth - 30f, 150f));
+            costs[i] = UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, -135f), new Vector2(CardWidth - 30f, 70f));
         }
         empty = UIStyle.Label(window, "Nada mais a ensinar", UIStyle.Large, new Vector2(0f, -10f), new Vector2(1600f, 60f));
         empty.color = UIStyle.Muted;
-        message = UIStyle.Label(window, "", UIStyle.Body, new Vector2(0f, -195f), new Vector2(1600f, 44f));
-        UIStyle.Button(window, "Fechar  [Esc]", UIStyle.Body, new Vector2(0f, -265f), new Vector2(360f, 60f), source.Close, out _);
+        message = UIStyle.Label(window, "", UIStyle.Body, new Vector2(0f, -235f), new Vector2(1600f, 44f));
+        UIStyle.Button(window, "Fechar  [Esc]", UIStyle.Body, new Vector2(0f, -310f), new Vector2(360f, 64f), source.Close, out _);
         modal.SetActive(false);
     }
 
