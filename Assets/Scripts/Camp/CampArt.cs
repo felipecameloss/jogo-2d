@@ -3,9 +3,14 @@ using UnityEngine;
 
 // Sprites do acampamento. Procura a arte final em Assets/Art/Resources/Camp/<nome>.png
 // e, se não existir, gera um placeholder.
+// Cerca e muro: 13 quadros de 48x64 na mesma ordem — 0-1 horizontal, 2-3 vertical, 4-7 diagonais,
+// 8 ┘, 9 └, 10 ┐, 11 ┌, 12 poste. Portões: 4 linhas de 6 quadros (abrindo para sul, oeste, norte, leste).
 public static class CampArt
 {
     const float PixelsPerUnit = 20f;
+    public const float ArtPixelsPerUnit = 24f;
+    // Passo da grade do anel: cada peça de cerca, muro ou portão ocupa 32 px.
+    public const float Cell = 32f / ArtPixelsPerUnit;
     static readonly Dictionary<string, Sprite> Cache = new Dictionary<string, Sprite>();
     static readonly Dictionary<string, Sprite[]> FrameCache = new Dictionary<string, Sprite[]>();
 
@@ -28,6 +33,34 @@ public static class CampArt
         return frames;
     }
 
+    // Arte em grade (peças do anel, portões, estações): quadros de largura x altura, lidos linha a linha
+    // a partir do topo, a 24 px por unidade. Sem arquivo, devolve só o placeholder.
+    public static Sprite[] Sheet(string name, int width, int height, Vector2 pivot)
+    {
+        string key = name + "#sheet";
+        if (FrameCache.TryGetValue(key, out var cached) && cached[0]) return cached;
+        var sheet = Resources.Load<Sprite>("Camp/" + name);
+        Sprite[] frames;
+        if (sheet)
+        {
+            var texture = sheet.texture;
+            int columns = texture.width / width, rows = texture.height / height;
+            frames = new Sprite[columns * rows];
+            for (int row = 0; row < rows; row++)
+            for (int column = 0; column < columns; column++)
+            {
+                var rect = new Rect(column * width, texture.height - (row + 1) * height, width, height);
+                frames[row * columns + column] = Sprite.Create(texture, rect, pivot, ArtPixelsPerUnit, 0, SpriteMeshType.FullRect);
+            }
+        }
+        else frames = new[] { Get(name) };
+        FrameCache[key] = frames;
+        return frames;
+    }
+
+    // Índice protegido: com o placeholder há um quadro só.
+    public static Sprite Pick(Sprite[] frames, int index) => frames[Mathf.Clamp(index, 0, frames.Length - 1)];
+
     public static Sprite[] Slice(Texture2D texture, Vector2 pivot, float pixelsPerUnit)
     {
         int size = texture.height;
@@ -44,9 +77,10 @@ public static class CampArt
             case "heart": return Fire();
             case "fence": return Bar(new Color(0.55f, 0.36f, 0.18f), new Color(0.36f, 0.22f, 0.1f), 5);
             case "wall": return Bar(new Color(0.58f, 0.6f, 0.65f), new Color(0.36f, 0.38f, 0.44f), 11);
-            case "gate": return Bar(new Color(0.72f, 0.5f, 0.24f), new Color(0.3f, 0.18f, 0.08f), 22);
-            case "station_weapon": return Station(new Color(0.75f, 0.32f, 0.2f));
-            case "station_armor": return Station(new Color(0.35f, 0.5f, 0.75f));
+            case "gate_wood": return Bar(new Color(0.72f, 0.5f, 0.24f), new Color(0.3f, 0.18f, 0.08f), 22);
+            case "gate_stone": return Bar(new Color(0.58f, 0.6f, 0.65f), new Color(0.3f, 0.18f, 0.08f), 22);
+            case "station_weapon_npc": return Station(new Color(0.75f, 0.32f, 0.2f));
+            case "station_armor_npc": return Station(new Color(0.35f, 0.5f, 0.75f));
             default: return Mark();
         }
     }

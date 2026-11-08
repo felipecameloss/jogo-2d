@@ -1,32 +1,58 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum SpotKind { Heart, Wall, Gate, WeaponStation, ArmorStation }
 
+// Uma peça desenhada pelo ponto: posição local e quadro na folha.
+// Em portões, o índice diz a orientação: 0 horizontal, 1 vertical.
+public struct SpotPiece
+{
+    public Vector2 offset;
+    public int index;
+    public SpotPiece(Vector2 offset, int index) { this.offset = offset; this.index = index; }
+}
+
 // Um lugar fixo do acampamento. Sabe qual é a próxima ação disponível e quanto ela custa.
 public class BuildSpot : MonoBehaviour
 {
-    public const int FenceWood = 6, WallStone = 6, GateWood = 8, StationWood = 30, StationStone = 20;
+    public const int FenceWood = 6, WallStone = 6, GateWood = 8, GateStone = 8, StationWood = 30, StationStone = 20;
     public const float HealthPerMaterial = 10f;
-    public const float FenceHealth = 60f, WallHealth = 150f, GateHealth = 100f, StationHealth = 120f;
+    public const float FenceHealth = 60f, WallHealth = 150f, GateHealth = 100f, StoneGateHealth = 200f, StationHealth = 120f;
+
+    // Quadros de 48x64: o pivô é o pé do poste, no nó da grade do anel.
+    static readonly Vector2 PiecePivot = new Vector2(0.5f, 20f / 64f);
+    // Quadros de 64x68: o pivô é a base da barraca.
+    static readonly Vector2 StationPivot = new Vector2(0.5f, 9f / 68f);
+    const float StationFrameTime = 0.11f;
 
     public SpotKind Kind { get; private set; }
     public Structure Current { get; private set; }
     public bool Locked { get; set; }
     public string LockedText { get; set; } = "";
 
-    SpriteRenderer mark;
-    Vector2 size;
+    SpotPiece[] pieces;
+    Rect[] areas; // colisores, em coordenadas locais
+    readonly List<SpriteRenderer> marks = new List<SpriteRenderer>();
+    readonly List<SpriteRenderer> renderers = new List<SpriteRenderer>();
+    GateVisual gate;
 
     public bool HasAction => !Locked && NextCost(out _, out _, out _);
 
-    public void Setup(SpotKind kind, Vector2 spotSize)
+    public void Setup(SpotKind kind, SpotPiece[] spotPieces, Rect[] spotAreas)
     {
         Kind = kind;
-        size = spotSize;
-        mark = gameObject.AddComponent<SpriteRenderer>();
-        mark.sprite = CampArt.Get("spot");
-        mark.sortingOrder = 5;
-        transform.localScale = Vector3.one;
+        pieces = spotPieces;
+        areas = spotAreas;
+        foreach (var piece in pieces)
+        {
+            var go = new GameObject("Marca");
+            go.transform.SetParent(transform, false);
+            go.transform.localPosition = piece.offset;
+            var mark = go.AddComponent<SpriteRenderer>();
+            mark.sprite = CampArt.Get("spot");
+            mark.sortingOrder = 5;
+            marks.Add(mark);
+        }
     }
 
     // A fogueira já nasce pronta: o ponto só adota a estrutura.
@@ -34,7 +60,16 @@ public class BuildSpot : MonoBehaviour
     {
         Current = structure;
         structure.OnDestroyed += StructureDestroyed;
-        mark.enabled = false;
+        ShowMarks(false);
+    }
+
+    // Distância até a peça mais próxima: pontos compridos são alcançados por qualquer ponta.
+    public float SqrDistance(Vector2 point)
+    {
+        float best = float.MaxValue;
+        foreach (var piece in pieces)
+            best = Mathf.Min(best, ((Vector2)transform.position + piece.offset - point).sqrMagnitude);
+        return best;
     }
 
     bool NextCost(out int wood, out int stone, out string label)
@@ -46,15 +81,17 @@ public class BuildSpot : MonoBehaviour
             if (Current.IsDamaged)
             {
                 int cost = Mathf.CeilToInt(Current.Missing / HealthPerMaterial);
-                if (Current.Kind == StructureKind.Wall) stone = cost;
+                if (Current.Kind == StructureKind.Wall || Current.Kind == StructureKind.StoneGate) stone = cost;
                 else wood = cost;
                 label = "Reparar";
                 return true;
             }
-            if (Current.Kind != StructureKind.Fence) return false;
-            stone = WallStone;
-            label = "Reforçar com muro";
-            return true;
+            switch (Current.Kind)
+            {
+                case StructureKind.Fence: stone = WallStone; label = "Reforçar com muro"; return true;
+                case StructureKind.Gate: stone = GateStone; label = "Reforçar portão com pedra"; return true;
+                default: return false;
+            }
         }
         switch (Kind)
         {
@@ -89,7 +126,8 @@ public class BuildSpot : MonoBehaviour
 
         if (!Current) Create();
         else if (Current.IsDamaged) Current.RepairFull();
-        else Replace(StructureKind.Wall, "wall", WallHealth);
+        else if (Current.Kind == StructureKind.Fence) Become(StructureKind.Wall, WallHealth);
+        else Become(StructureKind.StoneGate, StoneGateHealth);
         FxManager.Burst(transform.position, new Color(0.9f, 0.75f, 0.45f), 10, 3f);
         AudioManager.Play(Sfx.Select, 0.8f);
         return true;
@@ -99,30 +137,73 @@ public class BuildSpot : MonoBehaviour
     {
         var go = new GameObject("Structure");
         go.transform.SetParent(transform, false);
-        var renderer = go.AddComponent<SpriteRenderer>();
-        renderer.sortingOrder = 10;
-        renderer.spriteSortPoint = SpriteSortPoint.Pivot;
-        var box = go.AddComponent<BoxCollider2D>(); // sem Rigidbody2D: colisor estático
-        box.size = size;
-        // Portão: bloqueia monstros e deixa o jogador passar, então ninguém fica preso na base.
-        if (Kind == SpotKind.Gate && CampSystem.Instance && CampSystem.Instance.PlayerCollider)
-            Physics2D.IgnoreCollision(box, CampSystem.Instance.PlayerCollider);
+        // Sem Rigidbody2D: colisores estáticos.
+        foreach (var area in areas)
+        {
+            var box = go.AddComponent<BoxCollider2D>();
+            box.offset = area.center;
+            box.size = area.size;
+            // Portão: bloqueia monstros e deixa o jogador passar, então ninguém fica preso na base.
+            if (Kind == SpotKind.Gate && CampSystem.Instance && CampSystem.Instance.PlayerCollider)
+                Physics2D.IgnoreCollision(box, CampSystem.Instance.PlayerCollider);
+        }
+        renderers.Clear();
+        foreach (var piece in pieces)
+        {
+            var child = new GameObject("Peca");
+            child.transform.SetParent(go.transform, false);
+            child.transform.localPosition = piece.offset;
+            var renderer = child.AddComponent<SpriteRenderer>();
+            renderer.sortingOrder = 10;
+            renderer.spriteSortPoint = SpriteSortPoint.Pivot;
+            renderers.Add(renderer);
+        }
         Current = go.AddComponent<Structure>();
         Current.OnDestroyed += StructureDestroyed;
-        mark.enabled = false;
+        ShowMarks(false);
         switch (Kind)
         {
-            case SpotKind.Wall: Replace(StructureKind.Fence, "fence", FenceHealth); break;
-            case SpotKind.Gate: Replace(StructureKind.Gate, "gate", GateHealth); break;
-            case SpotKind.WeaponStation: Replace(StructureKind.Station, "station_weapon", StationHealth); break;
-            case SpotKind.ArmorStation: Replace(StructureKind.Station, "station_armor", StationHealth); break;
+            case SpotKind.Wall: Become(StructureKind.Fence, FenceHealth); break;
+            case SpotKind.Gate:
+                gate = go.AddComponent<GateVisual>();
+                gate.Setup(renderers[0], pieces[0].index == 0);
+                Become(StructureKind.Gate, GateHealth);
+                break;
+            case SpotKind.WeaponStation: Station("station_weapon_npc"); break;
+            case SpotKind.ArmorStation: Station("station_armor_npc"); break;
         }
     }
 
-    void Replace(StructureKind kind, string sprite, float health)
+    // Também serve para melhorar: troca o tipo, a arte e volta com a vida cheia.
+    void Become(StructureKind kind, float health)
     {
-        Current.GetComponent<SpriteRenderer>().sprite = CampArt.Get(sprite);
+        switch (kind)
+        {
+            case StructureKind.Fence: Pieces("fence"); break;
+            case StructureKind.Wall: Pieces("wall"); break;
+            case StructureKind.Gate: gate.SetFrames(CampArt.Sheet("gate_wood", 48, 64, PiecePivot)); break;
+            case StructureKind.StoneGate: gate.SetFrames(CampArt.Sheet("gate_stone", 48, 64, PiecePivot)); break;
+        }
         Current.Init(kind, health);
+    }
+
+    void Pieces(string sheet)
+    {
+        var frames = CampArt.Sheet(sheet, 48, 64, PiecePivot);
+        for (int i = 0; i < renderers.Count; i++) renderers[i].sprite = CampArt.Pick(frames, pieces[i].index);
+    }
+
+    void Station(string sheet)
+    {
+        var frames = CampArt.Sheet(sheet, 64, 68, StationPivot);
+        renderers[0].sprite = frames[0];
+        if (frames.Length > 1)
+        {
+            var loop = renderers[0].gameObject.AddComponent<SpriteLoop>();
+            loop.frames = frames;
+            loop.frameTime = StationFrameTime;
+        }
+        Current.Init(StructureKind.Station, StationHealth);
     }
 
     void StructureDestroyed(Structure structure)
@@ -131,12 +212,20 @@ public class BuildSpot : MonoBehaviour
         structure.OnDestroyed -= StructureDestroyed;
         Destroy(structure.gameObject);
         Current = null;
-        mark.enabled = true;
+        gate = null;
+        renderers.Clear();
+        ShowMarks(true);
+    }
+
+    void ShowMarks(bool show)
+    {
+        foreach (var mark in marks) mark.enabled = show;
     }
 
     bool PlayerOnSpot()
     {
-        foreach (var hit in Physics2D.OverlapBoxAll(transform.position, size, transform.eulerAngles.z))
+        foreach (var area in areas)
+        foreach (var hit in Physics2D.OverlapBoxAll(transform.TransformPoint(area.center), area.size, 0f))
             if (hit.GetComponent<PlayerStats>()) return true;
         return false;
     }

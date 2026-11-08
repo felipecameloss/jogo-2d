@@ -43,9 +43,9 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 ### Acampamento
 
 - Você começa ao lado da fogueira, no centro do acampamento. **Se ela se apagar, a run termina**; a barra fica no topo da tela.
-- Perto de uma marca no chão, aperte **F** para construir cerca ou portão. Depois, F transforma a cerca em muro. O custo aparece na tela.
+- Perto de uma marca no chão, aperte **F** para construir cerca ou portão. Depois, F reforça com pedra: a cerca vira muro e o portão de madeira vira portão de pedra. O custo aparece na tela.
 - F também repara estruturas danificadas, inclusive a fogueira, a qualquer hora. Estruturas escurecem conforme levam dano.
-- Portões bloqueiam monstros e deixam você passar. O dash atravessa monstros, mas não construções, árvores ou rochas.
+- Portões bloqueiam monstros e se abrem para você passar. O dash atravessa monstros, mas não construções, árvores ou rochas.
 - Monstros vão até a fogueira e destroem o que estiver no caminho. Longe da base, você é caçado enquanto ela é atacada. Os danos continuam após o amanhecer.
 - Estruturas destruídas deixam o ponto vazio, sem devolver materiais. Os pontos de estação abrem quando as pessoas forem resgatadas.
 
@@ -107,5 +107,6 @@ File > Build Profiles > Web > Switch Platform > Build. Suba o .zip da pasta gera
 - Código-base do protótipo gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
 - Fonte: LegacyRuntime (fonte padrão do Unity).
 - Jogador: sprites feitos no Aseprite por Pedro Nadotti.
+- Cercas, muros, portões e estações do acampamento: sprites feitos no Aseprite por Pedro Nadotti.
 - Árvore, arbustos, rochas, fogueira e baú: feitos no Aseprite (autoria a confirmar em [Assets](docs/ASSETS.md)).
 - Demais sprites e sons: placeholders gerados por código.

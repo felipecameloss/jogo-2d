@@ -108,11 +108,12 @@ XP para o próximo nível: `5 + 8 × (nível − 1)`. São 333 XP até o nível 
 | Cerca | 6 madeira | 60 |
 | Muro (melhoria da cerca) | 6 pedra | 150 |
 | Portão | 8 madeira | 100 |
+| Portão de pedra (melhoria do portão) | 8 pedra | 200 |
 | Estação | 30 madeira e 20 pedra | 120 |
 
-Anel com 12 pontos de muralha e 4 de portão, em raio 5,5. Área livre de recursos em raio 7.
+Anel quadrado de 8 × 8 células de 1,33 unidade (32 px), com lado de 10,7 unidades: 4 cantos, 8 trechos de 3 peças e 4 portões. Área livre de recursos em raio 8.
 
-- **Reparo:** 1 material a cada 10 de vida faltando, arredondado para cima. Muro usa pedra; as demais, madeira.
+- **Reparo:** 1 material a cada 10 de vida faltando, arredondado para cima. Muro e portão de pedra usam pedra; as demais, madeira.
 - **Dano de monstros em estruturas:** 50% do dano de contato, a cada 2 s, por monstro.
 - **Alvo:** o jogador a até 7 unidades; senão, a fogueira.
 - **Jogador a mais de 15 unidades da fogueira:** metade dos monstros nasce a 16 unidades dela; o resto caça o jogador.
@@ -122,8 +123,8 @@ Anel com 12 pontos de muralha e 4 de portão, em raio 5,5. Área livre de recurs
 - **Coleta:** 1,1 s segurando E, alcance 1,9. Madeira rende 5, pedra 3. Pontos ricos (1 em 8) rendem o dobro.
 - **Distribuição:** células de 6,5 unidades; 25% têm árvore, 30% têm pedra, 45% ficam vazias. Tudo renova ao amanhecer.
 - **Drops por inimigo:** ouro 20% (1–2, com +20% por noite após a primeira), cura 1%, ímã 0,4%.
-- **Baús:** 3 por run, a 9; 12,5 e 16 unidades do centro do acampamento. Cada um oferece 3 recompensas de força ×1, ×2 e ×3, conforme o baú, e custa 1 chave.
-- **Chaves:** uma garantida a 10 unidades do acampamento; demais em 20% das células de 14 unidades, somente enquanto faltarem chaves para os baús fechados.
+- **Baús:** 3 por run, a 10; 13,5 e 17 unidades do centro do acampamento. Cada um oferece 3 recompensas de força ×1, ×2 e ×3, conforme o baú, e custa 1 chave.
+- **Chaves:** uma garantida a 11 unidades do acampamento; demais em 20% das células de 14 unidades, somente enquanto faltarem chaves para os baús fechados.
 
 | Recompensa | Por ponto de força |
 |---|---|
@@ -160,6 +161,10 @@ Registre aqui cada sessão: data, quem jogou, versão, noite alcançada, causa d
 
 | Data | Valor | De → Para | Motivo |
 |---|---|---|---|
+| 08/11/2026 | Portão de pedra | — → 8 pedra, 200 de vida | Nova melhoria do portão, no mesmo ritmo do muro (cerca a muro: +90 de vida por 6 pedra) |
+| 08/11/2026 | Área livre de recursos | raio 7 → 8 | Os cantos do anel quadrado ficam a 7,5 do centro |
+| 08/11/2026 | Distância do primeiro baú | 9 → 10 | Não encostar nos cantos do anel quadrado |
+| 08/11/2026 | Distância da primeira chave | 10 → 11 | Acompanhar o primeiro baú |
 | 05/11/2026 | Dano em estruturas | 100% a cada 1 s → 50% a cada 2 s | Em teste automático, 15 Slimes apagariam a fogueira em segundos. Com anel de cercas e sem jogador, ela resistiu 75 s na Noite 1 |
 | 05/11/2026 | Distância do primeiro baú | 5 → 9 | Abrir espaço para o acampamento |
 | 05/11/2026 | Distância da primeira chave | 7 → 10 | Abrir espaço para o acampamento |

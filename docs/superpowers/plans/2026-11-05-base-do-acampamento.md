@@ -198,11 +198,11 @@ Relacionada à issue #5: quanto mais pessoas no acampamento, melhores as armas.
 
 Exportar para `Assets/Art/Resources/Camp/` a 24 px por unidade. `CampArt` carrega sem mudança de código.
 
-- [ ] Fogueira animada: `heart.png`
-- [ ] Cerca, muro e portão, com versão danificada: `fence`, `wall`, `gate`
-- [ ] Ferraria e armaria: `station_weapon`, `station_armor`
+- [x] Fogueira animada: `heart.png`
+- [x] Cerca, muro e portão de madeira e de pedra: `fence`, `wall`, `gate_wood`, `gate_stone`. Sem versão danificada: o dano escurece as peças.
+- [x] Ferraria e armaria, vazias e com NPC: `station_weapon`, `station_armor` e `*_npc`
 - [ ] Marca de ponto vazio: `spot`
-- [ ] Registrar em `docs/ASSETS.md`.
+- [x] Registrar em `docs/ASSETS.md`.
 
 ### Task 13: Arte dos monstros
 
