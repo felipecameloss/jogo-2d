@@ -105,7 +105,7 @@ Todas as tarefas dependem do código de baús e chaves, que está só em `feat/m
 - [x] Com o jogador a mais de 15 unidades da fogueira, metade dos monstros nasce a 16 unidades dela e metade em volta da câmera. Anéis e elites seguem a câmera.
 - [x] Monstro parado por mais de 1 s contra árvore ou baú desvia lateralmente.
 - [x] Verificar no Editor: sem muros, monstros chegam à fogueira; com muros, atacam e derrubam; longe da base, ela é atacada; ao amanhecer somem e os danos ficam.
-- [x] Verificar no build WebGL com muitos monstros atacando: desempenho aceitável.
+- [ ] Verificar no build WebGL com muitos monstros atacando: desempenho aceitável. (Pendente: ainda não há build; fica para a Task 22.)
 
 ### Task 6: Reparo da base
 
