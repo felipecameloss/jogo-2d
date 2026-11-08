@@ -37,15 +37,17 @@ Fonte: código e `Assets/Scenes/Game.unity`, em 05/11/2026.
 
 Cada dia ou noite dura 180 s. A dificuldade depende de `t`, o total de segundos de noite já passados. Durante o dia, nada avança.
 
-| Noite | `t` (s) | Inimigos/s | Multiplicador de vida |
-|---|---|---|---|
-| 1 | 0–180 | 1,0 → 2,8 | 1,0 → 1,9 |
-| 2 | 180–360 | 2,8 → 4,6 | 1,9 → 2,8 |
-| 3 | 360–540 | 4,6 → 6,4 | 2,8 → 3,7 |
-| 4 | 540–720 | 6,4 → 7,0 | 3,7 → 4,0 |
-| 5+ | 720+ | 7,0 | 4,0 |
+| Noite | `t` (s) | Inimigos/s | Multiplicador de vida | Multiplicador de dano |
+|---|---|---|---|---|
+| 1 | 0–180 | 1,0 → 2,8 | 1,0 → 1,9 | 1,00 |
+| 2 | 180–360 | 2,8 → 4,6 | 1,9 → 2,8 | 1,00 |
+| 3 | 360–540 | 4,6 → 6,4 | 2,8 → 3,7 | 1,00 |
+| 4 | 540–720 | 6,4 → 8,0 | 3,7 → 4,8 | 1,00 → 1,18 |
+| 5 | 720–900 | 8,0 → 9,5 | 4,8 → 6,0 | 1,18 → 1,36 |
+| 6 | 900–1080 | 9,5 → 11,0 | 6,0 → 7,2 | 1,36 → 1,54 |
+| 8 | 1260–1440 | 12,5 → 14,0 | 8,4 → 9,6 | 1,72 → 1,90 |
 
-As duas curvas chegam ao teto em `t = 600`, 60 s depois do início da Noite 4.
+As curvas da cena vão até `t = 600`. Depois, crescem em linha reta: +0,5 inimigo/s e +0,4 de multiplicador de vida por minuto de noite (`EnemySpawner.spawnsGrowthPerMinute` e `healthGrowthPerMinute`). O dano de contato cresce +6% por minuto de noite a partir de `t = 540`, início da Noite 4 (`damageGrowthStart`, `damageGrowthPerMinute`), e vale também contra construções e residentes. O limite de 350 inimigos simultâneos segura o ritmo nas noites altas.
 
 Eventos: anel de 24 inimigos a cada 60 s de `t`; elite a cada 90 s de `t`; limite de 350 inimigos simultâneos, exceto em anéis e elites.
 
@@ -59,7 +61,7 @@ Eventos: anel de 24 inimigos a cada 60 s de `t`; elite a cada 90 s de `t`; limit
 
 Elite: vida ×12, dano ×1,5, XP ×10, ouro garantido com faixa maior, cura garantida, resistência a empurrão de pelo menos 0,8.
 
-O dano de contato não cresce com o tempo.
+O dano de contato cresce a partir da Noite 4 (ver tabela acima).
 
 ### Armas
 
@@ -166,6 +168,8 @@ Registre aqui cada sessão: data, quem jogou, versão, noite alcançada, causa d
 
 | Data | Valor | De → Para | Motivo |
 |---|---|---|---|
+| 08/11/2026 | Dificuldade depois de `t = 600` | Constante → cresce sem limite | A partir da Noite 4 a run estabilizava e ficava fácil |
+| 08/11/2026 | Dano de contato | Fixo → +6%/min de noite a partir de `t = 540` | Mesmo motivo |
 | 08/11/2026 | Portão de pedra | — → 8 pedra, 200 de vida | Nova melhoria do portão, no mesmo ritmo do muro (cerca a muro: +90 de vida por 6 pedra) |
 | 08/11/2026 | Área livre de recursos | raio 7 → 8 | Os cantos do anel quadrado ficam a 7,5 do centro |
 | 08/11/2026 | Distância do primeiro baú | 9 → 10 | Não encostar nos cantos do anel quadrado |

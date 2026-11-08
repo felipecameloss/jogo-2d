@@ -24,6 +24,14 @@ public class EnemySpawner : MonoBehaviour
     public AnimationCurve spawnsPerSecond = AnimationCurve.Linear(0f, 1f, 600f, 7f);
     [Tooltip("Multiplicador de vida dos inimigos ao longo do tempo.")]
     public AnimationCurve healthMultiplier = AnimationCurve.Linear(0f, 1f, 600f, 4f);
+    [Tooltip("Depois do fim da curva: inimigos/s a mais por minuto de noite.")]
+    public float spawnsGrowthPerMinute = 0.5f;
+    [Tooltip("Depois do fim da curva: multiplicador de vida a mais por minuto de noite.")]
+    public float healthGrowthPerMinute = 0.4f;
+    [Tooltip("A partir desse tempo de noite (início da Noite 4), o dano de contato também cresce.")]
+    public float damageGrowthStart = 540f;
+    [Tooltip("Dano de contato a mais por minuto de noite depois de damageGrowthStart (0,06 = +6%).")]
+    public float damageGrowthPerMinute = 0.06f;
     public int maxEnemies = 350;
     public float spawnMargin = 1.5f;
 
@@ -60,7 +68,7 @@ public class EnemySpawner : MonoBehaviour
         if (cycle && !cycle.IsNight) return;
         float t = cycle ? cycle.NightElapsed : gm.ElapsedTime;
 
-        accumulator += spawnsPerSecond.Evaluate(t) * Time.deltaTime;
+        accumulator += Extended(spawnsPerSecond, t, spawnsGrowthPerMinute) * Time.deltaTime;
         while (accumulator >= 1f)
         {
             accumulator -= 1f;
@@ -78,6 +86,14 @@ public class EnemySpawner : MonoBehaviour
             nextEliteTime += eliteInterval;
             Spawn(PickEntry(t), RandomOffscreenPosition(), t, true, PlayerAway());
         }
+    }
+
+    // A curva vale até a última chave; depois, cresce em linha reta para a run nunca estabilizar.
+    static float Extended(AnimationCurve curve, float t, float perMinute)
+    {
+        if (curve == null || curve.length == 0) return 1f;
+        var last = curve[curve.length - 1];
+        return t <= last.time ? curve.Evaluate(t) : last.value + (t - last.time) / 60f * perMinute;
     }
 
     bool PlayerAway()
@@ -104,7 +120,8 @@ public class EnemySpawner : MonoBehaviour
     {
         if (entry == null || !entry.prefab) return;
         var enemy = Instantiate(entry.prefab, OutsideCamp(position), Quaternion.identity);
-        enemy.Init(healthMultiplier.Evaluate(t), elite, huntsPlayer);
+        float damage = 1f + Mathf.Max(0f, t - damageGrowthStart) / 60f * damageGrowthPerMinute;
+        enemy.Init(Extended(healthMultiplier, t, healthGrowthPerMinute), elite, huntsPlayer, damage);
     }
 
     // Nenhum inimigo nasce dentro do anel de muralhas.

@@ -278,10 +278,10 @@ Exportar para `Assets/Art/Resources/Camp/` a 24 px por unidade. `CampArt` carreg
 
 Hoje as curvas param de subir em `t = 600` e o dano de contato é fixo.
 
-- [ ] Estender `spawnsPerSecond` e `healthMultiplier` além de `t = 600`.
-- [ ] Escalar o dano de contato com o tempo.
-- [ ] Definir se a run é infinita ou tem noite final, no `docs/GDD.md`.
-- [ ] Registrar em `docs/BALANCEAMENTO.md`.
+- [x] Estender `spawnsPerSecond` e `healthMultiplier` além de `t = 600`.
+- [x] Escalar o dano de contato com o tempo.
+- [x] Definir se a run é infinita ou tem noite final, no `docs/GDD.md`.
+- [x] Registrar em `docs/BALANCEAMENTO.md`.
 
 ### Task 21: Testes de jogo e balanceamento
 
