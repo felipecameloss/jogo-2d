@@ -3840,16 +3840,10 @@ MonoBehaviour:
   panel: {fileID: 1050257071}
   availableWeapons:
   - {fileID: 3759093797985636280, guid: cdde5d8f7e532d146850e759e6fab81d, type: 3}
-  - {fileID: 4363761732635582555, guid: a2f9334f0d55b7d418345594c0c29c91, type: 3}
-  - {fileID: 5586678276196969558, guid: 55561600e886242479e9a21c63565b91, type: 3}
-  - {fileID: 7415210661664200238, guid: b81b53948a803d545b66cb8ec9528097, type: 3}
-  - {fileID: 2766970095034331727, guid: 85f85647572ed084f8737c01800cf7d2, type: 3}
-  - {fileID: 1856307193730259330, guid: fd9f9d766af51a54ba8b9b6aef01bba4, type: 3}
-  - {fileID: 2328131941235246641, guid: 0bcce4da1e62226459579fe958a02c7f, type: 3}
   - {fileID: 8441933353376269316, guid: 02d2a9746e58dfd41a7fb27da6d89bd9, type: 3}
-  - {fileID: 6032235528498688654, guid: 11a73c9d1a2301b42b354590e1b210b4, type: 3}
+  - {fileID: 7415210661664200238, guid: b81b53948a803d545b66cb8ec9528097, type: 3}
+  - {fileID: 1856307193730259330, guid: fd9f9d766af51a54ba8b9b6aef01bba4, type: 3}
   - {fileID: 4362647338307483788, guid: d73ae6b1cc4b5614fa3bb0714e6f8ce3, type: 3}
-  maxWeapons: 6
   optionsPerLevel: 3
   maxStatLevel: 5
 --- !u!114 &1202490317

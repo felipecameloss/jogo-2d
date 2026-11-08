@@ -35,8 +35,13 @@ public class BuildSpot : MonoBehaviour
     readonly List<SpriteRenderer> marks = new List<SpriteRenderer>();
     readonly List<SpriteRenderer> renderers = new List<SpriteRenderer>();
     GateVisual gate;
+    SpriteLoop stationLoop;
+    bool stationResident = true;
 
     public bool HasAction => !Locked && NextCost(out _, out _, out _);
+    public bool IsStation => Kind == SpotKind.WeaponStation || Kind == SpotKind.ArmorStation;
+    public bool IsBuiltStation => Current && Current.Kind == StructureKind.Station;
+    public string StationName => Kind == SpotKind.WeaponStation ? "Ferraria" : "Armaria";
 
     public void Setup(SpotKind kind, SpotPiece[] spotPieces, Rect[] spotAreas)
     {
@@ -169,8 +174,13 @@ public class BuildSpot : MonoBehaviour
                 gate.Setup(renderers[0], pieces[0].index == 0);
                 Become(StructureKind.Gate, GateHealth);
                 break;
-            case SpotKind.WeaponStation: Station("station_weapon_npc"); break;
-            case SpotKind.ArmorStation: Station("station_armor_npc"); break;
+            case SpotKind.WeaponStation:
+            case SpotKind.ArmorStation:
+                stationLoop = renderers[0].gameObject.AddComponent<SpriteLoop>();
+                stationLoop.frameTime = StationFrameTime;
+                StationArt();
+                Current.Init(StructureKind.Station, StationHealth);
+                break;
         }
     }
 
@@ -193,17 +203,20 @@ public class BuildSpot : MonoBehaviour
         for (int i = 0; i < renderers.Count; i++) renderers[i].sprite = CampArt.Pick(frames, pieces[i].index);
     }
 
-    void Station(string sheet)
+    // Com o NPC no acampamento, a barraca mostra ele trabalhando; sem ele, fica vazia e fechada.
+    public void ShowResident(bool resident)
     {
+        if (stationResident == resident) return;
+        stationResident = resident;
+        if (IsBuiltStation) StationArt();
+    }
+
+    void StationArt()
+    {
+        string sheet = (Kind == SpotKind.WeaponStation ? "station_weapon" : "station_armor") + (stationResident ? "_npc" : "");
         var frames = CampArt.Sheet(sheet, 64, 68, StationPivot);
         renderers[0].sprite = frames[0];
-        if (frames.Length > 1)
-        {
-            var loop = renderers[0].gameObject.AddComponent<SpriteLoop>();
-            loop.frames = frames;
-            loop.frameTime = StationFrameTime;
-        }
-        Current.Init(StructureKind.Station, StationHealth);
+        stationLoop.frames = frames;
     }
 
     void StructureDestroyed(Structure structure)
@@ -213,6 +226,7 @@ public class BuildSpot : MonoBehaviour
         Destroy(structure.gameObject);
         Current = null;
         gate = null;
+        stationLoop = null;
         renderers.Clear();
         ShowMarks(true);
     }

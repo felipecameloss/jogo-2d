@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 861ec50e0c8b58345aaf53fe6574975a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WhipWeapon
-  weaponName: Chicote
-  description: Golpe horizontal forte na sua frente.
+  weaponName: Espada
+  description: Golpe de espada forte na sua frente.
   maxLevel: 5
   damage: 13
   cooldown: 1.3

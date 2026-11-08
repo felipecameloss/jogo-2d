@@ -11,12 +11,12 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 | Mover | WASD / Setas | Analógico |
 | Dash (invencível, atravessa monstros) | Left Shift | Indisponível |
 | Coletar materiais (segurar) | E | Botão oeste (X no Xbox, quadrado no PlayStation) |
-| Construir, reparar e abrir baú | F | Botão norte (Y no Xbox, triângulo no PlayStation) |
-| Escolher upgrade ou recompensa | 1, 2, 3 ou clique | Não testado |
+| Construir, reparar, resgatar, abrir baú e estação | F | Botão norte (Y no Xbox, triângulo no PlayStation) |
+| Escolher upgrade, recompensa ou compra | 1 a 5 ou clique | Não testado |
 | Pausar | Esc / P | Indisponível |
 
-- As armas atacam sozinhas.
-- Colete as gemas que os inimigos derrubam para subir de nível e escolher upgrades.
+- As armas atacam sozinhas. Você começa com a Besta; Espada, Facas, Machado de arremesso e Bombas vêm de baús e da ferraria.
+- Colete as gemas que os inimigos derrubam para subir de nível e escolher atributos.
 - Cada dia e cada noite duram 3 minutos. De dia não aparecem inimigos. De noite eles vêm, e os que sobrarem somem ao amanhecer. O relógio e o período ficam no topo da tela.
 - Objetivo: sobreviver ao máximo de noites. A run não tem fim.
 
@@ -36,7 +36,7 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 
 - Três baús ficam perto do início da run, cada um mais distante e mais forte. Eles não voltam depois de abertos.
 - Cada baú precisa de uma chave. A primeira nasce perto do início; as demais ficam espalhadas pelo mapa e são coletadas ao passar por cima.
-- Perto do baú, aperte **F** e escolha **uma** de três recompensas permanentes. A chave só é gasta ao confirmar a escolha.
+- Perto do baú, aperte **F** e escolha **uma** de três recompensas: uma arma e dois equipamentos. A chave só é gasta ao confirmar a escolha.
 - **Esc / P** ou Voltar fecha a janela sem gastar a chave. As opções continuam as mesmas ao reabrir.
 - O canto da tela indica a direção do baú fechado mais próximo.
 
@@ -47,11 +47,19 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 - F também repara estruturas danificadas, inclusive a fogueira, a qualquer hora. Estruturas escurecem conforme levam dano.
 - Portões bloqueiam monstros e se abrem para você passar. O dash atravessa monstros, mas não construções, árvores ou rochas.
 - Monstros vão até a fogueira e destroem o que estiver no caminho. Longe da base, você é caçado enquanto ela é atacada. Os danos continuam após o amanhecer.
-- Estruturas destruídas deixam o ponto vazio, sem devolver materiais. Os pontos de estação abrem quando as pessoas forem resgatadas.
+- Estruturas destruídas deixam o ponto vazio, sem devolver materiais.
+
+### Pessoas perdidas e estações
+
+- O ferreiro e a ferreira estão perdidos longe do acampamento. De dia, o canto da tela aponta o mais próximo.
+- Perto da pessoa, aperte **F** para resgatá-la. Ela anda sozinha até o acampamento.
+- Cada residente libera um ponto de estação: **ferraria** (ferreiro) e **armaria** (ferreira), por 30 madeira e 20 pedra.
+- Perto da estação, **F** abre as compras: a ferraria ensina e melhora armas; a armaria dá armadura e vida. Pague com madeira e pedra (1 a 5 ou clique; Esc fecha).
+- Monstros encostados ferem os residentes. Derrotado, o residente se perde de novo e a estação fecha até o novo resgate. O que você comprou continua.
 
 ### Ouro
 
-Inimigos têm chance de dropar ouro, e o valor cresce a cada noite. O ouro ainda não tem uso no jogo; o mesmo vale para madeira e pedra (ver `docs/GDD.md`).
+Inimigos têm chance de dropar ouro, e o valor cresce a cada noite. O ouro ainda não tem uso no jogo (ver `docs/GDD.md`).
 
 ### Atalho de teste
 
@@ -80,17 +88,17 @@ Assets/
     Core/            GameManager, dia e noite, câmera, input, menu, decoração
     Player/          movimento, atributos, XP, ouro, animação, barra de vida
     Enemies/         Enemy (perseguição, dano, drops) e EnemySpawner (ondas, anéis, elites)
-    Weapons/         Weapon (base) + 10 armas: Orbe Arcano, Lâminas Orbitais, Aura Sagrada, Facas,
-                     Raio Celeste, Bumerangue, Frasco Venenoso, Chicote, Nova Gélida, Bombas
+    Weapons/         Weapon (base) + 5 armas no jogo: Besta, Espada, Facas, Machado de arremesso
+                     e Bombas (outras 5 fora do jogo)
     Resources/       coleta diurna, geração de recursos e inventário de materiais
     Chests/          baús, chaves, recompensas e interface
-    Camp/            fogueira, construções e HUD do acampamento
+    Camp/            fogueira, construções, pessoas perdidas, estações e HUD do acampamento
     Upgrades/        UpgradeManager (opções de level up)
     Pickups/         gemas de XP, cura, ímã e ouro
     UI/              HUD e tela de level up
     FX/              partículas, números de dano, screen shake
     Audio/           AudioManager + sons placeholder gerados por código
-    Editor/          SurvivorsSetup (gera sprites, prefabs e cenas)
+    Editor/          SurvivorsSetup (gera sprites, prefabs e cenas), WebGLBuild e CampDebug
 ```
 
 ### Regenerar o protótipo

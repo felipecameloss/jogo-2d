@@ -1,14 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-// Vida da fogueira e aviso de construção.
+// Vida da fogueira, aviso de construção e direção da pessoa perdida mais próxima.
 public class CampHUD : MonoBehaviour
 {
     const float BarWidth = 420f, LowHealth = 0.3f;
 
     public CampSystem source;
     GameObject root;
-    Text label, prompt;
+    Text label, prompt, direction;
     Image fill;
 
     void Start()
@@ -29,6 +29,9 @@ public class CampHUD : MonoBehaviour
         label = Text(track.transform, new Vector2(0.5f, 0.5f), new Vector2(0f, -32f), new Vector2(700f, 34f), 23);
         prompt = Text(root.transform, new Vector2(0.5f, 0f), new Vector2(0f, 300f), new Vector2(1000f, 50f), 25);
         prompt.color = new Color(1f, 0.9f, 0.65f);
+        // Logo abaixo da direção do baú, que fica no canto superior direito.
+        direction = Text(root.transform, new Vector2(1f, 1f), new Vector2(-250f, -225f), new Vector2(480f, 55f), 23);
+        direction.color = new Color(0.7f, 0.9f, 1f);
     }
 
     void Update()
@@ -38,6 +41,7 @@ public class CampHUD : MonoBehaviour
         root.SetActive(show);
         if (!show) return;
         prompt.text = source.Prompt;
+        direction.text = source.PersonDirection;
         var heart = source.Heart;
         float ratio = heart && heart.MaxHealth > 0f ? heart.Health / heart.MaxHealth : 0f;
         fill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, BarWidth * ratio);

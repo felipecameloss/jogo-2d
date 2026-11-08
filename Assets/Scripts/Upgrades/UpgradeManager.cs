@@ -10,19 +10,25 @@ public class UpgradeOption
     public Action Apply;
 }
 
-// Monta as opções de level up (armas novas, níveis de arma e bônus de atributo).
+// Monta as opções de level up: só atributos e passivas.
+// Também guarda o catálogo de armas do jogo, usado pela ferraria e pelos baús.
 public class UpgradeManager : MonoBehaviour
 {
     public LevelUpPanel panel;
-    [Tooltip("Armas que podem aparecer como 'NOVO' no level up.")]
+    [Tooltip("Armas medievais do jogo: oferecidas pela ferraria e pelos baús.")]
     public Weapon[] availableWeapons;
-    public int maxWeapons = 6;
     public int optionsPerLevel = 3;
     public int maxStatLevel = 5;
 
+    // Lido no Awake de quem precisar: o campo serializado já está pronto, sem depender da ordem dos Start.
+    public static Weapon[] Catalog()
+    {
+        var manager = FindAnyObjectByType<UpgradeManager>();
+        return manager && manager.availableWeapons != null ? manager.availableWeapons : new Weapon[0];
+    }
+
     PlayerStats stats;
     PlayerExperience xp;
-    WeaponHolder holder;
     readonly Dictionary<string, int> statLevels = new Dictionary<string, int>();
     List<UpgradeOption> currentOptions;
     bool showing;
@@ -31,7 +37,6 @@ public class UpgradeManager : MonoBehaviour
     {
         stats = GameManager.Instance.Player;
         xp = stats.GetComponent<PlayerExperience>();
-        holder = stats.GetComponent<WeaponHolder>();
         if (panel) panel.gameObject.SetActive(false);
     }
 
@@ -65,33 +70,7 @@ public class UpgradeManager : MonoBehaviour
     {
         var pool = new List<UpgradeOption>();
 
-        foreach (var w in holder.Weapons)
-        {
-            if (w.IsMaxLevel) continue;
-            var weapon = w;
-            pool.Add(new UpgradeOption
-            {
-                Title = $"{weapon.weaponName} Nv {weapon.Level + 1}",
-                Description = weapon.NextLevelDescription(),
-                Apply = weapon.LevelUp
-            });
-        }
-
-        if (holder.Weapons.Count < maxWeapons && availableWeapons != null)
-        {
-            foreach (var prefab in availableWeapons)
-            {
-                if (!prefab || holder.Has(prefab)) continue;
-                var p = prefab;
-                pool.Add(new UpgradeOption
-                {
-                    Title = $"NOVO: {p.weaponName}",
-                    Description = p.description,
-                    Apply = () => holder.AddWeapon(p)
-                });
-            }
-        }
-
+        // Armas vêm de baús e da ferraria; o level up só dá atributos e passivas.
         AddStat(pool, "vida", "Coração Robusto", "+20 de vida máxima", () => stats.AddMaxHealth(20f));
         AddStat(pool, "vel", "Botas Leves", "+10% de velocidade", () => stats.moveSpeed *= 1.1f);
         AddStat(pool, "dano", "Força Bruta", "+12% de dano em tudo", () => stats.damageMultiplier += 0.12f);
@@ -99,7 +78,7 @@ public class UpgradeManager : MonoBehaviour
         AddStat(pool, "area", "Expansão", "+12% de área das armas", () => stats.areaMultiplier += 0.12f);
         AddStat(pool, "ima", "Ímã", "+30% de alcance para coletar", () => stats.pickupRadius *= 1.3f);
         AddStat(pool, "regen", "Regeneração", "Recupera +0.5 de vida por segundo", () => stats.regenPerSecond += 0.5f);
-        AddStat(pool, "proj", "Duplicação", "+1 projétil, raio, frasco, bumerangue e bomba", () => stats.bonusProjectiles++, 2);
+        AddStat(pool, "proj", "Duplicação", "+1 virote, faca, machado e bomba", () => stats.bonusProjectiles++, 2);
         AddStat(pool, "xp", "Sabedoria", "+15% de XP ganho", () => stats.xpMultiplier += 0.15f);
         AddStat(pool, "armadura", "Armadura", "-1 de dano em cada golpe recebido", () => stats.armor += 1f);
         AddStat(pool, "crit", "Olho Afiado", "+8% de chance de crítico (dano x2)", () => stats.critChance += 0.08f);

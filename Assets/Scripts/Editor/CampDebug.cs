@@ -12,7 +12,8 @@ public static class CampDebug
     static CampDebug() => EditorApplication.playModeStateChanged += OnPlayModeChanged;
 
     // Abre a cena do jogo e começa a run com tudo construído. Durante o Play, constrói na hora.
-    // Lados de cima e da esquerda ficam de pedra; de baixo e da direita, de madeira; as duas estações prontas.
+    // Lados de cima e da esquerda ficam de pedra; de baixo e da direita, de madeira; os dois NPCs
+    // resgatados e as duas estações prontas.
     [MenuItem("Survivors/Testes/Jogar com acampamento pronto")]
     static void PlayWithReadyCamp()
     {
@@ -34,7 +35,7 @@ public static class CampDebug
     static void WaitForCamp()
     {
         if (!Application.isPlaying) { EditorApplication.update -= WaitForCamp; return; }
-        if (!CampSystem.Instance || !CampSystem.Instance.Inventory) return;
+        if (!CampSystem.Instance || !CampSystem.Instance.Inventory || CampSystem.Instance.Persons.Count == 0) return;
         EditorApplication.update -= WaitForCamp;
         BuildReadyCamp();
     }
@@ -46,11 +47,17 @@ public static class CampDebug
         var bag = camp.Inventory;
         bag.Add(ResourceKind.Wood, 1000);
         bag.Add(ResourceKind.Stone, 1000);
+        // Resgata e já coloca em casa: chegam no próximo frame.
+        foreach (var person in camp.Persons)
+        {
+            if (person.State == PersonState.Lost) person.Rescue();
+            person.transform.position = person.Home;
+        }
         float edge = CampSystem.RingCells / 2 * CampArt.Cell * 0.9f;
         foreach (var spot in camp.Spots)
         {
             if (spot.Kind == SpotKind.Heart) continue;
-            spot.Locked = false;
+            spot.Locked = false; // estações: o StationSystem recalcula no próximo frame
             if (!spot.Current) spot.TryBuild(bag);
             var offset = spot.transform.position - camp.Center;
             bool stone = offset.y > edge || offset.x < -edge;
@@ -68,13 +75,22 @@ public static class CampDebug
         bag.Add(ResourceKind.Stone, 100);
     }
 
-    // O resgate ainda não existe: libera os pontos de estação para ver a arte em jogo.
-    [MenuItem("Survivors/Testes/Liberar pontos de estação")]
-    static void UnlockStations()
+        [MenuItem("Survivors/Testes/Derrotar os NPCs residentes")]
+    static void DefeatResidents()
     {
         if (!Application.isPlaying || !CampSystem.Instance) return;
-        foreach (var spot in CampSystem.Instance.Spots)
-            if (spot.Kind == SpotKind.WeaponStation || spot.Kind == SpotKind.ArmorStation) spot.Locked = false;
+        foreach (var person in CampSystem.Instance.Persons)
+            if (person.State == PersonState.Resident) CampSystem.Instance.DefeatPerson(person);
+    }
+
+    [MenuItem("Survivors/Testes/Levar o jogador até a pessoa perdida mais próxima")]
+    static void GoToLostPerson()
+    {
+        var camp = CampSystem.Instance;
+        var player = Application.isPlaying ? Object.FindAnyObjectByType<PlayerStats>() : null;
+        if (!camp || !player) return;
+        foreach (var person in camp.Persons)
+            if (person.State == PersonState.Lost) { player.transform.position = person.transform.position + Vector3.right * 1.2f; return; }
     }
 
     [MenuItem("Survivors/Testes/Causar 50 de dano em tudo do acampamento")]

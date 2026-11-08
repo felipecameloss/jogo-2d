@@ -28,7 +28,7 @@ public class ChestSystem : MonoBehaviour
     public string Direction { get; private set; }
     public string Heading => selected == null ? "" : selected.Name;
     public IReadOnlyList<ChestOffer> Offers => selected == null ? null : selected.Offers;
-    public bool IsOpen => selected != null && GameManager.Instance && GameManager.Instance.State == GameState.Chest;
+    public bool IsOpen => selected != null && GameManager.Instance && GameManager.Instance.State == GameState.Menu;
     // A janela espera a animação terminar; antes disso cobriria o baú abrindo.
     public bool ShowOffers => IsOpen && selected.Lid == Lid.Open;
     public ResourceInventory Inventory { get; private set; }
@@ -86,20 +86,38 @@ public class ChestSystem : MonoBehaviour
 
         // Baús em direções diferentes, cada vez mais longe (e melhores).
         baseAngle = (float)random.NextDouble() * 360f;
-        string[] names = { "Baú do viajante", "Baú do guardião", "Baú astral" };
+        string[] names = { "Baú do viajante", "Baú do cavaleiro", "Baú do rei" };
+        var weapons = ChestWeapons(random);
         for (int tier = 0; tier < 3; tier++)
         {
             float angle = (baseAngle + tier * 120f + (float)random.NextDouble() * 30f - 15f) * Mathf.Deg2Rad;
             var position = spawn + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * (firstChestDistance + tier * chestSpacing);
-            var offers = new ChestOffer[3];
-            int offset = random.Next(7);
-            for (int i = 0; i < offers.Length; i++)
-                offers[i] = ChestOffer.Create((ChestReward)((offset + i * 2) % 7), tier + 1);
-            chests.Add(SpawnChest(names[tier], position, tier, offers));
+            // Cada baú: uma arma (diferente em cada baú, quando houver) e dois equipamentos.
+            var offers = new List<ChestOffer>();
+            if (weapons.Count > 0) offers.Add(ChestOffer.CreateWeapon(weapons[tier % weapons.Count], tier + 1));
+            int offset = random.Next(ChestOffer.GearCount);
+            for (int i = 0; offers.Count < 3; i++)
+                offers.Add(ChestOffer.Create((ChestReward)((offset + i * 2) % ChestOffer.GearCount), tier + 1));
+            chests.Add(SpawnChest(names[tier], position, tier, offers.ToArray()));
         }
         // Chave garantida no começo, entre o primeiro e o segundo baú.
         float keyAngle = (baseAngle + 60f) * Mathf.Deg2Rad;
         starterKeyPosition = spawn + new Vector3(Mathf.Cos(keyAngle), Mathf.Sin(keyAngle), 0) * firstKeyDistance;
+    }
+
+    // Armas do catálogo, menos a inicial, embaralhadas com a semente da run.
+    List<Weapon> ChestWeapons(System.Random random)
+    {
+        var holder = player.GetComponent<WeaponHolder>();
+        var list = new List<Weapon>();
+        foreach (var weapon in UpgradeManager.Catalog())
+            if (weapon && (!holder || weapon != holder.startingWeapon)) list.Add(weapon);
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = random.Next(i + 1);
+            (list[i], list[j]) = (list[j], list[i]);
+        }
+        return list;
     }
 
     void Start()
@@ -299,7 +317,7 @@ public class ChestSystem : MonoBehaviour
     public bool TryOpenNearest()
     {
         if (nearest == null || nearest.Opened || player.IsDead || Inventory.Keys <= 0) return false;
-        if (!GameManager.Instance.EnterChest()) return false;
+        if (!GameManager.Instance.EnterMenu(Close)) return false;
         selected = nearest;
         selected.Lid = Lid.Opening;
         selected.Timer = 0f;
@@ -331,7 +349,7 @@ public class ChestSystem : MonoBehaviour
             selected.Timer = 0f;
         }
         selected = null;
-        if (GameManager.Instance) GameManager.Instance.ExitChest();
+        if (GameManager.Instance) GameManager.Instance.ExitMenu();
     }
 
     void OnDestroy()
