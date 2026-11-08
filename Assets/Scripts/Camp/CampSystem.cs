@@ -32,8 +32,6 @@ public class CampSystem : MonoBehaviour
     public string Prompt { get; private set; } = "";
     public ResourceInventory Inventory { get; private set; }
     public LostPerson NearestPerson { get; private set; }
-    // Direção da pessoa perdida mais próxima, só de dia.
-    public string PersonDirection { get; private set; } = "";
     public StationSystem Stations { get; private set; }
     // Quando há ação disponível, o F é do acampamento e não abre baús próximos.
     public bool HasTarget => NearestPerson || (NearestSpot && (NearestSpot.HasAction || NearestSpot.IsBuiltStation));
@@ -170,24 +168,6 @@ public class CampSystem : MonoBehaviour
         return false;
     }
 
-    void UpdatePersonDirection()
-    {
-        PersonDirection = "";
-        if (DayNightCycle.Instance && DayNightCycle.Instance.IsNight) return;
-        LostPerson closest = null;
-        float best = float.MaxValue;
-        foreach (var person in persons)
-        {
-            if (!person || person.State != PersonState.Lost) continue;
-            float sqr = ((Vector2)(person.transform.position - player.transform.position)).sqrMagnitude;
-            if (sqr < best) { best = sqr; closest = person; }
-        }
-        if (!closest) return;
-        var d = closest.transform.position - player.transform.position;
-        string heading = Mathf.Abs(d.x) > Mathf.Abs(d.y) ? (d.x > 0 ? "leste >" : "< oeste") : (d.y > 0 ? "norte ^" : "sul v");
-        PersonDirection = $"{closest.Title} perdid{closest.Ending}: {Mathf.Sqrt(best):0} m • {heading}";
-    }
-
     BuildSpot NewSpot(SpotKind kind, Vector3 position, SpotPiece[] pieces, params Rect[] areas)
     {
         var go = new GameObject("BuildSpot_" + kind);
@@ -318,7 +298,6 @@ public class CampSystem : MonoBehaviour
         NearestPerson = null;
         Prompt = "";
         if (!playing || player.IsDead) return;
-        UpdatePersonDirection();
         bool pressed = !(controller && controller.IsDashing) && GameInput.InteractPressed();
 
         float range = interactionRange * interactionRange;

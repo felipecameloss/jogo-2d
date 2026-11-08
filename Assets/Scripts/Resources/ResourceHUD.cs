@@ -1,33 +1,46 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// Painel de materiais (madeira, pedra, chaves e ouro) e a caixa de coleta, que só aparece
+// perto de uma árvore ou rocha.
 public class ResourceHUD : MonoBehaviour
 {
+    const float PromptWidth = 620f;
+
     public DayResourceSystem source;
-    Text inventoryText, promptText;
+    Text left, right, promptText;
     Image progress;
-    GameObject canvasObject;
+    GameObject canvasObject, prompt;
+    PlayerWallet wallet;
 
     void Start()
     {
-        canvasObject = new GameObject("ResourceHUD", typeof(Canvas), typeof(CanvasScaler));
-        canvasObject.transform.SetParent(transform, false);
-        var canvas = canvasObject.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = -1; // Os menus de pausa e level up continuam por cima.
-        var scaler = canvasObject.GetComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080);
-        scaler.matchWidthOrHeight = 0.5f;
-        var panel = Box("Materials", canvasObject.transform, new Vector2(0, 1), new Vector2(165, -160), new Vector2(290, 180), new Color(0.04f, 0.09f, 0.12f, 0.88f));
-        inventoryText = TextBox(panel.transform, new Vector2(0, 0), new Vector2(260, 160), 23);
-        inventoryText.alignment = TextAnchor.MiddleLeft;
-        var prompt = Box("CollectPrompt", canvasObject.transform, new Vector2(0.5f, 0), new Vector2(0, 140), new Vector2(760, 70), new Color(0.04f, 0.09f, 0.12f, 0.88f));
-        promptText = TextBox(prompt.transform, new Vector2(0, 6), new Vector2(740, 52), 22);
-        var track = Box("ProgressTrack", prompt.transform, new Vector2(0.5f, 0), new Vector2(0, 7), new Vector2(720, 5), new Color(0.2f, 0.27f, 0.3f));
-        progress = Box("Progress", track.transform, Vector2.zero, Vector2.zero, new Vector2(720, 5), new Color(0.55f, 0.9f, 0.4f));
-        progress.rectTransform.anchorMin = progress.rectTransform.anchorMax = new Vector2(0, 0.5f);
-        progress.rectTransform.pivot = new Vector2(0, 0.5f);
+        var canvas = UIStyle.Canvas(transform, "ResourceHUD", -1); // Os menus continuam por cima.
+        canvasObject = canvas.gameObject;
+
+        // Logo abaixo do painel de nível.
+        var panel = UIStyle.Panel(canvas, "Materiais", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -150f), new Vector2(460f, 140f));
+        var title = UIStyle.Label(panel, "MATERIAIS", UIStyle.Body, TextAnchor.UpperLeft, UIStyle.Gold);
+        UIStyle.Stretch(title.rectTransform, UIStyle.Padding);
+        left = UIStyle.Label(panel, "", UIStyle.Body, TextAnchor.LowerLeft, Color.white);
+        UIStyle.Stretch(left.rectTransform, UIStyle.Padding);
+        right = UIStyle.Label(panel, "", UIStyle.Body, TextAnchor.LowerRight, Color.white);
+        UIStyle.Stretch(right.rectTransform, UIStyle.Padding);
+
+        var box = UIStyle.Panel(canvas, "Coleta", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 90f), new Vector2(PromptWidth, 76f));
+        prompt = box.parent.gameObject;
+        promptText = UIStyle.Label(box, "", UIStyle.Body, Vector2.zero, new Vector2(PromptWidth - 30f, 50f));
+        promptText.rectTransform.anchorMin = promptText.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        promptText.rectTransform.anchoredPosition = new Vector2(0f, 4f);
+        var track = UIStyle.Image(box, "Barra", new Color(0.05f, 0.03f, 0.02f));
+        track.rectTransform.anchorMin = new Vector2(0f, 0f);
+        track.rectTransform.anchorMax = new Vector2(1f, 0f);
+        track.rectTransform.offsetMin = new Vector2(10f, 6f);
+        track.rectTransform.offsetMax = new Vector2(-10f, 14f);
+        progress = UIStyle.Image(track.rectTransform, "Progresso", UIStyle.Good);
+        progress.rectTransform.anchorMin = Vector2.zero;
+        progress.rectTransform.anchorMax = new Vector2(0f, 1f);
+        progress.rectTransform.offsetMin = progress.rectTransform.offsetMax = Vector2.zero;
     }
 
     void Update()
@@ -35,38 +48,16 @@ public class ResourceHUD : MonoBehaviour
         if (!source || !source.Inventory || !GameManager.Instance) return;
         bool show = GameManager.Instance.State == GameState.Playing;
         canvasObject.SetActive(show);
+        if (!show) return;
+        if (!wallet && GameManager.Instance.Player) wallet = GameManager.Instance.Player.GetComponent<PlayerWallet>();
         var bag = source.Inventory;
-        inventoryText.text = $"<b>MATERIAIS DA VILA</b>\n<color=#A6DD77>Madeira</color>     {bag.Wood}\n<color=#C9D4ED>Pedra</color>          {bag.Stone}\n<color=#FFD45E>Chaves</color>        {bag.Keys}";
+        left.text = $"<color=#A6DD77>Madeira</color>  {bag.Wood}\n<color=#C9D4ED>Pedra</color>  {bag.Stone}";
+        right.text = $"<color=#FFD45E>Chaves</color>  {bag.Keys}\n<color=#FFD45E>Ouro</color>  {(wallet ? wallet.Gold : 0)}";
+
+        bool collecting = !string.IsNullOrEmpty(source.Prompt);
+        prompt.SetActive(collecting);
+        if (!collecting) return;
         promptText.text = source.Prompt;
-        progress.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 720 * source.Progress);
-    }
-
-    static Image Box(string name, Transform parent, Vector2 anchor, Vector2 position, Vector2 size, Color color)
-    {
-        var go = new GameObject(name, typeof(RectTransform), typeof(Image));
-        go.transform.SetParent(parent, false);
-        var image = go.GetComponent<Image>();
-        image.color = color;
-        image.raycastTarget = false;
-        var rt = image.rectTransform;
-        rt.anchorMin = rt.anchorMax = anchor;
-        rt.anchoredPosition = position;
-        rt.sizeDelta = size;
-        return image;
-    }
-
-    static Text TextBox(Transform parent, Vector2 position, Vector2 size, int fontSize)
-    {
-        var go = new GameObject("Label", typeof(RectTransform), typeof(Text));
-        go.transform.SetParent(parent, false);
-        var text = go.GetComponent<Text>();
-        text.font = UIStyle.Font;
-        text.fontSize = fontSize;
-        text.alignment = TextAnchor.MiddleCenter;
-        text.color = Color.white;
-        text.raycastTarget = false;
-        text.rectTransform.sizeDelta = size;
-        text.rectTransform.anchoredPosition = position;
-        return text;
+        progress.rectTransform.anchorMax = new Vector2(source.Progress, 1f);
     }
 }

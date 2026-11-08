@@ -25,7 +25,6 @@ public class ChestSystem : MonoBehaviour
     public Vector2 chestColliderOffset = new Vector2(0f, 0.3f);
 
     public string Prompt { get; private set; }
-    public string Direction { get; private set; }
     public string Heading => selected == null ? "" : selected.Name;
     public IReadOnlyList<ChestOffer> Offers => selected == null ? null : selected.Offers;
     public bool IsOpen => selected != null && GameManager.Instance && GameManager.Instance.State == GameState.Menu;
@@ -129,6 +128,24 @@ public class ChestSystem : MonoBehaviour
         keys[StarterKey] = SpawnKey(starterKeyPosition);
     }
 
+    // Baú fechado mais próximo de um ponto, para as missões.
+    public bool TryGetClosest(Vector3 from, out string name, out Vector3 position)
+    {
+        name = "";
+        position = Vector3.zero;
+        float best = float.MaxValue;
+        foreach (var chest in chests)
+        {
+            if (chest.Opened) continue;
+            float sqr = ((Vector2)(chest.Object.transform.position - from)).sqrMagnitude;
+            if (sqr >= best) continue;
+            best = sqr;
+            name = chest.Name;
+            position = chest.Object.transform.position;
+        }
+        return best < float.MaxValue;
+    }
+
     public void GetClosedChests(List<Vector3> positions)
     {
         foreach (var chest in chests)
@@ -205,7 +222,6 @@ public class ChestSystem : MonoBehaviour
         foreach (var chest in chests) Animate(chest);
         RefreshKeys();
         UpdateKeys();
-        UpdateDirection();
         if (IsOpen) return;
 
         nearest = null;
@@ -296,22 +312,6 @@ public class ChestSystem : MonoBehaviour
         Destroy(key);
         keys.Remove(picked.Value);
         pickedKeys.Add(picked.Value);
-    }
-
-    void UpdateDirection()
-    {
-        Chest closest = null;
-        float best = float.MaxValue;
-        foreach (var chest in chests)
-        {
-            if (chest.Opened) continue;
-            float sqr = ((Vector2)(chest.Object.transform.position - player.transform.position)).sqrMagnitude;
-            if (sqr < best) { best = sqr; closest = chest; }
-        }
-        if (closest == null) { Direction = ""; return; }
-        var d = closest.Object.transform.position - player.transform.position;
-        string heading = Mathf.Abs(d.x) > Mathf.Abs(d.y) ? (d.x > 0 ? "leste >" : "< oeste") : (d.y > 0 ? "norte ^" : "sul v");
-        Direction = $"Baú mais próximo: {Mathf.Sqrt(best):0} m • {heading}";
     }
 
     public bool TryOpenNearest()

@@ -71,7 +71,7 @@ public class StationSystem : MonoBehaviour
     {
         var person = PersonAt(spot);
         return IsResident(spot)
-            ? $"[F / Y] Abrir {spot.StationName.ToLower()} de {person.Name}"
+            ? $"[F / Y] Abrir a {spot.StationName.ToLower()}"
             : $"{spot.StationName} fechada • resgate {person.Name}";
     }
 
