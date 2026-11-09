@@ -6,7 +6,7 @@ Organizado pelo framework **DDE** (Design, Dynamics, Experience), como pede a ru
 
 | Item | Valor |
 |---|---|
-| Nome | **A definir** (provisório: Survivors 2D) |
+| Nome | **Brasa Viva** (antes: Survivors 2D, provisório) |
 | Gênero | Sobrevivência e defesa de base com ondas de monstros, top-down 2D |
 | Plataforma | Navegador (WebGL), teclado; suporte parcial a gamepad |
 | Motor | Unity 6 |
@@ -31,6 +31,7 @@ Organizado pelo framework **DDE** (Design, Dynamics, Experience), como pede a ru
 - **Armas (05/11/2026):** Besta (inicial), Espada, Facas, Machado de arremesso e Bombas. Quanto mais pessoas no acampamento, melhores as armas à venda.
 - **Baús (05/11/2026):** mantêm chaves e oferecem armas e gear.
 - **Tutorial (08/11/2026):** objetivos curtos no primeiro dia, sem pausar: coletar, construir, resgatar e abrir um baú. Termina ao anoitecer com um aviso para defender a fogueira. Pode ser pulado e só aparece na primeira run; as opções o reativam.
+- **Nome e história (09/11/2026):** o jogo se chama *Brasa Viva*. O protagonista é Bento, um jovem lenhador; os monstros vêm da maldição do Rei da Noite (ver 1.1). Uma introdução curta conta a história na primeira run.
 - **Duração da run (08/11/2026):** infinita. A dificuldade cresce sem limite a partir da Noite 4, e o objetivo é sobreviver a mais noites.
 
 Detalhes em `docs/superpowers/specs/2026-11-05-base-do-acampamento-design.md`. A ideia pode ser refinada durante o desenvolvimento: registre cada mudança no histórico ao final.
@@ -39,8 +40,7 @@ Detalhes em `docs/superpowers/specs/2026-11-05-base-do-acampamento-design.md`. A
 
 1. Ouro continua no jogo? Com qual uso?
 2. Quais são os "outros materiais" além de madeira e pedra?
-3. Nome do jogo, protagonista e origem dos monstros
-4. Qual o incentivo para jogar de novo
+3. Qual o incentivo para jogar de novo
 
 ## 1. Design
 
@@ -48,7 +48,19 @@ Detalhes em `docs/superpowers/specs/2026-11-05-base-do-acampamento-design.md`. A
 
 Mundo medieval. O protagonista começa sozinho num acampamento e tem uma missão: usar o dia para reunir recursos, porque à noite os monstros chegam e ele precisa defender seu espaço. Cada noite é mais difícil que a anterior, e sozinho ele não aguenta por muito tempo. Por isso, procura pessoas perdidas pelo mapa, resgata-as para o acampamento e constrói estações de trabalho para elas. Com o tempo, o acampamento vira uma comunidade, e os monstros passam a ameaçar a base.
 
-Nome, protagonista e origem dos monstros: **a definir**.
+**Nome:** *Brasa Viva*. A brasa é a fogueira do acampamento: enquanto ela queimar, ainda há esperança, e a run acaba quando ela se apaga.
+
+**Mundo:** o vale de Alvorada, uma região medieval de aldeias, florestas, pântanos e ruínas antigas.
+
+**Protagonista:** Bento, um jovem lenhador da aldeia de Alvorada. Na noite em que a aldeia caiu, ele salvou a última brasa da forja e acendeu uma fogueira numa clareira, que vira o acampamento.
+
+**Origem dos monstros:** sob as ruínas do vale dormia o Rei da Noite, um rei antigo. Ao despertar, ele lançou uma maldição: a cada anoitecer, a escuridão ganha vida. O lodo dos pântanos rasteja como Slime, morcegos famintos deixam as cavernas e as pedras antigas se erguem como Golens. Ao amanhecer, a maldição adormece e as criaturas se desfazem, por isso os monstros somem quando o sol nasce. Só o fogo resiste à maldição, e é por isso que os monstros vão atrás da fogueira para apagá-la.
+
+**Chefes:** o Golem Ancião era o guardião das ruínas, tomado pela maldição (a runa no peito arde com ela); desperta na quarta noite. Na sétima, o próprio Rei da Noite vem apagar a última brasa.
+
+**Pessoas perdidas:** os aldeões fugiram para a floresta e se perderam, entre eles o ferreiro e a ferreira. Resgatá-los reconstrói a comunidade em volta da fogueira.
+
+**Introdução:** na primeira run, seis cartões contam essa história antes do primeiro dia: a aldeia em paz, o Rei da Noite despertando, os monstros, a aldeia caindo, Bento acendendo a fogueira e o título. Cada cartão é uma cena montada com a arte do próprio jogo, e o texto surge letra a letra. Espaço ou clique avança; Enter ou Esc pula.
 
 ### 1.2 Mechanics: regras do jogo
 
@@ -97,11 +109,11 @@ Valores detalhados em `BALANCEAMENTO.md`.
 - **HUD:** painéis opacos com moldura. Canto superior esquerdo: nível, abates e barra de XP rotulada; abaixo, materiais (madeira, pedra, chaves, ouro) e **missões**. Topo: relógio, período e vida da fogueira; em noite de chefe, abaixo deles, nome e barra de vida do chefe. Canto superior direito: minimapa. Embaixo: avisos de interação, barra de coleta (só perto de árvore ou rocha) e dash.
 - **Missões:** lista no canto esquerdo com o passo do tutorial, as pessoas a resgatar (distância e direção), estações a construir, o baú mais próximo e a meta do período (coletar de dia, defender a fogueira à noite).
 - **Minimapa:** radar centrado no jogador, com alcance fixo, que mostra a fogueira e os baús fechados; o que está além do alcance fica preso na borda, indicando a direção. Chaves e inimigos ficam de fora para manter a exploração.
-- **Menus:** principal, pausa, opções (volume de música e efeitos, controles), level up, baú, ferraria, armaria e game over.
+- **Menus:** principal (com o nome *Brasa Viva* e a frase "Mantenha a fogueira acesa até o amanhecer."), introdução da primeira run, pausa, opções (volume de música e efeitos, controles, introdução e tutorial na próxima run), level up, baú, ferraria, armaria e game over.
 - **Identidade visual:** fonte pixelada (Pixel Operator) em toda a interface, sem suavização; painéis e botões opacos em tons de madeira com moldura.
 - **Arte dos monstros:** pixel art no estilo do jogador (sem contorno preto, paleta terrosa, luz de cima à esquerda), com olhos que brilham para ler bem à noite. Slime verde com um osso engolido; Morcego roxo de olhos âmbar; Golem de pedra com musgo. O Golem Ancião é um golem maior de basalto, com cristais âmbar nas costas e uma runa de lava no peito; o Rei da Noite é um rei espectral que flutua, com capa roxa rasgada, coroa, lua no peito e espadão violeta. As cores seguem as dos tiros de cada chefe (laranja e roxo).
 - **Feedback no mundo:** monstros avermelham e crescem um pouco ao levar golpe; números de dano; tela tremendo e jogador piscando ao sofrer dano; recursos esgotados acinzentados; chaves pulsando; escuridão à noite com luz em volta do jogador.
-- **Som:** SFX gerados por código, ainda placeholder. **Sem música.**
+- **Som:** música calma de dia (alaúde e flauta), tensa à noite (ostinato grave, cordas em trêmulo, taikos) e de suspense quando o chefe aparece (tambores de guerra, metais e coro), trocadas com fade; depois do chefe, silêncio até o amanhecer. Passos ao andar, golpes de machado e de picareta durante a coleta e um tilintar ao pegar uma chave. Os demais efeitos (tiro, acerto, morte, nível, dano, seleção) ainda são os 8-bit gerados por código.
 
 ## 2. Dynamics
 
@@ -126,6 +138,8 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 | Data | Mudança | Motivo |
 |---|---|---|
 | 09/11/2026 | Arte das armas, itens e chão no jogo: projéteis, bomba, explosão e golpe da espada animados, drops, chave e ladrilho de grama; ícones das armas e equipamentos no baú e na ferraria, e de madeira e pedra no HUD. | Rubrica pede arte medieval no lugar das formas geradas |
+| 09/11/2026 | Música de dia, noite e chefe, com troca por fade; sons de passo, coleta de madeira e pedra e chave. | Rubrica (Som e música) e item 10 do `ESCOPO.md`; a música separa a calma do dia da tensão da noite |
+| 09/11/2026 | Nome *Brasa Viva*, protagonista Bento, origem dos monstros (maldição do Rei da Noite) e introdução em seis cartões na primeira run, com opção de pular. As opções reativam a introdução junto com o tutorial. | Rubrica (Blueprint) pede nome, personagens e história; a história explica por que os monstros vão atrás da fogueira e somem ao amanhecer |
 | 09/11/2026 | Arte dos monstros e chefes no jogo (sprites em `Assets/Art/Resources/Enemies/`), substituindo as formas coloridas. Monstros passam a ser desenhados pela altura, atrás ou na frente de árvores, muros e jogador. | Rubrica pede sprites medievais de inimigos (item 11 do `ESCOPO.md`) |
 | 09/11/2026 | Chefes na Noite 4 (Golem Ancião) e na Noite 7 (Rei da Noite): a noite só acaba quando o chefe morre. A confirmar pela equipe no PR da branch `feature/inimigos`. | Variar a run infinita com lutas diferentes das hordas |
 | 08/11/2026 | As armas só atacam à noite. | De dia não há monstros; os ataques só faziam barulho e poluíam a tela durante a coleta |

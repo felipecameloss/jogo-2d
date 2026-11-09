@@ -49,6 +49,9 @@ public class GameManager : MonoBehaviour
             gameObject.AddComponent<ChestSystem>();
         if (Player && !GetComponent<Minimap>())
             gameObject.AddComponent<Minimap>();
+        // A introdução para o jogo (estado Menu) até terminar; o tutorial espera por ela.
+        if (Player && !Intro.Seen && !GetComponent<Intro>())
+            gameObject.AddComponent<Intro>();
         if (Player && !Tutorial.Seen && !GetComponent<Tutorial>())
             gameObject.AddComponent<Tutorial>();
         if (Player && !GetComponent<QuestLog>())

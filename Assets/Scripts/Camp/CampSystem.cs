@@ -14,7 +14,7 @@ public class CampSystem : MonoBehaviour
     // Pessoas perdidas: longe o bastante para exigir uma expedição durante o dia.
     public const float PersonMinDistance = 25f, PersonMaxDistance = 40f;
     // O ferreiro usa o mesmo desenho do jogador: a cor diferencia.
-    static readonly Color SmithTint = new Color(1f, 0.72f, 0.55f);
+    public static readonly Color SmithTint = new Color(1f, 0.72f, 0.55f); // ferreiro: quadros do jogador tingidos
     static readonly Color ArmorerTint = Color.white;
     const float CenterOffset = 1.5f; // O jogador nasce ao lado da fogueira, não em cima dela.
     const float HeartScale = 2f;
@@ -123,8 +123,12 @@ public class CampSystem : MonoBehaviour
         return person;
     }
 
+    // Quadros da fogueira. CampArt guarda o cache só pelo nome: quem mais usar a arte (como a
+    // introdução) passa por aqui para não fatiar com outro pivô.
+    public static Sprite[] FireFrames() => CampArt.Frames("heart", HeartPivot, HeartPixelsPerUnit);
+
     // Spritesheet fatiada no import (Multiple): ordena os quadros pelo número do nome.
-    static Sprite[] LoadFrames(string path)
+    public static Sprite[] LoadFrames(string path)
     {
         var frames = Resources.LoadAll<Sprite>(path);
         if (frames == null || frames.Length == 0) return null;
@@ -187,7 +191,7 @@ public class CampSystem : MonoBehaviour
         var go = new GameObject("Fogueira");
         go.transform.SetParent(spot.transform, false);
         var renderer = go.AddComponent<SpriteRenderer>();
-        var frames = CampArt.Frames("heart", HeartPivot, HeartPixelsPerUnit);
+        var frames = FireFrames();
         renderer.sprite = frames[0];
         renderer.sortingOrder = 10;
         renderer.spriteSortPoint = SpriteSortPoint.Pivot;

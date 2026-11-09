@@ -46,6 +46,20 @@ As folhas de `Resources/Enemies/` são tiras de 8 quadros olhando para a direita
 
 Armas, equipamentos, drops, ícones do HUD e chão vêm de `tools/sprites-itens/gerar.py`, que usa o mesmo motor (`px.py`) e a paleta do baú e da ferraria. As tiras (`bomba`, `explosao`, `golpe_espada`) têm quadros quadrados lado a lado; o gerador de cenas as fatia (`ImportSheet`, que passa o `.meta` para *Multiple*), com o pivô do golpe na mão, a 12 px da esquerda. Os demais são sprite único: pickups, projéteis e machado vão para os prefabs pelo gerador, em escala 1; ícones de armas, equipamentos e recursos são carregados em jogo por `Resources`. Rodar o script de novo mantém os `.meta` existentes (e os GUIDs).
 
+### Áudio (`Assets/Art/Resources/Audio/`)
+
+Gerado pelo script `tools/sons/gerar.py` (Python com numpy e soundfile), por síntese: nenhum sample de terceiros. Para ajustar, mude o script e rode de novo. Para trocar por um arquivo de outra fonte, registre aqui origem e licença e salve com o mesmo nome. Os WAV são importados com as opções padrão do Unity, que os comprime no build.
+
+| Arquivo | Uso | Autoria e licença |
+|---|---|---|
+| `musica_dia.wav` | Dia: alaúde em arpejos e flauta doce, ré maior/mixolídio, 80 BPM, loop de 48 s | Equipe, com auxílio do Claude (Anthropic) (autoral) |
+| `musica_noite.wav` | Noite: ostinato grave, cordas em trêmulo e taikos, ré menor, 96 BPM, loop de 40 s | Idem |
+| `musica_chefe.wav` | Noite de chefe, a partir do aparecimento: ostinato no frígio, tambores de guerra, metais e coro, 112 BPM, loop de 34 s | Idem |
+| `sfx_passo_1` a `_4.wav` | Passo do jogador, sorteado a cada passada | Idem |
+| `sfx_machado_1` a `_3.wav` | Golpes ao coletar madeira | Idem |
+| `sfx_picareta_1` a `_3.wav` | Golpes ao coletar pedra | Idem |
+| `sfx_chave.wav` | Chave coletada | Idem |
+
 ### Placeholders por substituir
 
 | Item | Hoje | Destino |
@@ -53,8 +67,8 @@ Armas, equipamentos, drops, ícones do HUD e chão vêm de `tools/sprites-itens/
 | Armas mágicas antigas | Lâminas Orbitais, Aura, Raio, Frasco e Nova seguem com formas geradas, mas não entram no jogo | Nenhum: fora do escopo |
 | Gemas de XP valiosas | A gema azul é tingida de verde (5+) ou vermelho (20+) e tende a ficar escura (conferir no Editor) | Variações de cor no `gerar.py`, se a equipe quiser |
 | Marca de ponto de construção | Gerada em `CampArt` | `spot.png` em `Assets/Art/Resources/Camp/` |
-| SFX | Sons 8-bit de `SfxGenerator` | `AudioClip` final no `AudioManager` |
-| Música | **Nenhuma** (`music` vazio em `Game.unity`) | Trilha de dia e de noite |
+| SFX de tiro, acerto, morte, coleta, nível, dano e seleção | Sons 8-bit de `SfxGenerator` | WAV em `Resources/Audio` com o nome que o `AudioManager` procura (ex.: `sfx_tiro.wav`) |
+| Música do menu | Nenhuma | Opcional: `music` no `AudioManager` do menu |
 
 ## Disponível, sem uso no jogo
 
@@ -68,3 +82,4 @@ Mantenha esta lista igual à seção Créditos do `README.md`.
 - Código-base do protótipo: gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
 - Inimigos e chefes: sprites gerados por código com auxílio do Claude (Anthropic), no estilo do jogador de Pedro Nadotti.
 - Armas, equipamentos, drops, ícones de recurso e chão: sprites gerados por código com auxílio do Claude (Anthropic), no mesmo estilo.
+- Músicas (dia, noite e chefe) e efeitos de passo, machado, picareta e chave: compostos e sintetizados por código com auxílio do Claude (Anthropic), sem samples de terceiros (`tools/sons/gerar.py`).

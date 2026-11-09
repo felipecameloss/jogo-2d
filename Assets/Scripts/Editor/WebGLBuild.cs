@@ -12,6 +12,7 @@ public static class WebGLBuild
     [MenuItem("Survivors/Gerar build WebGL")]
     public static void Build()
     {
+        PlayerSettings.productName = GameInfo.Title; // título da aba do navegador
         var scenes = EditorBuildSettings.scenes.Where(scene => scene.enabled).Select(scene => scene.path).ToArray();
         var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
         {

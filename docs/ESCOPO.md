@@ -30,6 +30,8 @@ Sem negociação; ver `RUBRICA.md`.
 - Monstros que atacam e destroem a base
 - Mapa infinito com decoração
 - Menu principal, pausa, game over, reinício
+- Música de dia, noite e chefe; sons de passo, coleta de madeira e pedra e chave (09/11/2026)
+- Nome (*Brasa Viva*), história e introdução em seis cartões na primeira run, com opção de pular (09/11/2026)
 - HUD
 - Minimapa de orientação, sem chaves nem inimigos (pedido em 05/11/2026; nada saiu do escopo por ele)
 

@@ -61,7 +61,21 @@ public static class GameInput
 #endif
     }
 
-    // Pula o tutorial: Enter ou Select/Back do controle.
+    // Avança a introdução: Espaço, clique ou botão sul do controle (A no Xbox, X no PlayStation).
+    public static bool AdvancePressed()
+    {
+#if ENABLE_INPUT_SYSTEM
+        var k = Keyboard.current;
+        var m = Mouse.current;
+        var g = Gamepad.current;
+        return (k != null && k.spaceKey.wasPressedThisFrame) || (m != null && m.leftButton.wasPressedThisFrame)
+            || (g != null && g.buttonSouth.wasPressedThisFrame);
+#else
+        return Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.JoystickButton0);
+#endif
+    }
+
+    // Pula o tutorial e a introdução: Enter ou Select/Back do controle.
     public static bool SkipTutorialPressed()
     {
 #if ENABLE_INPUT_SYSTEM
