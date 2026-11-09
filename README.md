@@ -133,4 +133,5 @@ O build usa Gzip com *decompression fallback* ligado, porque o itch.io não envi
 - Jogador: sprites feitos no Aseprite por Pedro Nadotti.
 - Cercas, muros, portões e estações do acampamento: sprites feitos no Aseprite por Pedro Nadotti.
 - Árvore, arbustos, rochas, fogueira e baú: feitos no Aseprite (autoria a confirmar em [Assets](docs/ASSETS.md)).
+- Inimigos e chefes: sprites gerados por código com auxílio do Claude (Anthropic), no estilo do jogador de Pedro Nadotti.
 - Demais sprites e sons: placeholders gerados por código.

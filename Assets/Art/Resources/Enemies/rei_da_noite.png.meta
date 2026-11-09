@@ -1,0 +1,561 @@
+fileFormatVersion: 2
+guid: 89c605ee204b91e4cae2870f3ee54357
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1481421388330909241
+    second: rei_da_noite_0
+  - first:
+      213: -3831348016282634024
+    second: rei_da_noite_1
+  - first:
+      213: -7128269965305939073
+    second: rei_da_noite_2
+  - first:
+      213: -5372287242424523149
+    second: rei_da_noite_3
+  - first:
+      213: -4568051490075241821
+    second: rei_da_noite_4
+  - first:
+      213: 1158610031060557608
+    second: rei_da_noite_5
+  - first:
+      213: -6441289630329747129
+    second: rei_da_noite_6
+  - first:
+      213: 6136060077033777770
+    second: rei_da_noite_7
+  - first:
+      213: 6253625955154941578
+    second: rei_da_noite_8
+  - first:
+      213: 4443282347671836062
+    second: rei_da_noite_9
+  - first:
+      213: -8989963056427020631
+    second: rei_da_noite_10
+  - first:
+      213: -2991903633304055101
+    second: rei_da_noite_11
+  - first:
+      213: 8458177636615928167
+    second: rei_da_noite_12
+  - first:
+      213: -8867966895938166971
+    second: rei_da_noite_13
+  - first:
+      213: 1741888152263655985
+    second: rei_da_noite_14
+  - first:
+      213: 1050382232357183309
+    second: rei_da_noite_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: rei_da_noite_0
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 11
+        width: 49
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c1ced1a81fe07be0800000000000000
+      internalID: -1481421388330909241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_1
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 10
+        width: 49
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d8739e474154dac0800000000000000
+      internalID: -3831348016282634024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_2
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 9
+        width: 49
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7b7ad6db3c431d90800000000000000
+      internalID: -7128269965305939073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_3
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 10
+        width: 49
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3766ce3773dc175b0800000000000000
+      internalID: -5372287242424523149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_4
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 11
+        width: 49
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a21f525f550b90c0800000000000000
+      internalID: -4568051490075241821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_5
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 12
+        width: 49
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82f91964fa5341010800000000000000
+      internalID: 1158610031060557608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_6
+      rect:
+        serializedVersion: 2
+        x: 492
+        y: 13
+        width: 49
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 749c9c86531fb96a0800000000000000
+      internalID: -6441289630329747129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_7
+      rect:
+        serializedVersion: 2
+        x: 572
+        y: 12
+        width: 49
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6aed0c312aa72550800000000000000
+      internalID: 6136060077033777770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_8
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 2
+        width: 28
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a865c2f4ca759c650800000000000000
+      internalID: 6253625955154941578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_9
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 2
+        width: 26
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e955eb1f0c5b9ad30800000000000000
+      internalID: 4443282347671836062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_10
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 2
+        width: 26
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ae48c52b3c3d3380800000000000000
+      internalID: -8989963056427020631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_11
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 2
+        width: 26
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c216be4f7f9a76d0800000000000000
+      internalID: -2991903633304055101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_12
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 2
+        width: 28
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76935a54fbb716570800000000000000
+      internalID: 8458177636615928167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_13
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 2
+        width: 30
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54f9ea7b717aee480800000000000000
+      internalID: -8867966895938166971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_14
+      rect:
+        serializedVersion: 2
+        x: 505
+        y: 2
+        width: 30
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 132032aab0e6c2810800000000000000
+      internalID: 1741888152263655985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rei_da_noite_15
+      rect:
+        serializedVersion: 2
+        x: 585
+        y: 2
+        width: 30
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4f180e3315b39e00800000000000000
+      internalID: 1050382232357183309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      rei_da_noite_0: -1481421388330909241
+      rei_da_noite_1: -3831348016282634024
+      rei_da_noite_10: -8989963056427020631
+      rei_da_noite_11: -2991903633304055101
+      rei_da_noite_12: 8458177636615928167
+      rei_da_noite_13: -8867966895938166971
+      rei_da_noite_14: 1741888152263655985
+      rei_da_noite_15: 1050382232357183309
+      rei_da_noite_2: -7128269965305939073
+      rei_da_noite_3: -5372287242424523149
+      rei_da_noite_4: -4568051490075241821
+      rei_da_noite_5: 1158610031060557608
+      rei_da_noite_6: -6441289630329747129
+      rei_da_noite_7: 6136060077033777770
+      rei_da_noite_8: 6253625955154941578
+      rei_da_noite_9: 4443282347671836062
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
