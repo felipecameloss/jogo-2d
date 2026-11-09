@@ -475,9 +475,9 @@ public static class SurvivorsSetup
 
         var menu = canvas.gameObject.AddComponent<MainMenu>();
 
-        var title = MakeText(canvas.transform, "Title", "SURVIVORS 2D", 110, TextAnchor.MiddleCenter, new Color(1f, 0.85f, 0.35f));
+        var title = MakeText(canvas.transform, "Title", GameInfo.Title.ToUpperInvariant(), 110, TextAnchor.MiddleCenter, new Color(1f, 0.85f, 0.35f));
         Anchor(title.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 300f), new Vector2(1400f, 160f));
-        var subtitle = MakeText(canvas.transform, "Subtitle", "(nome provisório)", 30, TextAnchor.MiddleCenter, new Color(1f, 1f, 1f, 0.6f));
+        var subtitle = MakeText(canvas.transform, "Subtitle", GameInfo.Tagline, 30, TextAnchor.MiddleCenter, new Color(1f, 1f, 1f, 0.6f));
         Anchor(subtitle.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 210f), new Vector2(800f, 50f));
 
         var col = MakeButtonColumn(canvas.transform as RectTransform, new Vector2(0f, -10f));

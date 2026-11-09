@@ -8,7 +8,7 @@ Tudo em `Assets/Scripts/`:
 
 | Pasta | Responsabilidade | Principais classes |
 |---|---|---|
-| `Core/` | Estado da run, ciclo, input, câmera, menu, cenário | `GameManager`, `DayNightCycle`, `GameInput`, `CameraFollow`, `DecorationScatter`, `InfiniteBackground`, `SpriteLoop`, `MainMenu`, `GameSettings` |
+| `Core/` | Estado da run, ciclo, input, câmera, menu, cenário | `GameManager`, `DayNightCycle`, `GameInput`, `CameraFollow`, `DecorationScatter`, `InfiniteBackground`, `SpriteLoop`, `MainMenu`, `GameSettings`, `GameInfo` |
 | `Player/` | Movimento, atributos, XP, ouro, animação | `PlayerController`, `PlayerStats`, `PlayerExperience`, `PlayerWallet`, `CharacterAnimator`, `WorldHealthBar` |
 | `Enemies/` | Comportamento, geração, chefes e arte | `Enemy`, `EnemySpawner`, `Boss`, `EnemyBullet`, `EnemyArt` |
 | `Weapons/` | Base `Weapon`, 10 armas e seus projéteis/zonas | `WeaponHolder`, `Weapon`, `*Weapon` |
@@ -17,7 +17,7 @@ Tudo em `Assets/Scripts/`:
 | `Resources/` | Coleta diurna e inventário | `DayResourceSystem`, `ResourceInventory`, `ResourceHUD` |
 | `Chests/` | Baús, chaves, recompensas | `ChestSystem`, `ChestOffer`, `ChestUI`, `ChestArt` |
 | `Camp/` | Acampamento: estruturas, pontos de construção, HUD e arte | `CampSystem`, `BuildSpot`, `Structure`, `GateVisual`, `CampHUD`, `CampArt` |
-| `UI/` | HUD, minimapa, level up, opções e estilo | `HUD`, `Minimap`, `LevelUpPanel`, `OptionsMenu`, `UIStyle`, `Tutorial`, `QuestLog`, `PromptBox` |
+| `UI/` | HUD, minimapa, level up, opções e estilo | `HUD`, `Minimap`, `LevelUpPanel`, `OptionsMenu`, `UIStyle`, `Intro`, `Tutorial`, `QuestLog`, `PromptBox` |
 | `FX/` | Partículas, popups, shake | `FxManager`, `FxParticle`, `FxFade`, `FloatingText` |
 | `Audio/` | SFX e música | `AudioManager`, `SfxGenerator` |
 | `Editor/` | Gerador do protótipo, build WebGL e atalhos de teste | `SurvivorsSetup`, `WebGLBuild`, `CampDebug` |
@@ -85,5 +85,9 @@ Durante o Play, **Survivors > Testes** adiciona materiais e causa dano na foguei
 **Opções e estilo.** `GameSettings` guarda os volumes em `PlayerPrefs`, salvos ao fechar as opções; `AudioManager` escuta `GameSettings.Changed`. `OptionsMenu.Open` cria a tela por cima do menu ou da pausa; enquanto `OptionsMenu.BlocksInput`, o `GameManager` ignora Esc para não despausar junto. O botão Opções é clonado em tempo de execução (`UIStyle.CloneButton`), sem editar as cenas.
 
 **Interface.** `UIStyle` concentra a identidade: fonte Pixel Operator, regular e negrito (`Resources/Fonts`, importadas em *Hinted Raster*); a fonte é desenhada numa grade de 16 px, então o texto usa 32 (`Body`) e 64 (`Title`, sempre em negrito), nítidos em 1920×1080 e em 960×540. `UIStyle.Bold` aplica o negrito; `ColumnWidth` é a largura da coluna esquerda para cair no grid da fonte, paleta, `Panel` (moldura + miolo opaco), `Button`, `Label` e `Canvas` (1920×1080 de referência, *pixel perfect*). `UIStyle.ApplyToScene` reestiliza textos, botões e canvases das cenas geradas. `HUD.Layout` reorganiza em painéis os textos da cena. `QuestLog` monta as missões a cada frame a partir de `Tutorial.Current`, `CampSystem.Persons`, estações livres e `ChestSystem.TryGetClosest`. `PromptBox` é a caixa de aviso de interação que some sem texto.
+
+**Nome do jogo.** `GameInfo.Title` e `GameInfo.Tagline` são a única fonte do nome: `MainMenu.Start` troca o título e a frase da cena (objetos `Title` e `Subtitle`), o gerador usa os mesmos textos, `Intro` mostra o nome no último cartão e `WebGLBuild` grava `PlayerSettings.productName` antes do build (título da aba do navegador).
+
+**Introdução.** `GameManager.Start` adiciona `Intro` se `Intro.Seen` for falso, antes do `Tutorial`. A introdução entra no estado `Menu` (`EnterMenu`), então o tempo para e o tutorial espera; Esc chama o `onClose`, que pula. São seis cartões, cada um com uma cena montada em UI com a arte do jogo (quadros do jogador pelo `CharacterAnimator`, `CampSystem.LoadFrames` e `FireFrames`, `EnemyArt`, a árvore de `DayResourceSystem.treePrefab`) a 4 unidades por pixel de arte, e o texto surgindo letra a letra. Céu, lua, halos e morros são texturas pequenas geradas por código e destruídas no fim. Tudo usa tempo não escalado. Espaço, clique ou A avançam (`GameInput.AdvancePressed`); Enter ou Select pulam. Ao terminar, escurece, sai do `Menu` e clareia sobre o jogo. `Seen` fica em `PlayerPrefs` (`intro_vista`); as opções ligam e desligam introdução e tutorial juntos. A fogueira passa por `CampSystem.FireFrames` porque `CampArt` guarda o cache só pelo nome: pedir com outro pivô desalinharia a fogueira do jogo.
 
 **Tutorial.** `GameManager.Start` adiciona `Tutorial` se `Tutorial.Seen` for falso. Cada passo é um texto e uma condição verificada a cada frame (materiais coletados, estrutura construída, pessoa resgatada, baú aberto). Ao anoitecer, mostra o aviso da noite e termina; Enter (`GameInput.SkipTutorialPressed`) pula. `Seen` fica em `PlayerPrefs`.

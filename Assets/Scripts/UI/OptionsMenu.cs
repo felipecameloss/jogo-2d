@@ -71,9 +71,12 @@ public class OptionsMenu : MonoBehaviour
         controls.lineSpacing = 0.95f;
 
         Text tutorialLabel = null;
-        MakeButton(window, new Vector2(0, -265), new Vector2(560, 60), "", 30, out tutorialLabel).onClick.AddListener(() =>
+        MakeButton(window, new Vector2(0, -265), new Vector2(760, 60), "", 30, out tutorialLabel).onClick.AddListener(() =>
         {
-            Tutorial.Seen = !Tutorial.Seen;
+            // Liga ou desliga os dois juntos: a introdução e o tutorial da primeira run.
+            bool seen = FirstRunGuide;
+            Tutorial.Seen = seen;
+            Intro.Seen = seen;
             tutorialLabel.text = TutorialText();
         });
         tutorialLabel.text = TutorialText();
@@ -83,7 +86,8 @@ public class OptionsMenu : MonoBehaviour
         if (EventSystem.current) EventSystem.current.SetSelectedGameObject(music.gameObject);
     }
 
-    static string TutorialText() => Tutorial.Seen ? "Tutorial na próxima run: não" : "Tutorial na próxima run: sim";
+    static bool FirstRunGuide => !Tutorial.Seen || !Intro.Seen;
+    static string TutorialText() => FirstRunGuide ? "Introdução e tutorial na próxima run: sim" : "Introdução e tutorial na próxima run: não";
 
     static Button MakeButton(Transform parent, Vector2 position, Vector2 size, string content, int fontSize, out Text label) =>
         UIStyle.Button(parent, content, fontSize, position, size, null, out label);

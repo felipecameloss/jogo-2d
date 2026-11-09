@@ -250,9 +250,9 @@ Exportar para `Assets/Art/Resources/Camp/` a 24 px por unidade. `CampArt` carreg
 
 **Bloco:** acabamento · **Alvo:** 08/11 · **Depende de:** nenhuma
 
-- [ ] Definir nome do jogo, protagonista e origem dos monstros no `docs/GDD.md`.
-- [ ] Criar introdução curta ao iniciar a run, com opção de pular.
-- [ ] Atualizar título do menu e `README.md`.
+- [x] Definir nome do jogo, protagonista e origem dos monstros no `docs/GDD.md`. (*Brasa Viva*; Bento; maldição do Rei da Noite.)
+- [x] Criar introdução curta ao iniciar a run, com opção de pular. (Seis cartões na primeira run; as opções reativam.)
+- [x] Atualizar título do menu e `README.md`.
 
 ### Task 18: Tutorial no início da run
 
