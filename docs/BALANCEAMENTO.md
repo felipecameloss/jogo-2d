@@ -71,14 +71,14 @@ Golem Ancião na Noite 4 e Rei da Noite na Noite 7 (`EnemySpawner.midBossNight` 
 |---|---|---|
 | Vida base × multiplicador de vida | 2.000 | 5.000 |
 | Vida estimada | ≈ 7.400 (`t` ≈ 544) | ≈ 32.000 a 35.000 (depende da duração da Noite 4) |
-| Escala | ×2,2 | ×3 |
+| Tamanho do colisor (× o do Golem) | ×2,2 | ×3 |
 | Dano de contato | ×2 (24) | ×3 (36) |
 | Velocidade | ×1,15 (1,38) | ×1,4 (1,68; ×1,35 em fúria) |
 | Dano dos tiros | 10 | 15 |
 | XP | 150 | 400 |
 | Ouro | 100 | 300 |
 
-Ambos: resistência a empurrão 0,95, massa 50, cura e ímã garantidos. O Rei da Noite entra em fúria com 50% da vida e ataca com mais frequência. Os chefes usam o mesmo multiplicador de vida dos monstros comuns, inclusive depois de `t = 600`, mas não recebem o crescimento de dano por minuto. Na noite de chefe, `t` avança só o tempo real da luta, mais o atraso e o amanhecer, e não os 180 s: uma luta curta deixa as noites seguintes um pouco mais fáceis do que a tabela de ritmo indica.
+Ambos: resistência a empurrão 0,95, massa 50, cura e ímã garantidos. A arte é desenhada a 1,5× (`bossArtScale`), o que mantém o tamanho visual que os chefes tinham como formas; o colisor segue a linha acima. O Rei da Noite entra em fúria com 50% da vida e ataca com mais frequência. Os chefes usam o mesmo multiplicador de vida dos monstros comuns, inclusive depois de `t = 600`, mas não recebem o crescimento de dano por minuto. Na noite de chefe, `t` avança só o tempo real da luta, mais o atraso e o amanhecer, e não os 180 s: uma luta curta deixa as noites seguintes um pouco mais fáceis do que a tabela de ritmo indica.
 
 ### Armas
 

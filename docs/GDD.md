@@ -100,7 +100,7 @@ Valores detalhados em `BALANCEAMENTO.md`.
 - **Menus:** principal, pausa, opções (volume de música e efeitos, controles), level up, baú, ferraria, armaria e game over.
 - **Identidade visual:** fonte pixelada (Pixel Operator) em toda a interface, sem suavização; painéis e botões opacos em tons de madeira com moldura.
 - **Arte dos monstros:** pixel art no estilo do jogador (sem contorno preto, paleta terrosa, luz de cima à esquerda), com olhos que brilham para ler bem à noite. Slime verde com um osso engolido; Morcego roxo de olhos âmbar; Golem de pedra com musgo. O Golem Ancião é um golem maior de basalto, com cristais âmbar nas costas e uma runa de lava no peito; o Rei da Noite é um rei espectral que flutua, com capa roxa rasgada, coroa, lua no peito e espadão violeta. As cores seguem as dos tiros de cada chefe (laranja e roxo).
-- **Feedback no mundo:** clarão e escala ao acertar; números de dano; tela tremendo e jogador piscando ao sofrer dano; recursos esgotados acinzentados; chaves pulsando; escuridão à noite com luz em volta do jogador.
+- **Feedback no mundo:** monstros avermelham e crescem um pouco ao levar golpe; números de dano; tela tremendo e jogador piscando ao sofrer dano; recursos esgotados acinzentados; chaves pulsando; escuridão à noite com luz em volta do jogador.
 - **Som:** SFX gerados por código, ainda placeholder. **Sem música.**
 
 ## 2. Dynamics
@@ -125,7 +125,7 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
-| 09/11/2026 | Arte dos monstros e chefes definida (sprites em `Assets/Art/Resources/Enemies/`), substituindo as formas coloridas. Ainda não ligada ao jogo. | Rubrica pede sprites medievais de inimigos (item 11 do `ESCOPO.md`) |
+| 09/11/2026 | Arte dos monstros e chefes no jogo (sprites em `Assets/Art/Resources/Enemies/`), substituindo as formas coloridas. Monstros passam a ser desenhados pela altura, atrás ou na frente de árvores, muros e jogador. | Rubrica pede sprites medievais de inimigos (item 11 do `ESCOPO.md`) |
 | 09/11/2026 | Chefes na Noite 4 (Golem Ancião) e na Noite 7 (Rei da Noite): a noite só acaba quando o chefe morre. A confirmar pela equipe no PR da branch `feature/inimigos`. | Variar a run infinita com lutas diferentes das hordas |
 | 08/11/2026 | As armas só atacam à noite. | De dia não há monstros; os ataques só faziam barulho e poluíam a tela durante a coleta |
 | 08/11/2026 | Fonte trocada de Jersey 10 para Pixel Operator, maior (32/64) e com letras inequívocas. | A Jersey 10 estava difícil de ler; a Pixelify Sans confundia B/G, 5/S e C/O |

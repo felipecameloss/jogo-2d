@@ -1,31 +1,7 @@
 fileFormatVersion: 2
 guid: 81cdd13a7229ae54c887a6552a2f59d5
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 4665928806533344354
-    second: golem_anciao_0
-  - first:
-      213: 449543701428054439
-    second: golem_anciao_1
-  - first:
-      213: -9211939019941622348
-    second: golem_anciao_2
-  - first:
-      213: -2458207106006142936
-    second: golem_anciao_3
-  - first:
-      213: -3114275849933008043
-    second: golem_anciao_4
-  - first:
-      213: 3063852769320480506
-    second: golem_anciao_5
-  - first:
-      213: 190219461606605328
-    second: golem_anciao_6
-  - first:
-      213: -9010649365557544987
-    second: golem_anciao_7
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -58,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -67,12 +43,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 24
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -98,7 +74,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -111,7 +87,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -124,7 +100,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -137,7 +113,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -147,188 +123,12 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: golem_anciao_0
-      rect:
-        serializedVersion: 2
-        x: 5
-        y: 0
-        width: 53
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 26caea44785b0c040800000000000000
-      internalID: 4665928806533344354
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: golem_anciao_1
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 0
-        width: 53
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7a922aa5d991d3600800000000000000
-      internalID: 449543701428054439
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: golem_anciao_2
-      rect:
-        serializedVersion: 2
-        x: 133
-        y: 0
-        width: 53
-        height: 61
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4bdc1dfa44e982080800000000000000
-      internalID: -9211939019941622348
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: golem_anciao_3
-      rect:
-        serializedVersion: 2
-        x: 197
-        y: 0
-        width: 53
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 820b92649a1b2edd0800000000000000
-      internalID: -2458207106006142936
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: golem_anciao_4
-      rect:
-        serializedVersion: 2
-        x: 261
-        y: 0
-        width: 53
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5535a285d9ed7c4d0800000000000000
-      internalID: -3114275849933008043
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: golem_anciao_5
-      rect:
-        serializedVersion: 2
-        x: 325
-        y: 0
-        width: 53
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: afea1775cddf48a20800000000000000
-      internalID: 3063852769320480506
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: golem_anciao_6
-      rect:
-        serializedVersion: 2
-        x: 389
-        y: 0
-        width: 53
-        height: 61
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0128d6ea79bc3a200800000000000000
-      internalID: 190219461606605328
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: golem_anciao_7
-      rect:
-        serializedVersion: 2
-        x: 453
-        y: 0
-        width: 53
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5e7f75a742eb3f280800000000000000
-      internalID: -9010649365557544987
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 06d29b9ea44c412094c8816a2dd8a9b0
     internalID: 0
     vertices: []
     indices: 
@@ -337,15 +137,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      golem_anciao_0: 4665928806533344354
-      golem_anciao_1: 449543701428054439
-      golem_anciao_2: -9211939019941622348
-      golem_anciao_3: -2458207106006142936
-      golem_anciao_4: -3114275849933008043
-      golem_anciao_5: 3063852769320480506
-      golem_anciao_6: 190219461606605328
-      golem_anciao_7: -9010649365557544987
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

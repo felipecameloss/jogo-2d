@@ -186,3 +186,4 @@ MonoBehaviour:
   goldMax: 6
   goldBonusPerNight: 0.2
   relocateDistance: 22
+  art: golem

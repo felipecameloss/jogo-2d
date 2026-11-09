@@ -39,6 +39,10 @@ public class Enemy : MonoBehaviour
     [Tooltip("Fração do dano de contato aplicada em construções.")]
     [Range(0f, 1f)] public float structureDamageFactor = 0.5f;
 
+    [Header("Arte")]
+    [Tooltip("Folha animada em Assets/Art/Resources/Enemies (sem extensão). Vazio ou sem arquivo: usa o sprite e a cor do prefab.")]
+    public string art;
+
     public bool IsDead { get; private set; }
     public bool IsElite { get; private set; }
     public bool IsBoss { get; private set; }
@@ -76,7 +80,17 @@ public class Enemy : MonoBehaviour
     // Construções encostadas agora: uma entrada por contato de colisor (ver OnCollisionEnter2D).
     readonly List<Structure> touchingStructures = new List<Structure>(2);
 
+    // Animação da folha de arte (null sem arte).
+    Sprite[] frames;
+    float frameTime;
+    float frameTimer;
+    int frame;
+    // Cor das partículas ao morrer. Sem arte é a própria cor do sprite; com arte, a cor que o prefab usava.
+    Color fxColor;
+
     static readonly Color SlowTint = new Color(0.55f, 0.85f, 1f);
+    // Com arte, o clarão branco não aparece: o golpe avermelha, como o jogador ao apanhar.
+    static readonly Color HitTint = new Color(1f, 0.35f, 0.35f);
 
     void Awake()
     {
@@ -84,9 +98,32 @@ public class Enemy : MonoBehaviour
         int layer = LayerMask.NameToLayer("Enemy");
         if (layer >= 0) gameObject.layer = layer;
         sr = GetComponentInChildren<SpriteRenderer>();
+        fxColor = sr.color;
+        ApplyArt(art, 1f);
         baseColor = sr.color;
         baseScale = transform.localScale;
         health = maxHealth;
+    }
+
+    // Troca o visual pela folha animada, desenhada a 24 px por unidade na escala pedida.
+    // O colisor mantém o tamanho que tinha no mundo, para a arte não mudar o jogo.
+    bool ApplyArt(string sheet, float scale)
+    {
+        var loaded = EnemyArt.Frames(sheet);
+        if (loaded == null) return false;
+        frames = loaded;
+        frameTime = Mathf.Max(0.02f, EnemyArt.FrameTime(sheet));
+        frame = Random.Range(0, frames.Length); // a horda não anima em sincronia
+        frameTimer = 0f;
+        sr.sprite = frames[frame];
+        sr.color = Color.white;
+        // Mesma camada do jogador, ordenado pela altura: passa atrás ou na frente de árvores e muros.
+        sr.sortingOrder = 10;
+        sr.spriteSortPoint = SpriteSortPoint.Pivot;
+        var col = GetComponent<CircleCollider2D>();
+        if (col) col.radius *= transform.localScale.x / scale;
+        transform.localScale = Vector3.one * scale;
+        return true;
     }
 
     void OnEnable() => Active.Add(this);
@@ -129,14 +166,17 @@ public class Enemy : MonoBehaviour
             transform.localScale *= 1.7f;
             baseScale = transform.localScale;
             baseColor = Color.Lerp(baseColor, new Color(1f, 0.8f, 0.2f), 0.55f);
+            fxColor = Color.Lerp(fxColor, new Color(1f, 0.8f, 0.2f), 0.55f);
             sr.color = baseColor;
         }
         health = maxHealth;
     }
 
     // Transforma este inimigo em chefe (chamado pelo spawner nas noites de chefe).
-    public void InitBoss(float health, float scaleMultiplier, Color tint, float damageMultiplier, float speedMultiplier,
-        float xpAmount, int goldAmount)
+    // O colisor cresce sizeMultiplier vezes, como antes; a arte do chefe (bossArt) é desenhada em artScale.
+    // Sem essa arte, o próprio sprite cresce junto e recebe o tint.
+    public void InitBoss(float health, float sizeMultiplier, string bossArt, float artScale, Color tint,
+        float damageMultiplier, float speedMultiplier, float xpAmount, int goldAmount)
     {
         IsBoss = true;
         HuntsPlayer = true; // a luta é contra o jogador: o chefe não desvia para a fogueira
@@ -152,10 +192,11 @@ public class Enemy : MonoBehaviour
         goldBonusPerNight = 0f;
         healDropChance = 1f;
         magnetDropChance = 1f; // ao morrer, puxa todas as gemas da tela
-        transform.localScale *= scaleMultiplier;
+        transform.localScale *= sizeMultiplier;
+        fxColor = tint;
+        if (!ApplyArt(bossArt, artScale)) sr.color = tint;
         baseScale = transform.localScale;
-        baseColor = tint;
-        sr.color = baseColor;
+        baseColor = sr.color;
         rb.mass = 50f; // empurra o jogador em vez de ser empurrado
     }
 
@@ -239,7 +280,20 @@ public class Enemy : MonoBehaviour
         if (flashTimer > 0f) flashTimer -= Time.deltaTime;
         if (flashTimer <= 0f) sr.color = slowTimer > 0f ? Color.Lerp(baseColor, SlowTint, 0.6f) : baseColor;
         transform.localScale = Vector3.Lerp(transform.localScale, baseScale, 15f * Time.deltaTime);
-        if (target) sr.flipX = target.position.x < transform.position.x;
+        if (target) sr.flipX = target.position.x < transform.position.x; // a arte olha para a direita
+        if (frames != null) Animate();
+    }
+
+    void Animate()
+    {
+        // Lento também anima mais devagar.
+        frameTimer += Time.deltaTime * (slowTimer > 0f ? slowFactor : 1f);
+        while (frameTimer >= frameTime)
+        {
+            frameTimer -= frameTime;
+            frame = (frame + 1) % frames.Length;
+        }
+        sr.sprite = frames[frame];
     }
 
     public void TakeDamage(float amount, Vector2 knockback)
@@ -252,7 +306,7 @@ public class Enemy : MonoBehaviour
 
         health -= amount;
         flashTimer = 0.08f;
-        sr.color = Color.white;
+        sr.color = frames != null ? HitTint : Color.white;
         if (!IsBoss) transform.localScale = baseScale * 1.15f; // chefe não "pula" a cada golpe
         knockbackVelocity += knockback * (1f - knockbackResistance);
 
@@ -273,7 +327,7 @@ public class Enemy : MonoBehaviour
             if (GameManager.Instance.Player) GameManager.Instance.Player.OnEnemyKilled();
         }
 
-        FxManager.Burst(transform.position, baseColor, IsBoss ? 60 : IsElite ? 24 : 8, IsBoss ? 9f : 4f, IsBoss ? 0.3f : 0.18f);
+        FxManager.Burst(transform.position, fxColor, IsBoss ? 60 : IsElite ? 24 : 8, IsBoss ? 9f : 4f, IsBoss ? 0.3f : 0.18f);
         if (IsBoss) FxManager.Shake(0.6f, 0.6f);
         else if (IsElite) FxManager.Shake(0.25f, 0.25f);
         AudioManager.Play(Sfx.EnemyDie, 0.5f);
