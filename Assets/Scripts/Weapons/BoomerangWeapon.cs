@@ -31,7 +31,7 @@ public class BoomerangWeapon : Weapon
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
             sr.color = color;
-            sr.sortingOrder = 6;
+            sr.sortingOrder = 15; // acima dos inimigos
             go.AddComponent<Boomerang>().Launch(transform, dir, speed, outTime, Damage, size * Area, knockback);
         }
         AudioManager.Play(Sfx.Shoot, 0.3f, 0.2f);

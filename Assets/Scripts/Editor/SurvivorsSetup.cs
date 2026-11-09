@@ -534,6 +534,9 @@ public static class SurvivorsSetup
         e.goldDropChance = goldChance;
         e.goldMin = goldMin;
         e.goldMax = goldMax;
+        // Folha animada em Assets/Art/Resources/Enemies; com ela, o Enemy troca o sprite, tira a cor
+        // e desenha em escala 1, mantendo o tamanho do colisor (ver EnemyArt).
+        e.art = name.ToLowerInvariant();
         return SavePrefab<Enemy>(go, "Enemy_" + name);
     }
 
@@ -560,7 +563,7 @@ public static class SurvivorsSetup
         var sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = sprite;
         sr.color = color;
-        sr.sortingOrder = 5;
+        sr.sortingOrder = 15; // acima dos inimigos, que ficam na camada 10
         var rb = go.AddComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic;
         var col = go.AddComponent<CircleCollider2D>();
@@ -573,7 +576,7 @@ public static class SurvivorsSetup
     static OrbitBlade MakeBlade(Sprite sprite)
     {
         var go = new GameObject("OrbitBlade");
-        var visual = NewSprite("Visual", go.transform, sprite, new Color(0.85f, 0.95f, 1f), 6);
+        var visual = NewSprite("Visual", go.transform, sprite, new Color(0.85f, 0.95f, 1f), 15);
         visual.transform.localScale = new Vector3(0.7f, 0.3f, 1f);
         var rb = go.AddComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic;

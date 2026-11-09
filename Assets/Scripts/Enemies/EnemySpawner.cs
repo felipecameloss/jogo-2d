@@ -61,13 +61,19 @@ public class EnemySpawner : MonoBehaviour
     public Enemy bossBasePrefab;
     [Tooltip("Segundos até amanhecer depois que o chefe morre.")]
     public float dawnAfterBoss = 6f;
+    [Tooltip("Escala da arte dos chefes (desenhada a 24 px por unidade). 1,5 mantém o tamanho que tinham como formas; o colisor não muda.")]
+    public float bossArtScale = 1.5f;
 
     public string midBossName = "Golem Ancião";
+    [Tooltip("Folha do chefe intermediário em Assets/Art/Resources/Enemies.")]
+    public string midBossArt = "golem_anciao";
     [Tooltip("Vida base do chefe intermediário (multiplicada pela curva de vida).")]
     public float midBossHealth = 2000f;
     public float midBossBulletDamage = 10f;
 
     public string bigBossName = "Rei da Noite";
+    [Tooltip("Folha do chefe final em Assets/Art/Resources/Enemies.")]
+    public string bigBossArt = "rei_da_noite";
     [Tooltip("Vida base do chefe final (multiplicada pela curva de vida).")]
     public float bigBossHealth = 5000f;
     public float bigBossBulletDamage = 15f;
@@ -170,9 +176,9 @@ public class EnemySpawner : MonoBehaviour
         // Mesma escala de vida dos inimigos comuns, inclusive depois do fim da curva.
         float hp = (kind == BossKind.Big ? bigBossHealth : midBossHealth) * Extended(healthMultiplier, t, healthGrowthPerMinute);
         if (kind == BossKind.Big)
-            enemy.InitBoss(hp, 3f, new Color(0.45f, 0.2f, 0.7f), 3f, 1.4f, 400f, 300);
+            enemy.InitBoss(hp, 3f, bigBossArt, bossArtScale, new Color(0.45f, 0.2f, 0.7f), 3f, 1.4f, 400f, 300);
         else
-            enemy.InitBoss(hp, 2.2f, new Color(0.75f, 0.3f, 0.15f), 2f, 1.15f, 150f, 100);
+            enemy.InitBoss(hp, 2.2f, midBossArt, bossArtScale, new Color(0.75f, 0.3f, 0.15f), 2f, 1.15f, 150f, 100);
 
         var boss = enemy.gameObject.AddComponent<Boss>();
         boss.Setup(kind, kind == BossKind.Big ? bigBossName : midBossName,

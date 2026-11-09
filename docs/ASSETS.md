@@ -28,12 +28,17 @@ Inventário dos assets do jogo. A rubrica exige referências e créditos no `REA
 | `Resources/Camp/station_weapon.png`, `station_armor.png` | Estações vazias e fechadas, enquanto o NPC está perdido | Aseprite (`station_weapons.ase`, `station_armor.ase`) | Pedro Nadotti (autoral) |
 | `Resources/Fonts/PixelOperator.ttf`, `PixelOperator-Bold.ttf` | Fonte pixelada de toda a interface e dos números de dano. Importadas em *Hinted Raster* (sem suavização); use 32 ou 64 | [Pixel Operator](https://www.dafont.com/pixel-operator.font) | Jayvee Enaguas (HarvettFox96), CC0 1.0 (domínio público). Licença em `docs/licencas/PixelOperator-CC0.txt` |
 | `Resources/Chests/chest.png` | Baú animado, 20 quadros de 32 px | Aseprite (`chest.ase`) | **A confirmar** |
+| `Resources/Enemies/slime.png`, `bat.png` | Slime (salto) e Morcego (voo), 8 quadros de 32 × 32 | Gerados por código (`tools/sprites-inimigos/gerar.py`) no estilo do `player.png` | Equipe, com auxílio do Claude (Anthropic) (autoral) |
+| `Resources/Enemies/golem.png` | Golem (passo pesado), 8 quadros de 48 × 48 | Idem | Idem |
+| `Resources/Enemies/golem_anciao.png` | Golem Ancião, chefe da Noite 4 (passo, runa pulsando), 8 quadros de 64 × 64, desenhado a 1,5× | Idem | Idem |
+| `Resources/Enemies/rei_da_noite.png` | Rei da Noite, chefe da Noite 7 (flutuando, capa ao vento), 8 quadros de 80 × 80, desenhado a 1,5× | Idem | Idem |
+
+As folhas de `Resources/Enemies/` são tiras de 8 quadros olhando para a direita (o jogo vira com `flipX`), com a sombra desenhada no chão. São importadas como sprite único (filtro *Point*, sem compressão, 24 px por unidade) e fatiadas por `EnemyArt`, que guarda o pivô de cada uma: o centro do corpo, a 12 px da base no Slime, 19 no Morcego, 23 no Golem, 29 no Golem Ancião e 40 no Rei da Noite. A fonte é o script `tools/sprites-inimigos/gerar.py` (Python com Pillow): mude cores ou formas lá e rode de novo, em vez de editar os PNGs.
 
 ### Placeholders por substituir
 
 | Item | Hoje | Destino |
 |---|---|---|
-| Inimigos (Slime, Bat, Golem) | Formas geradas e coloridas | Sprites finais animados |
 | Armas e projéteis | Formas geradas | Sprites finais ou efeitos |
 | XP, ouro, cura, ímã | Formas geradas | Sprites finais |
 | Chave | Pixel art gerada por código em `ChestArt` | Avaliar se mantém |
@@ -52,3 +57,4 @@ Mantenha esta lista igual à seção Créditos do `README.md`.
 
 - Fonte: Pixel Operator, de Jayvee Enaguas (HarvettFox96), CC0 1.0 (`docs/licencas/PixelOperator-CC0.txt`).
 - Código-base do protótipo: gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
+- Inimigos e chefes: sprites gerados por código com auxílio do Claude (Anthropic), no estilo do jogador de Pedro Nadotti.

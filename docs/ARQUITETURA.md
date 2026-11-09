@@ -10,7 +10,7 @@ Tudo em `Assets/Scripts/`:
 |---|---|---|
 | `Core/` | Estado da run, ciclo, input, câmera, menu, cenário | `GameManager`, `DayNightCycle`, `GameInput`, `CameraFollow`, `DecorationScatter`, `InfiniteBackground`, `SpriteLoop`, `MainMenu`, `GameSettings` |
 | `Player/` | Movimento, atributos, XP, ouro, animação | `PlayerController`, `PlayerStats`, `PlayerExperience`, `PlayerWallet`, `CharacterAnimator`, `WorldHealthBar` |
-| `Enemies/` | Comportamento, geração e chefes | `Enemy`, `EnemySpawner`, `Boss`, `EnemyBullet` |
+| `Enemies/` | Comportamento, geração, chefes e arte | `Enemy`, `EnemySpawner`, `Boss`, `EnemyBullet`, `EnemyArt` |
 | `Weapons/` | Base `Weapon`, 10 armas e seus projéteis/zonas | `WeaponHolder`, `Weapon`, `*Weapon` |
 | `Upgrades/` | Opções de level up e catálogo de armas | `UpgradeManager` |
 | `Pickups/` | XP, cura, ímã, ouro | `Pickup` |
@@ -42,7 +42,9 @@ MainMenu → Game (Playing) ⇄ Paused / LevelUp / Menu
 
 **Inimigos.** `EnemySpawner` só gera à noite e avalia curvas por `NightElapsed`. Monstros não usam pathfinding: `Enemy` reavalia o alvo a cada 0,25 s, anda reto, ataca a `Structure` que o bloqueia e desvia de lado se ficar parado. `HuntsPlayer` marca quem nasceu para caçar o jogador longe da base. O contato não usa `OnCollisionStay2D`, que o Unity chamaria a cada passo para todo par de inimigos encostados: `OnCollisionEnter2D`/`Exit2D` registram o jogador e as construções tocados, e `FixedUpdate` aplica o dano. Monstros ficam na layer `Enemy`, que o dash ignora por `Collider2D.excludeLayers`. Armas encontram alvos pela lista estática `Enemy.Active`, com `Enemy.FindNearest` e `Enemy.DamageInRadius`, sem `Find`.
 
-**Chefes.** Nas noites de chefe, `EnemySpawner.UpdateBossNight` liga `DayNightCycle.HoldNight`, suspende spawns, anéis e elites e cria o chefe: um `Enemy` comum transformado por `Enemy.InitBoss` (vida, escala, cor, drops, `HuntsPlayer`) e com o componente `Boss` adicionado. `Boss` roda os padrões de ataque em corrotinas; durante a investida, liga `Enemy.externalMovement` para controlar a velocidade sozinho. Os tiros são `EnemyBullet`, sem física: checam a distância até o jogador e atravessam construções. `Enemy.Died` só dispara em morte por dano (não ao sumir no amanhecer); `Boss.Spawned` e `Boss.Defeated` avisam o `HUD` (aviso e barra de vida) e o spawner, que chama `FinishNightIn`. No Editor, N mata o chefe na hora.
+**Arte dos inimigos.** O campo `Enemy.art` nomeia uma folha em `Assets/Art/Resources/Enemies/` (tira de 8 quadros quadrados olhando para a direita, importada como sprite único). `EnemyArt` fatia a folha em tempo de execução, como `CampArt`, e guarda por folha o pivô e o tempo de quadro. O pivô fica no centro do corpo, como nas formas antigas, para colisor, mira, tiros e números de dano não mudarem de lugar. Com arte, `Enemy.ApplyArt` troca o sprite, tira a cor do prefab (que passa a colorir só as partículas da morte), põe o inimigo na camada 10 ordenada pelo pivô, junto do jogador, das árvores e dos muros, e desenha em escala 1 sem mudar o tamanho do colisor no mundo: o raio compensa a escala que o prefab tinha. O golpe avermelha em vez de clarear, e o lento também desacelera a animação. Sem a folha, o inimigo usa o sprite e a cor do prefab. Projéteis (`Projectile`, `Knife`, `OrbitBlade`, bumerangue) ficam na camada 15 para passar por cima dos monstros.
+
+**Chefes.** Nas noites de chefe, `EnemySpawner.UpdateBossNight` liga `DayNightCycle.HoldNight`, suspende spawns, anéis e elites e cria o chefe: um `Enemy` comum transformado por `Enemy.InitBoss` (vida, colisor, arte, drops, `HuntsPlayer`). O colisor cresce como antes (×2,2 e ×3); a arte troca para `midBossArt` ou `bigBossArt`, desenhada em `bossArtScale` (1,5) e com o componente `Boss` adicionado. `Boss` roda os padrões de ataque em corrotinas; durante a investida, liga `Enemy.externalMovement` para controlar a velocidade sozinho. Os tiros são `EnemyBullet`, sem física: checam a distância até o jogador e atravessam construções. `Enemy.Died` só dispara em morte por dano (não ao sumir no amanhecer); `Boss.Spawned` e `Boss.Defeated` avisam o `HUD` (aviso e barra de vida) e o spawner, que chama `FinishNightIn`. No Editor, N mata o chefe na hora.
 
 **Desempenho dos efeitos.** `FxManager` reaproveita partículas, números de dano e flashes em pilhas em vez de criar e destruir objetos, com teto de `maxPopups` e `maxParticles`; cada efeito chama `FxManager.Release` ao terminar. `Pickup.TryMergeXP` soma o XP numa gema existente quando já há 250 no chão.
 
@@ -73,7 +75,7 @@ Durante o Play, **Survivors > Testes** adiciona materiais e causa dano na foguei
 
 ## Como estender
 
-- **Inimigo:** duplique um `Generated/Prefabs/Enemy_*`, ajuste e adicione em `GameSystems > EnemySpawner > Entries`.
+- **Inimigo:** duplique um `Generated/Prefabs/Enemy_*`, ajuste e adicione em `GameSystems > EnemySpawner > Entries`. Para a arte, ponha a folha em `Assets/Art/Resources/Enemies/` (importada como as outras: sprite único, filtro *Point*, sem compressão), preencha `art` no prefab e registre pivô e tempo de quadro em `EnemyArt`.
 - **Arma:** herde de `Weapon` (a `AuraWeapon` é a mais simples), crie o prefab e adicione em `GameSystems > UpgradeManager > Available Weapons`.
 - **Upgrade de atributo:** uma linha `AddStat(...)` em `UpgradeManager.RollOptions`.
 - **Recompensa de baú:** novo valor em `ChestReward`, com caso em `ChestOffer.Create` e `Apply`. O sorteio em `ChestSystem.Awake` usa `% 7` fixo: atualize junto.
