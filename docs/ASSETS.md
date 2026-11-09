@@ -32,18 +32,29 @@ Inventário dos assets do jogo. A rubrica exige referências e créditos no `REA
 | `Resources/Enemies/golem.png` | Golem (passo pesado), 8 quadros de 48 × 48 | Idem | Idem |
 | `Resources/Enemies/golem_anciao.png` | Golem Ancião, chefe da Noite 4 (passo, runa pulsando), 8 quadros de 64 × 64, desenhado a 1,5× | Idem | Idem |
 | `Resources/Enemies/rei_da_noite.png` | Rei da Noite, chefe da Noite 7 (flutuando, capa ao vento), 8 quadros de 80 × 80, desenhado a 1,5× | Idem | Idem |
+| `Resources/Weapons/icone_besta.png`, `icone_espada`, `icone_facas`, `icone_machado`, `icone_bombas` | Ícones das 5 armas (baú e ferraria), 24 × 24 | Gerados por código (`tools/sprites-itens/gerar.py`) no estilo do `player.png` | Equipe, com auxílio do Claude (Anthropic) (autoral) |
+| `Resources/Weapons/virote.png`, `faca.png`, `machado.png` | Projéteis da Besta, das Facas e do Machado, 16 × 16, apontando para a direita (o machado é girado pelo jogo) | Idem | Idem |
+| `Resources/Weapons/bomba.png` | Bomba no chão com pavio piscando, 2 quadros de 16 × 16 | Idem | Idem |
+| `Resources/Weapons/explosao.png` | Explosão, 7 quadros de 48 × 48 | Idem | Idem |
+| `Resources/Weapons/golpe_espada.png` | Golpe em arco da Espada, de cima para baixo olhando para a direita, 5 quadros de 48 × 48 | Idem | Idem |
+| `Resources/Gear/*.png` | Ícones dos 7 equipamentos dos baús (amuleto de carvalho, pedra de amolar, cota de malha, luvas de couro, alforje, ervas do curandeiro, moeda da fortuna), 24 × 24 | Idem | Idem |
+| `Resources/Pickups/gema_xp.png`, `moeda.png`, `cura.png`, `ima.png`, `chave.png` | Drops no chão, 16 × 16 | Idem | Idem |
+| `Resources/Hud/madeira.png`, `pedra.png` | Ícones de recurso no HUD e na loja, 16 × 16 | Idem | Idem |
+| `Sprites/chao.png` | Ladrilho contínuo de grama, 48 × 48 (2 unidades, igual ao `tileSize` do `InfiniteBackground`), importado com *Repeat* | Idem | Idem |
 
 As folhas de `Resources/Enemies/` são tiras de 8 quadros olhando para a direita (o jogo vira com `flipX`), com a sombra desenhada no chão. São importadas como sprite único (filtro *Point*, sem compressão, 24 px por unidade) e fatiadas por `EnemyArt`, que guarda o pivô de cada uma: o centro do corpo, a 12 px da base no Slime, 19 no Morcego, 23 no Golem, 29 no Golem Ancião e 40 no Rei da Noite. A fonte é o script `tools/sprites-inimigos/gerar.py` (Python com Pillow): mude cores ou formas lá e rode de novo, em vez de editar os PNGs.
+
+Armas, equipamentos, drops, ícones do HUD e chão vêm de `tools/sprites-itens/gerar.py`, que usa o mesmo motor (`px.py`) e a paleta do baú e da ferraria. As tiras (`bomba`, `explosao`, `golpe_espada`) têm quadros quadrados lado a lado, para fatiar com `CampArt.Slice`. Rodar o script de novo mantém os `.meta` existentes (e os GUIDs).
 
 ### Placeholders por substituir
 
 | Item | Hoje | Destino |
 |---|---|---|
-| Armas e projéteis | Formas geradas | Sprites finais ou efeitos |
-| XP, ouro, cura, ímã | Formas geradas | Sprites finais |
-| Chave | Pixel art gerada por código em `ChestArt` | Avaliar se mantém |
+| Armas e projéteis | Formas geradas; sprites prontos em `Resources/Weapons/` | Ligar os sprites às armas |
+| XP, ouro, cura, ímã | Formas geradas; sprites prontos em `Resources/Pickups/` | Ligar os sprites aos prefabs |
+| Chave | Pixel art gerada por código em `ChestArt`; versão no estilo do jogo em `Resources/Pickups/chave.png` | Trocar em `ChestArt.Key()` |
 | Marca de ponto de construção | Gerada em `CampArt` | `spot.png` em `Assets/Art/Resources/Camp/` |
-| Chão | Textura gerada em `Assets/Generated/Sprites` | Sprite ou tileset final |
+| Chão | Textura gerada em `Assets/Generated/Sprites`; ladrilho pronto em `Sprites/chao.png` | Usar em `MakeGroundSprite` |
 | SFX | Sons 8-bit de `SfxGenerator` | `AudioClip` final no `AudioManager` |
 | Música | **Nenhuma** (`music` vazio em `Game.unity`) | Trilha de dia e de noite |
 
@@ -58,3 +69,4 @@ Mantenha esta lista igual à seção Créditos do `README.md`.
 - Fonte: Pixel Operator, de Jayvee Enaguas (HarvettFox96), CC0 1.0 (`docs/licencas/PixelOperator-CC0.txt`).
 - Código-base do protótipo: gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
 - Inimigos e chefes: sprites gerados por código com auxílio do Claude (Anthropic), no estilo do jogador de Pedro Nadotti.
+- Armas, equipamentos, drops, ícones de recurso e chão: sprites gerados por código com auxílio do Claude (Anthropic), no mesmo estilo.
