@@ -86,14 +86,15 @@ Nome, protagonista e origem dos monstros: **a definir**.
 - **Pessoas perdidas:** o ferreiro e a ferreira começam perdidos, em direções opostas, longe do acampamento. De dia, o HUD aponta o mais próximo. Com F, a pessoa é resgatada e anda sozinha até o acampamento.
 - **Estações:** cada residente libera a construção da sua estação. A ferraria ensina e melhora armas (Besta sempre; Espada e Facas com 1 residente; Machado e Bombas com os 2). A armaria dá até 5 níveis de armadura e vida. Compras são pagas com madeira e pedra e continuam valendo se a estação cair.
 - **Residentes em perigo:** monstros não procuram os residentes, mas ferem quem estiver encostado. Derrotado, o residente volta a ficar perdido em outro ponto do mapa; a estação fica fechada, e as armas que dependem dos dois residentes somem da ferraria até o novo resgate.
-- **Inimigos:** vão até a fogueira, atacam o que os bloqueia e perseguem o jogador se ele estiver perto. Longe da base, o jogador é caçado enquanto ela é atacada. Causam dano por contato. Variam entre Slime (básico), Bat (rápido) e Golem (resistente), além de elites e anéis que cercam o jogador.
+- **Inimigos:** vão até a fogueira, atacam o que os bloqueia e perseguem o jogador se ele estiver perto. Longe da base, o jogador é caçado enquanto ela é atacada. Causam dano por contato. Variam entre Slime (básico), Bat (rápido) e Golem (resistente), além de elites, anéis que cercam o jogador e chefes.
+- **Chefes:** na Noite 4 vem o Golem Ancião; na Noite 7, o Rei da Noite. Nessas noites não aparecem outros monstros: o relógio para à meia-noite até o chefe morrer, e então amanhece em poucos segundos. O chefe persegue só o jogador, investe depois de um aviso em linha vermelha e dispara anéis de tiros. O Rei da Noite também solta espirais e leques mirados, e entra em fúria com metade da vida. Derrotado, solta muito XP e ouro, cura e ímã.
 - **Derrota:** vida do jogador zerada ou fogueira destruída encerra a run e mostra as estatísticas.
 
 Valores detalhados em `BALANCEAMENTO.md`.
 
 ### 1.3 Interface
 
-- **HUD:** painéis opacos com moldura. Canto superior esquerdo: nível, abates e barra de XP rotulada; abaixo, materiais (madeira, pedra, chaves, ouro) e **missões**. Topo: relógio, período e vida da fogueira. Canto superior direito: minimapa. Embaixo: avisos de interação, barra de coleta (só perto de árvore ou rocha) e dash.
+- **HUD:** painéis opacos com moldura. Canto superior esquerdo: nível, abates e barra de XP rotulada; abaixo, materiais (madeira, pedra, chaves, ouro) e **missões**. Topo: relógio, período e vida da fogueira; em noite de chefe, abaixo deles, nome e barra de vida do chefe. Canto superior direito: minimapa. Embaixo: avisos de interação, barra de coleta (só perto de árvore ou rocha) e dash.
 - **Missões:** lista no canto esquerdo com o passo do tutorial, as pessoas a resgatar (distância e direção), estações a construir, o baú mais próximo e a meta do período (coletar de dia, defender a fogueira à noite).
 - **Minimapa:** radar centrado no jogador, com alcance fixo, que mostra a fogueira e os baús fechados; o que está além do alcance fica preso na borda, indicando a direção. Chaves e inimigos ficam de fora para manter a exploração.
 - **Menus:** principal, pausa, opções (volume de música e efeitos, controles), level up, baú, ferraria, armaria e game over.
@@ -123,6 +124,7 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
+| 09/11/2026 | Chefes na Noite 4 (Golem Ancião) e na Noite 7 (Rei da Noite): a noite só acaba quando o chefe morre. A confirmar pela equipe no PR da branch `feature/inimigos`. | Variar a run infinita com lutas diferentes das hordas |
 | 08/11/2026 | As armas só atacam à noite. | De dia não há monstros; os ataques só faziam barulho e poluíam a tela durante a coleta |
 | 08/11/2026 | Fonte trocada de Jersey 10 para Pixel Operator, maior (32/64) e com letras inequívocas. | A Jersey 10 estava difícil de ler; a Pixelify Sans confundia B/G, 5/S e C/O |
 | 08/11/2026 | UI refeita: fonte pixelada, painéis opacos, missões no canto esquerdo (com o tutorial e as direções de pessoas e baús), XP rotulada junto do nível, minimapa sozinho no canto direito. | Pedido da equipe: textos borrados, minimapa sobreposto e caixa de coleta sempre visível |

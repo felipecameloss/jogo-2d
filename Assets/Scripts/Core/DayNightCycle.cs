@@ -49,6 +49,19 @@ public class DayNightCycle : MonoBehaviour
 
     public event Action<DayPeriod> OnPeriodChanged;
 
+    // Noite de chefe: enquanto HoldNight estiver ligado, o relógio para na meia-noite e não amanhece.
+    public bool HoldNight { get; set; }
+    const float HoldAtFraction = 0.5f; // metade da noite = 00:00
+    float fastForwardRate = 1f;
+
+    // Faz o resto da noite passar rápido, amanhecendo em "seconds" segundos (usado quando o chefe morre).
+    public void FinishNightIn(float seconds)
+    {
+        HoldNight = false;
+        if (!IsNight) return;
+        fastForwardRate = Mathf.Max(1f, TimeLeftInPeriod / Mathf.Max(0.1f, seconds));
+    }
+
     const float OverlaySize = 44f; // em unidades: cobre a tela inteira com folga
     SpriteRenderer overlay;
     Transform player;
@@ -78,9 +91,11 @@ public class DayNightCycle : MonoBehaviour
         bool playing = !gm || gm.State == GameState.Playing;
         if (playing)
         {
-            PeriodTime += Time.deltaTime;
-            if (IsNight) NightElapsed += Time.deltaTime;
-            if (GameInput.DebugSkipPeriodPressed()) PeriodTime = periodDuration;
+            float dt = Time.deltaTime;
+            if (IsNight) NightElapsed += dt;
+            if (IsNight && HoldNight) PeriodTime = Mathf.Min(PeriodTime + dt, periodDuration * HoldAtFraction);
+            else PeriodTime += dt * fastForwardRate;
+            if (GameInput.DebugSkipPeriodPressed() && !(IsNight && HoldNight)) PeriodTime = periodDuration;
             if (PeriodTime >= periodDuration) EnterPeriod(IsNight ? DayPeriod.Day : DayPeriod.Night, true);
         }
         UpdateVisuals();
@@ -90,6 +105,8 @@ public class DayNightCycle : MonoBehaviour
     {
         Period = period;
         PeriodTime = 0f;
+        fastForwardRate = 1f;
+        HoldNight = false;
         if (period == DayPeriod.Day) DayNumber++;
         else NightNumber++;
 

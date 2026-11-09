@@ -73,7 +73,7 @@ No menu principal ou na pausa, **Opções** ajusta o volume da música e dos efe
 
 ### Atalho de teste
 
-**N** (só no Editor): pula para o próximo período.
+**N** (só no Editor): pula para o próximo período. Em noite de chefe, mata o chefe na hora.
 
 ## Documentação
 

@@ -22,6 +22,7 @@ Sem negociação; ver `RUBRICA.md`.
 - Movimento, dash e combate automático
 - 10 armas, 15 upgrades de atributo e level up
 - 3 inimigos, elites e anéis de inimigos
+- Chefes nas Noites 4 e 7, com padrões de ataque e barra de vida (proposto em 09/11/2026 por Carlos; a equipe confirma no PR da branch `feature/inimigos`)
 - Dia e noite, com iluminação noturna
 - Coleta de madeira e pedra
 - 3 baús com chaves espalhadas

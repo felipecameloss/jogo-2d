@@ -10,7 +10,7 @@ Tudo em `Assets/Scripts/`:
 |---|---|---|
 | `Core/` | Estado da run, ciclo, input, câmera, menu, cenário | `GameManager`, `DayNightCycle`, `GameInput`, `CameraFollow`, `DecorationScatter`, `InfiniteBackground`, `SpriteLoop`, `MainMenu`, `GameSettings` |
 | `Player/` | Movimento, atributos, XP, ouro, animação | `PlayerController`, `PlayerStats`, `PlayerExperience`, `PlayerWallet`, `CharacterAnimator`, `WorldHealthBar` |
-| `Enemies/` | Comportamento e geração | `Enemy`, `EnemySpawner` |
+| `Enemies/` | Comportamento, geração e chefes | `Enemy`, `EnemySpawner`, `Boss`, `EnemyBullet` |
 | `Weapons/` | Base `Weapon`, 10 armas e seus projéteis/zonas | `WeaponHolder`, `Weapon`, `*Weapon` |
 | `Upgrades/` | Opções de level up e catálogo de armas | `UpgradeManager` |
 | `Pickups/` | XP, cura, ímã, ouro | `Pickup` |
@@ -38,9 +38,13 @@ MainMenu → Game (Playing) ⇄ Paused / LevelUp / Menu
 
 ## Sistemas
 
-**Dia e noite.** `DayNightCycle.periodDuration` é 180 s por período. O evento `OnPeriodChanged` avisa os interessados e `NightElapsed` acumula só o tempo de noite, que é o relógio da dificuldade. Ao amanhecer, `Enemy.VanishAll()` remove os inimigos restantes.
+**Dia e noite.** `DayNightCycle.periodDuration` é 180 s por período. O evento `OnPeriodChanged` avisa os interessados e `NightElapsed` acumula só o tempo de noite, que é o relógio da dificuldade. Ao amanhecer, `Enemy.VanishAll()` remove os inimigos restantes. `HoldNight` prende o relógio à meia-noite (noite de chefe) e `FinishNightIn(segundos)` acelera o resto da noite até amanhecer.
 
-**Inimigos.** `EnemySpawner` só gera à noite e avalia curvas por `NightElapsed`. Monstros não usam pathfinding: `Enemy` reavalia o alvo a cada 0,25 s, anda reto, ataca a `Structure` que o bloqueia e desvia de lado se ficar parado. `HuntsPlayer` marca quem nasceu para caçar o jogador longe da base. Monstros ficam na layer `Enemy`, que o dash ignora por `Collider2D.excludeLayers`. Armas encontram alvos pela lista estática `Enemy.Active`, com `Enemy.FindNearest` e `Enemy.DamageInRadius`, sem `Find`.
+**Inimigos.** `EnemySpawner` só gera à noite e avalia curvas por `NightElapsed`. Monstros não usam pathfinding: `Enemy` reavalia o alvo a cada 0,25 s, anda reto, ataca a `Structure` que o bloqueia e desvia de lado se ficar parado. `HuntsPlayer` marca quem nasceu para caçar o jogador longe da base. O contato não usa `OnCollisionStay2D`, que o Unity chamaria a cada passo para todo par de inimigos encostados: `OnCollisionEnter2D`/`Exit2D` registram o jogador e as construções tocados, e `FixedUpdate` aplica o dano. Monstros ficam na layer `Enemy`, que o dash ignora por `Collider2D.excludeLayers`. Armas encontram alvos pela lista estática `Enemy.Active`, com `Enemy.FindNearest` e `Enemy.DamageInRadius`, sem `Find`.
+
+**Chefes.** Nas noites de chefe, `EnemySpawner.UpdateBossNight` liga `DayNightCycle.HoldNight`, suspende spawns, anéis e elites e cria o chefe: um `Enemy` comum transformado por `Enemy.InitBoss` (vida, escala, cor, drops, `HuntsPlayer`) e com o componente `Boss` adicionado. `Boss` roda os padrões de ataque em corrotinas; durante a investida, liga `Enemy.externalMovement` para controlar a velocidade sozinho. Os tiros são `EnemyBullet`, sem física: checam a distância até o jogador e atravessam construções. `Enemy.Died` só dispara em morte por dano (não ao sumir no amanhecer); `Boss.Spawned` e `Boss.Defeated` avisam o `HUD` (aviso e barra de vida) e o spawner, que chama `FinishNightIn`. No Editor, N mata o chefe na hora.
+
+**Desempenho dos efeitos.** `FxManager` reaproveita partículas, números de dano e flashes em pilhas em vez de criar e destruir objetos, com teto de `maxPopups` e `maxParticles`; cada efeito chama `FxManager.Release` ao terminar. `Pickup.TryMergeXP` soma o XP numa gema existente quando já há 250 no chão.
 
 **Armas e upgrades.** `WeaponHolder` guarda as armas. Cada arma herda de `Weapon` e usa os multiplicadores de `PlayerStats`. `PlayerExperience` acumula level ups pendentes e `UpgradeManager` os consome quando o estado volta a `Playing`, para nenhum se perder durante uma pausa. O level up só oferece atributos. `UpgradeManager.availableWeapons` é o catálogo de armas do jogo, lido por `UpgradeManager.Catalog()` pela ferraria e pelos baús; `WeaponHolder.Unlock` adiciona a arma ou sobe um nível.
 
@@ -57,7 +61,7 @@ MainMenu → Game (Playing) ⇄ Paused / LevelUp / Menu
 ## Convenções
 
 - Singletons de cena com `Instance`, limpos em `OnDestroy`.
-- Comunicação entre sistemas por eventos C# (`OnChanged`, `OnPeriodChanged`, `OnLevelUp`, `OnGoldChanged`).
+- Comunicação entre sistemas por eventos C# (`OnChanged`, `OnPeriodChanged`, `OnLevelUp`, `OnGoldChanged`, `Boss.Spawned`, `Boss.Defeated`, `Enemy.Died`).
 - Efeitos e som por chamadas estáticas: `FxManager.Burst/Popup/Shake`, `AudioManager.Play`.
 - Input somente por `GameInput`, que abstrai teclado e gamepad e funciona com o Input Manager antigo.
 - Valores ajustáveis em campos públicos com `[Tooltip]`. Valores de balanceamento são registrados em `BALANCEAMENTO.md`.

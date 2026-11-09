@@ -15,8 +15,11 @@ public class SpawnEntry
 
 // Spawna inimigos fora da tela, só durante a noite (se tiver DayNightCycle na cena).
 // A dificuldade cresce com o tempo de noite acumulado, pelas curvas abaixo.
+// Em algumas noites aparece só um chefe: a noite não acaba até ele ser derrotado.
 public class EnemySpawner : MonoBehaviour
 {
+    public static EnemySpawner Instance { get; private set; }
+
     public SpawnEntry[] entries;
 
     [Header("Ritmo")]
@@ -47,13 +50,45 @@ public class EnemySpawner : MonoBehaviour
     [Tooltip("A cada X segundos aparece um inimigo elite (mais forte, dropa muito XP e cura).")]
     public float eliteInterval = 90f;
 
+    [Header("Chefes")]
+    [Tooltip("Noite do chefe intermediário (4 = logo depois da terceira noite). 0 desliga.")]
+    public int midBossNight = 4;
+    [Tooltip("Noite do chefe final (7 = logo depois da sexta noite). 0 desliga.")]
+    public int bigBossNight = 7;
+    [Tooltip("Segundos depois do anoitecer até o chefe aparecer.")]
+    public float bossDelay = 4f;
+    [Tooltip("Inimigo usado como base dos chefes. Se vazio, usa o inimigo com mais vida da lista.")]
+    public Enemy bossBasePrefab;
+    [Tooltip("Segundos até amanhecer depois que o chefe morre.")]
+    public float dawnAfterBoss = 6f;
+
+    public string midBossName = "Golem Ancião";
+    [Tooltip("Vida base do chefe intermediário (multiplicada pela curva de vida).")]
+    public float midBossHealth = 2000f;
+    public float midBossBulletDamage = 10f;
+
+    public string bigBossName = "Rei da Noite";
+    [Tooltip("Vida base do chefe final (multiplicada pela curva de vida).")]
+    public float bigBossHealth = 5000f;
+    public float bigBossBulletDamage = 15f;
+
     float accumulator;
+    int bossSpawnedForNight = -1;
     float nextRingTime;
     float nextEliteTime;
     Camera cam;
 
+    void Awake() => Instance = this;
+
+    void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+        Boss.Defeated -= OnBossDefeated;
+    }
+
     void Start()
     {
+        Boss.Defeated += OnBossDefeated;
         cam = Camera.main;
         nextRingTime = ringInterval;
         nextEliteTime = eliteInterval;
@@ -67,6 +102,12 @@ public class EnemySpawner : MonoBehaviour
         var cycle = DayNightCycle.Instance;
         if (cycle && !cycle.IsNight) return;
         float t = cycle ? cycle.NightElapsed : gm.ElapsedTime;
+
+        if (cycle && IsBossNight(cycle.NightNumber))
+        {
+            UpdateBossNight(cycle, t);
+            return;
+        }
 
         accumulator += Extended(spawnsPerSecond, t, spawnsGrowthPerMinute) * Time.deltaTime;
         while (accumulator >= 1f)
@@ -87,6 +128,72 @@ public class EnemySpawner : MonoBehaviour
             Spawn(PickEntry(t), RandomOffscreenPosition(), t, true, PlayerAway());
         }
     }
+
+    // ------------------------------------------------------------------ Chefes
+
+    public bool IsBossNight(int night) => night > 0 && (night == midBossNight || night == bigBossNight);
+    public BossKind BossKindForNight(int night) => night == bigBossNight ? BossKind.Big : BossKind.Mid;
+
+    void UpdateBossNight(DayNightCycle cycle, float t)
+    {
+        // Noite de chefe não conta para os eventos normais (senão eles "acumulariam" para a próxima noite).
+        nextRingTime = Mathf.Max(nextRingTime, t + ringInterval);
+        nextEliteTime = Mathf.Max(nextEliteTime, t + eliteInterval);
+        accumulator = 0f;
+
+        if (bossSpawnedForNight == cycle.NightNumber)
+        {
+#if UNITY_EDITOR
+            // Atalho de teste: N mata o chefe na hora.
+            if (Boss.Current && GameInput.DebugSkipPeriodPressed()) Boss.Current.Enemy.TakeDamage(1e9f, Vector2.zero);
+#endif
+            return;
+        }
+
+        cycle.HoldNight = true; // não amanhece enquanto o chefe não aparecer e morrer
+        if (cycle.PeriodTime < bossDelay) return;
+        bossSpawnedForNight = cycle.NightNumber;
+        SpawnBoss(BossKindForNight(cycle.NightNumber), t);
+    }
+
+    void SpawnBoss(BossKind kind, float t)
+    {
+        var prefab = bossBasePrefab ? bossBasePrefab : ToughestEntry();
+        if (!prefab)
+        {
+            if (DayNightCycle.Instance) DayNightCycle.Instance.HoldNight = false;
+            return;
+        }
+
+        var enemy = Instantiate(prefab, OutsideCamp(RandomOffscreenPosition()), Quaternion.identity);
+        enemy.name = kind == BossKind.Big ? "BigBoss" : "MidBoss";
+        // Mesma escala de vida dos inimigos comuns, inclusive depois do fim da curva.
+        float hp = (kind == BossKind.Big ? bigBossHealth : midBossHealth) * Extended(healthMultiplier, t, healthGrowthPerMinute);
+        if (kind == BossKind.Big)
+            enemy.InitBoss(hp, 3f, new Color(0.45f, 0.2f, 0.7f), 3f, 1.4f, 400f, 300);
+        else
+            enemy.InitBoss(hp, 2.2f, new Color(0.75f, 0.3f, 0.15f), 2f, 1.15f, 150f, 100);
+
+        var boss = enemy.gameObject.AddComponent<Boss>();
+        boss.Setup(kind, kind == BossKind.Big ? bigBossName : midBossName,
+            kind == BossKind.Big ? bigBossBulletDamage : midBossBulletDamage);
+    }
+
+    void OnBossDefeated(Boss boss)
+    {
+        if (DayNightCycle.Instance) DayNightCycle.Instance.FinishNightIn(dawnAfterBoss);
+    }
+
+    Enemy ToughestEntry()
+    {
+        Enemy best = null;
+        if (entries == null) return null;
+        foreach (var e in entries)
+            if (e.prefab && (!best || e.prefab.maxHealth > best.maxHealth)) best = e.prefab;
+        return best;
+    }
+
+    // ------------------------------------------------------------------ Inimigos comuns
 
     // A curva vale até a última chave; depois, cresce em linha reta para a run nunca estabilizar.
     static float Extended(AnimationCurve curve, float t, float perMinute)

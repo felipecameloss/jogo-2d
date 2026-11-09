@@ -63,6 +63,23 @@ Elite: vida ×12, dano ×1,5, XP ×10, ouro garantido com faixa maior, cura gara
 
 O dano de contato cresce a partir da Noite 4 (ver tabela acima).
 
+### Chefes
+
+Golem Ancião na Noite 4 e Rei da Noite na Noite 7 (`EnemySpawner.midBossNight` e `bigBossNight`; 0 desliga). O chefe nasce 4 s depois do anoitecer (`bossDelay`) a partir de `bossBasePrefab` ou, se vazio, do inimigo com mais vida da lista (Golem). Nessas noites não há spawns comuns, anéis nem elites. O relógio para à meia-noite até o chefe morrer; depois, amanhece em 6 s (`dawnAfterBoss`).
+
+| Atributo | Golem Ancião | Rei da Noite |
+|---|---|---|
+| Vida base × multiplicador de vida | 2.000 | 5.000 |
+| Vida estimada | ≈ 7.400 (`t` ≈ 544) | ≈ 32.000 a 35.000 (depende da duração da Noite 4) |
+| Escala | ×2,2 | ×3 |
+| Dano de contato | ×2 (24) | ×3 (36) |
+| Velocidade | ×1,15 (1,38) | ×1,4 (1,68; ×1,35 em fúria) |
+| Dano dos tiros | 10 | 15 |
+| XP | 150 | 400 |
+| Ouro | 100 | 300 |
+
+Ambos: resistência a empurrão 0,95, massa 50, cura e ímã garantidos. O Rei da Noite entra em fúria com 50% da vida e ataca com mais frequência. Os chefes usam o mesmo multiplicador de vida dos monstros comuns, inclusive depois de `t = 600`, mas não recebem o crescimento de dano por minuto. Na noite de chefe, `t` avança só o tempo real da luta, mais o atraso e o amanhecer, e não os 180 s: uma luta curta deixa as noites seguintes um pouco mais fáceis do que a tabela de ritmo indica.
+
 ### Armas
 
 Dano e recarga base; todas vão até o nível 5. As cinco armas vêm de baús e da ferraria. Lâminas Orbitais, Aura Sagrada, Raio Celeste, Frasco Venenoso e Nova Gélida ainda existem como prefabs, mas saíram do jogo.
@@ -168,6 +185,10 @@ Registre aqui cada sessão: data, quem jogou, versão, noite alcançada, causa d
 
 | Data | Valor | De → Para | Motivo |
 |---|---|---|---|
+| 09/11/2026 | Chefes | — → Golem Ancião na Noite 4, Rei da Noite na Noite 7 (valores acima) | Proposta da branch `feature/inimigos`; ainda sem teste com o acampamento |
+| 09/11/2026 | Vida do Rei da Noite | multiplicador preso em 4 depois de `t = 600` → cresce como o dos monstros comuns (≈ 20.000 → ≈ 32.000 a 35.000) | Seguir a regra da run infinita: a vida dos monstros cresce sem limite |
+| 09/11/2026 | Gemas de XP no chão | sem limite → 250; acima disso, o XP entra numa gema antiga | Desempenho com a tela cheia à noite |
+| 09/11/2026 | Números de dano e partículas | sem limite → 60 números e 300 partículas ao mesmo tempo | Mesmo motivo |
 | 08/11/2026 | Dificuldade depois de `t = 600` | Constante → cresce sem limite | A partir da Noite 4 a run estabilizava e ficava fácil |
 | 08/11/2026 | Dano de contato | Fixo → +6%/min de noite a partir de `t = 540` | Mesmo motivo |
 | 08/11/2026 | Portão de pedra | — → 8 pedra, 200 de vida | Nova melhoria do portão, no mesmo ritmo do muro (cerca a muro: +90 de vida por 6 pedra) |
