@@ -113,7 +113,7 @@ Valores detalhados em `BALANCEAMENTO.md`.
 - **Identidade visual:** fonte pixelada (Pixel Operator) em toda a interface, sem suavização; painéis e botões opacos em tons de madeira com moldura.
 - **Arte dos monstros:** pixel art no estilo do jogador (sem contorno preto, paleta terrosa, luz de cima à esquerda), com olhos que brilham para ler bem à noite. Slime verde com um osso engolido; Morcego roxo de olhos âmbar; Golem de pedra com musgo. O Golem Ancião é um golem maior de basalto, com cristais âmbar nas costas e uma runa de lava no peito; o Rei da Noite é um rei espectral que flutua, com capa roxa rasgada, coroa, lua no peito e espadão violeta. As cores seguem as dos tiros de cada chefe (laranja e roxo).
 - **Feedback no mundo:** monstros avermelham e crescem um pouco ao levar golpe; números de dano; tela tremendo e jogador piscando ao sofrer dano; recursos esgotados acinzentados; chaves pulsando; escuridão à noite com luz em volta do jogador.
-- **Som:** SFX gerados por código, ainda placeholder. **Sem música.**
+- **Som:** música calma de dia (alaúde e flauta), tensa à noite (ostinato grave, cordas em trêmulo, taikos) e de suspense quando o chefe aparece (tambores de guerra, metais e coro), trocadas com fade; depois do chefe, silêncio até o amanhecer. Passos ao andar, golpes de machado e de picareta durante a coleta e um tilintar ao pegar uma chave. Os demais efeitos (tiro, acerto, morte, nível, dano, seleção) ainda são os 8-bit gerados por código.
 
 ## 2. Dynamics
 
@@ -137,6 +137,7 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
+| 09/11/2026 | Música de dia, noite e chefe, com troca por fade; sons de passo, coleta de madeira e pedra e chave. | Rubrica (Som e música) e item 10 do `ESCOPO.md`; a música separa a calma do dia da tensão da noite |
 | 09/11/2026 | Nome *Brasa Viva*, protagonista Bento, origem dos monstros (maldição do Rei da Noite) e introdução em seis cartões na primeira run, com opção de pular. As opções reativam a introdução junto com o tutorial. | Rubrica (Blueprint) pede nome, personagens e história; a história explica por que os monstros vão atrás da fogueira e somem ao amanhecer |
 | 09/11/2026 | Arte dos monstros e chefes no jogo (sprites em `Assets/Art/Resources/Enemies/`), substituindo as formas coloridas. Monstros passam a ser desenhados pela altura, atrás ou na frente de árvores, muros e jogador. | Rubrica pede sprites medievais de inimigos (item 11 do `ESCOPO.md`) |
 | 09/11/2026 | Chefes na Noite 4 (Golem Ancião) e na Noite 7 (Rei da Noite): a noite só acaba quando o chefe morre. A confirmar pela equipe no PR da branch `feature/inimigos`. | Variar a run infinita com lutas diferentes das hordas |

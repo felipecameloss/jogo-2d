@@ -16,6 +16,9 @@ public class CharacterAnimator : MonoBehaviour
     public float idleFrameTime = 0.13f;
     public float runFrameTime = 0.07f;
 
+    [Tooltip("Volume do passo, tocado quando o pé encosta no chão (quadros 1 e 5 da corrida).")]
+    public float stepVolume = 0.3f;
+
     enum State { Idle = 0, Run = 2 }
 
     // Índice da direção na spritesheet para cada setor de 45° (começando na direita, sentido anti-horário).
@@ -59,6 +62,8 @@ public class CharacterAnimator : MonoBehaviour
         {
             timer -= frameTime;
             frame = (frame + 1) % framesPerAnimation;
+            if (state == State.Run && !controller.IsDashing && (frame == 1 || frame == 5))
+                AudioManager.Play(Sfx.Step, stepVolume, 0.12f);
         }
 
         int index = animation * framesPerAnimation + frame;

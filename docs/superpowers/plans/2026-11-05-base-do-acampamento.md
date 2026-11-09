@@ -230,8 +230,8 @@ Exportar para `Assets/Art/Resources/Camp/` a 24 px por unidade. `CampArt` carreg
 
 **Arquivos:** alterar `Audio/AudioManager.cs`.
 
-- [ ] Escolher ou compor faixas de dia, noite e menu, com licença registrada.
-- [ ] `AudioManager` troca a faixa com fade em `OnPeriodChanged`.
+- [x] Escolher ou compor faixas de dia, noite e menu, com licença registrada. (Dia, noite e também chefe, compostas por síntese em `tools/sons/gerar.py`; o menu continua sem música.)
+- [x] `AudioManager` troca a faixa com fade em `OnPeriodChanged`. (E troca para a do chefe em `Boss.Spawned`.)
 - [ ] Verificar no build WebGL: áudio começa após o primeiro clique e faz loop sem corte.
 
 ### Task 16: Efeitos sonoros finais
@@ -240,7 +240,8 @@ Exportar para `Assets/Art/Resources/Camp/` a 24 px por unidade. `CampArt` carreg
 
 **Arquivos:** alterar `Audio/AudioManager.cs`.
 
-- [ ] Substituir os 7 sons gerados por `SfxGenerator`.
+- [ ] Substituir os 7 sons gerados por `SfxGenerator`. (Basta salvar o WAV em `Resources/Audio` com o nome que o `AudioManager` procura.)
+- [x] Passos, golpes de machado e picareta na coleta e chave coletada (09/11).
 - [ ] Adicionar sons de construção, reparo, estrutura destruída, resgate e alerta da fogueira.
 - [ ] Registrar em `docs/ASSETS.md`.
 

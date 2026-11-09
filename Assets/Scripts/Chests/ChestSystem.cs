@@ -308,7 +308,7 @@ public class ChestSystem : MonoBehaviour
         Inventory.AddKey();
         FxManager.Burst(key.transform.position, new Color(1f, 0.85f, 0.3f), 10, 3f);
         FxManager.Popup(key.transform.position + Vector3.up, "+1 Chave", new Color(1f, 0.85f, 0.3f));
-        AudioManager.Play(Sfx.Pickup, 0.8f);
+        AudioManager.Play(Sfx.Key, 0.9f, 0.03f);
         Destroy(key);
         keys.Remove(picked.Value);
         pickedKeys.Add(picked.Value);

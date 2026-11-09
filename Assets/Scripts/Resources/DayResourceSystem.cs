@@ -114,17 +114,24 @@ public class DayResourceSystem : MonoBehaviour
         Prompt = $"Segure [E]  •  {Label(target.Kind)} +{amount}" + (target.Rich ? "  •  VEIO RICO!" : "");
         if (!GameInput.CollectHeld()) { Progress = 0; return; }
         float duration = Mathf.Max(0.1f, collectSeconds);
+        float before = Progress;
         Progress = Mathf.Min(1f, Progress + Time.deltaTime / duration);
+        // Golpes do machado ou da picareta no começo e no meio; o último vem ao terminar.
+        if ((before <= 0f && Progress > 0f) || (before < 0.5f && Progress >= 0.5f)) Strike(target.Kind, 0.75f);
         target.Object.transform.localScale *= 1f + Mathf.Sin(Time.time * 30f) * 0.04f;
         if (Progress < 1f) return;
         depleted.Add(target.Cell);
         Inventory.Add(target.Kind, amount);
         FxManager.Burst(target.Object.transform.position, Tint(target.Kind), 10, 3f);
         FxManager.Popup(target.Object.transform.position + Vector3.up, $"+{amount} {Label(target.Kind)}", Tint(target.Kind));
-        AudioManager.Play(Sfx.Pickup, 0.65f);
+        Strike(target.Kind, 1f);
+        AudioManager.Play(Sfx.Pickup, 0.5f);
         Progress = 0;
         target = null;
     }
+
+    static void Strike(ResourceKind kind, float volume) =>
+        AudioManager.Play(kind == ResourceKind.Wood ? Sfx.Chop : Sfx.Mine, volume, 0.08f);
 
     static int Yield(ResourceKind kind) => kind == ResourceKind.Wood ? 5 : 3;
 
