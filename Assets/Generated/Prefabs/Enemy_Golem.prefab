@@ -186,4 +186,8 @@ MonoBehaviour:
   goldMax: 6
   goldBonusPerNight: 0.2
   relocateDistance: 22
+  aggroRadius: 7
+  structureHitInterval: 2
+  structureDamageFactor: 0.5
   art: golem
+  externalMovement: 0

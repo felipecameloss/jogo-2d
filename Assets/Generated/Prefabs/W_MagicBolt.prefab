@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MagicBoltWeapon
   weaponName: Besta
   description: "Dispara virotes no inimigo mais pr\xF3ximo."
+  icon: {fileID: 21300000, guid: 0bf2878e64ba400596839a752dbda092, type: 3}
   maxLevel: 5
   damage: 10
   cooldown: 0.9

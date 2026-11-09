@@ -19,7 +19,10 @@ public class Boomerang : MonoBehaviour
         this.damage = damage;
         this.knockback = knockback;
         radius = size * 0.5f;
-        transform.localScale = Vector3.one * size;
+        // size é o diâmetro em unidades; o sprite é escalado para ficar desse tamanho.
+        var sr = GetComponent<SpriteRenderer>();
+        float spriteSize = sr && sr.sprite ? Mathf.Max(sr.sprite.bounds.size.x, sr.sprite.bounds.size.y) : 1f;
+        transform.localScale = Vector3.one * size / spriteSize;
     }
 
     void Update()

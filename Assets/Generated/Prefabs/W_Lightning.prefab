@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LightningWeapon
   weaponName: Raio Celeste
   description: "Raios caem em inimigos aleat\xF3rios."
+  icon: {fileID: 0}
   maxLevel: 5
   damage: 14
   cooldown: 1.8

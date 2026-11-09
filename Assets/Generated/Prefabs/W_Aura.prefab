@@ -139,6 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AuraWeapon
   weaponName: Aura Sagrada
   description: "Causa dano cont\xEDnuo em quem chega perto."
+  icon: {fileID: 0}
   maxLevel: 5
   damage: 5
   cooldown: 0.6

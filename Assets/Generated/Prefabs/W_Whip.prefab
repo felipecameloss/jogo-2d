@@ -46,10 +46,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WhipWeapon
   weaponName: Espada
   description: Golpe de espada forte na sua frente.
+  icon: {fileID: 21300000, guid: 9ff1bccb80dd4fc496fb487b5426bca5, type: 3}
   maxLevel: 5
   damage: 13
   cooldown: 1.3
   slashSprite: {fileID: 21300000, guid: a6915afe1411e0a47974e72c903e1ee5, type: 3}
+  slashFrames:
+  - {fileID: 65620031, guid: 3ac2ca2fb08a4b1dbc67122411c54679, type: 3}
+  - {fileID: 1636143735, guid: 3ac2ca2fb08a4b1dbc67122411c54679, type: 3}
+  - {fileID: 2109045120, guid: 3ac2ca2fb08a4b1dbc67122411c54679, type: 3}
+  - {fileID: 1604318837, guid: 3ac2ca2fb08a4b1dbc67122411c54679, type: 3}
+  - {fileID: -1277943860, guid: 3ac2ca2fb08a4b1dbc67122411c54679, type: 3}
   color: {r: 1, g: 1, b: 1, a: 0.85}
   length: 3.2
   height: 0.9

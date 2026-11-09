@@ -79,8 +79,8 @@ public class ChestSystem : MonoBehaviour
         spawn = camp ? camp.Center : player.transform.position;
         runSeed = Random.Range(int.MinValue, int.MaxValue);
         var random = new System.Random(runSeed);
-        keySprite = ChestArt.Key();
-        ownedSprites.Add(keySprite);
+        keySprite = ChestArt.Key(out bool generatedKey);
+        if (generatedKey) ownedSprites.Add(keySprite);
         chestFrames = ChestArt.ChestFrames();
 
         // Baús em direções diferentes, cada vez mais longe (e melhores).

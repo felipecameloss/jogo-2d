@@ -125,6 +125,7 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
+| 09/11/2026 | Arte das armas, itens e chão no jogo: projéteis, bomba, explosão e golpe da espada animados, drops, chave e ladrilho de grama; ícones das armas e equipamentos no baú e na ferraria, e de madeira e pedra no HUD. | Rubrica pede arte medieval no lugar das formas geradas |
 | 09/11/2026 | Arte dos monstros e chefes no jogo (sprites em `Assets/Art/Resources/Enemies/`), substituindo as formas coloridas. Monstros passam a ser desenhados pela altura, atrás ou na frente de árvores, muros e jogador. | Rubrica pede sprites medievais de inimigos (item 11 do `ESCOPO.md`) |
 | 09/11/2026 | Chefes na Noite 4 (Golem Ancião) e na Noite 7 (Rei da Noite): a noite só acaba quando o chefe morre. A confirmar pela equipe no PR da branch `feature/inimigos`. | Variar a run infinita com lutas diferentes das hordas |
 | 08/11/2026 | As armas só atacam à noite. | De dia não há monstros; os ataques só faziam barulho e poluíam a tela durante a coleta |

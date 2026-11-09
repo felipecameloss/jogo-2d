@@ -6,9 +6,10 @@ using UnityEngine.UI;
 public class ResourceHUD : MonoBehaviour
 {
     const float PromptWidth = 620f;
+    const float RowHeight = 38f, IconSize = 32f; // ícones de 16 px, em 2x
 
     public DayResourceSystem source;
-    Text left, right, promptText;
+    Text wood, stone, keys, gold, promptText;
     Image progress;
     GameObject canvasObject, prompt;
     PlayerWallet wallet;
@@ -22,10 +23,10 @@ public class ResourceHUD : MonoBehaviour
         var panel = UIStyle.Panel(canvas, "Materiais", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -154f), new Vector2(UIStyle.ColumnWidth, 150f));
         var title = UIStyle.Bold(UIStyle.Label(panel, "MATERIAIS", UIStyle.Body, TextAnchor.UpperLeft, UIStyle.Gold));
         UIStyle.Stretch(title.rectTransform, UIStyle.Padding);
-        left = UIStyle.Label(panel, "", UIStyle.Body, TextAnchor.LowerLeft, Color.white);
-        UIStyle.Stretch(left.rectTransform, UIStyle.Padding);
-        right = UIStyle.Label(panel, "", UIStyle.Body, TextAnchor.LowerRight, Color.white);
-        UIStyle.Stretch(right.rectTransform, UIStyle.Padding);
+        wood = Row(panel, 1, TextAnchor.MiddleLeft, "Hud/madeira");
+        stone = Row(panel, 0, TextAnchor.MiddleLeft, "Hud/pedra");
+        keys = Row(panel, 1, TextAnchor.MiddleRight, null);
+        gold = Row(panel, 0, TextAnchor.MiddleRight, null);
 
         var box = UIStyle.Panel(canvas, "Coleta", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 90f), new Vector2(PromptWidth, 76f));
         prompt = box.parent.gameObject;
@@ -51,13 +52,41 @@ public class ResourceHUD : MonoBehaviour
         if (!show) return;
         if (!wallet && GameManager.Instance.Player) wallet = GameManager.Instance.Player.GetComponent<PlayerWallet>();
         var bag = source.Inventory;
-        left.text = $"<color=#A6DD77>Madeira</color>  {bag.Wood}\n<color=#C9D4ED>Pedra</color>  {bag.Stone}";
-        right.text = $"<color=#FFD45E>Chaves</color>  {bag.Keys}\n<color=#FFD45E>Ouro</color>  {(wallet ? wallet.Gold : 0)}";
+        wood.text = $"<color=#A6DD77>Madeira</color>  {bag.Wood}";
+        stone.text = $"<color=#C9D4ED>Pedra</color>  {bag.Stone}";
+        keys.text = $"<color=#FFD45E>Chaves</color>  {bag.Keys}";
+        gold.text = $"<color=#FFD45E>Ouro</color>  {(wallet ? wallet.Gold : 0)}";
 
         bool collecting = !string.IsNullOrEmpty(source.Prompt);
         prompt.SetActive(collecting);
         if (!collecting) return;
         promptText.text = source.Prompt;
         progress.rectTransform.anchorMax = new Vector2(source.Progress, 1f);
+    }
+
+    // Uma linha do painel, contada de baixo (0) para cima, com ícone opcional (de Resources) à esquerda.
+    static Text Row(RectTransform panel, int row, TextAnchor align, string icon)
+    {
+        float y = UIStyle.Padding + row * RowHeight;
+        float left = UIStyle.Padding;
+        var sprite = icon != null ? Resources.Load<Sprite>(icon) : null;
+        if (sprite)
+        {
+            var image = UIStyle.Image(panel, "Icone", Color.white);
+            image.sprite = sprite;
+            image.preserveAspect = true;
+            var rect = image.rectTransform;
+            rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.zero;
+            rect.anchoredPosition = new Vector2(left, y + (RowHeight - IconSize) * 0.5f);
+            rect.sizeDelta = Vector2.one * IconSize;
+            left += IconSize + 8f;
+        }
+        var text = UIStyle.Label(panel, "", UIStyle.Body, align, Color.white);
+        var textRect = text.rectTransform;
+        textRect.anchorMin = Vector2.zero;
+        textRect.anchorMax = new Vector2(1f, 0f);
+        textRect.offsetMin = new Vector2(left, y);
+        textRect.offsetMax = new Vector2(-UIStyle.Padding, y + RowHeight);
+        return text;
     }
 }

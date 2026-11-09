@@ -6,6 +6,8 @@ public abstract class Weapon : MonoBehaviour
     [Header("Info")]
     public string weaponName = "Arma";
     [TextArea] public string description;
+    [Tooltip("Ícone mostrado no baú e na ferraria (Assets/Art/Resources/Weapons/icone_*).")]
+    public Sprite icon;
     public int maxLevel = 5;
 
     [Header("Base")]

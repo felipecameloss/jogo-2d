@@ -13,6 +13,7 @@ public class ChestOffer
     public ChestReward Reward { get; }
     public float Amount { get; }
     public Weapon WeaponPrefab { get; }
+    public Sprite Icon { get; }
 
     ChestOffer(string title, string description, ChestReward reward, float amount, Weapon weapon = null)
     {
@@ -21,6 +22,23 @@ public class ChestOffer
         Reward = reward;
         Amount = amount;
         WeaponPrefab = weapon;
+        Icon = weapon ? weapon.icon : GearIcon(reward);
+    }
+
+    // Ícone do equipamento, em Assets/Art/Resources/Gear. A armaria usa o da cota de malha.
+    public static Sprite GearIcon(ChestReward reward)
+    {
+        switch (reward)
+        {
+            case ChestReward.MaxHealth: return Resources.Load<Sprite>("Gear/amuleto_carvalho");
+            case ChestReward.Damage: return Resources.Load<Sprite>("Gear/pedra_amolar");
+            case ChestReward.Armor: return Resources.Load<Sprite>("Gear/cota_malha");
+            case ChestReward.Haste: return Resources.Load<Sprite>("Gear/luvas_couro");
+            case ChestReward.Magnet: return Resources.Load<Sprite>("Gear/alforje");
+            case ChestReward.Regeneration: return Resources.Load<Sprite>("Gear/ervas_curandeiro");
+            case ChestReward.GoldBonus: return Resources.Load<Sprite>("Gear/moeda_fortuna");
+            default: return null;
+        }
     }
 
     // power 1..3: baús mais distantes dão bônus mais fortes.

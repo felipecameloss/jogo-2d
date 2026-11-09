@@ -44,17 +44,15 @@ Inventário dos assets do jogo. A rubrica exige referências e créditos no `REA
 
 As folhas de `Resources/Enemies/` são tiras de 8 quadros olhando para a direita (o jogo vira com `flipX`), com a sombra desenhada no chão. São importadas como sprite único (filtro *Point*, sem compressão, 24 px por unidade) e fatiadas por `EnemyArt`, que guarda o pivô de cada uma: o centro do corpo, a 12 px da base no Slime, 19 no Morcego, 23 no Golem, 29 no Golem Ancião e 40 no Rei da Noite. A fonte é o script `tools/sprites-inimigos/gerar.py` (Python com Pillow): mude cores ou formas lá e rode de novo, em vez de editar os PNGs.
 
-Armas, equipamentos, drops, ícones do HUD e chão vêm de `tools/sprites-itens/gerar.py`, que usa o mesmo motor (`px.py`) e a paleta do baú e da ferraria. As tiras (`bomba`, `explosao`, `golpe_espada`) têm quadros quadrados lado a lado, para fatiar com `CampArt.Slice`. Rodar o script de novo mantém os `.meta` existentes (e os GUIDs).
+Armas, equipamentos, drops, ícones do HUD e chão vêm de `tools/sprites-itens/gerar.py`, que usa o mesmo motor (`px.py`) e a paleta do baú e da ferraria. As tiras (`bomba`, `explosao`, `golpe_espada`) têm quadros quadrados lado a lado; o gerador de cenas as fatia (`ImportSheet`, que passa o `.meta` para *Multiple*), com o pivô do golpe na mão, a 12 px da esquerda. Os demais são sprite único: pickups, projéteis e machado vão para os prefabs pelo gerador, em escala 1; ícones de armas, equipamentos e recursos são carregados em jogo por `Resources`. Rodar o script de novo mantém os `.meta` existentes (e os GUIDs).
 
 ### Placeholders por substituir
 
 | Item | Hoje | Destino |
 |---|---|---|
-| Armas e projéteis | Formas geradas; sprites prontos em `Resources/Weapons/` | Ligar os sprites às armas |
-| XP, ouro, cura, ímã | Formas geradas; sprites prontos em `Resources/Pickups/` | Ligar os sprites aos prefabs |
-| Chave | Pixel art gerada por código em `ChestArt`; versão no estilo do jogo em `Resources/Pickups/chave.png` | Trocar em `ChestArt.Key()` |
+| Armas mágicas antigas | Lâminas Orbitais, Aura, Raio, Frasco e Nova seguem com formas geradas, mas não entram no jogo | Nenhum: fora do escopo |
+| Gemas de XP valiosas | A gema azul é tingida de verde (5+) ou vermelho (20+) e tende a ficar escura (conferir no Editor) | Variações de cor no `gerar.py`, se a equipe quiser |
 | Marca de ponto de construção | Gerada em `CampArt` | `spot.png` em `Assets/Art/Resources/Camp/` |
-| Chão | Textura gerada em `Assets/Generated/Sprites`; ladrilho pronto em `Sprites/chao.png` | Usar em `MakeGroundSprite` |
 | SFX | Sons 8-bit de `SfxGenerator` | `AudioClip` final no `AudioManager` |
 | Música | **Nenhuma** (`music` vazio em `Game.unity`) | Trilha de dia e de noite |
 

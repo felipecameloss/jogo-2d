@@ -46,11 +46,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoomerangWeapon
   weaponName: Machado de arremesso
   description: "Vai at\xE9 o inimigo e volta, acertando duas vezes."
+  icon: {fileID: 21300000, guid: ba6040d1919e4aa689d8913afabfcb9d, type: 3}
   maxLevel: 5
   damage: 9
   cooldown: 1.6
-  sprite: {fileID: 21300000, guid: 6ae771c92e8b7f042bc2eeff50136842, type: 3}
-  color: {r: 1, g: 0.75, b: 0.35, a: 1}
+  sprite: {fileID: 21300000, guid: 385e559332fe4208844ddabb862f4acb, type: 3}
+  color: {r: 1, g: 1, b: 1, a: 1}
   count: 1
   speed: 11
   outTime: 0.55

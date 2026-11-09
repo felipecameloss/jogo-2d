@@ -8,6 +8,7 @@ public class StationOffer
     public string Title;
     public string Description;
     public int Wood, Stone;
+    public Sprite Icon;
     public Action Apply;
 }
 
@@ -147,6 +148,7 @@ public class StationSystem : MonoBehaviour
                 Description = owned ? owned.NextLevelDescription() : weapon.description,
                 Wood = WeaponWood + extra,
                 Stone = WeaponStone + extra,
+                Icon = weapon.icon,
                 Apply = () => holder.Unlock(weapon),
             });
         }
@@ -160,6 +162,7 @@ public class StationSystem : MonoBehaviour
             Title = $"Armadura Nv {armorLevel + 1}/{ArmorLevels}",
             Description = $"+{ArmorPerLevel:0} de armadura contra cada golpe e +{HealthPerLevel:0} de vida máxima.",
             Stone = ArmorStone + ArmorStep * armorLevel,
+            Icon = ChestOffer.GearIcon(ChestReward.Armor),
             Apply = () =>
             {
                 armorLevel++;

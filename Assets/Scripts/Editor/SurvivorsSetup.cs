@@ -22,6 +22,8 @@ public static class SurvivorsSetup
     // Spritesheets exportadas do Aseprite (arte de verdade, não é gerada aqui).
     const string ArtDir = "Assets/Art/Sprites";
     const int ArtPixelsPerUnit = 24;
+    // Arte carregada também em jogo por Resources (armas, itens, ícones).
+    const string ItemArtDir = "Assets/Art/Resources";
     const string PrefabDir = GenRoot + "/Prefabs";
     const string SceneDir = "Assets/Scenes";
     const string MenuScenePath = SceneDir + "/MainMenu.unity";
@@ -58,7 +60,8 @@ public static class SurvivorsSetup
         var sRing = MakeSprite("Ring", 64, 64, Shapes.Ring);
         var sGlow = MakeSprite("Glow", 128, 128, Shapes.Glow);
         var sPlain = MakeSprite("Pixel", 8, 8, (u, v, px) => Color.white);
-        var sGround = MakeGroundSprite();
+        // Ladrilho de 48 px (2 unidades, o tileSize do InfiniteBackground), importado com Repeat.
+        var sGround = LoadArt($"{ArtDir}/chao.png");
 
         // ---------- Arte (Aseprite) ----------
         // Pivô nos pés / base do tronco, para ordenar pela altura (quem está mais embaixo fica na frente).
@@ -85,10 +88,11 @@ public static class SurvivorsSetup
         };
 
         // ---------- Pickups ----------
-        var gem = MakePickup("XPGem", sDiamond, PickupType.Experience, new Color(0.35f, 0.7f, 1f), 0.32f, 1f);
-        var heal = MakePickup("HealOrb", sCross, PickupType.Heal, new Color(1f, 0.35f, 0.4f), 0.45f, 30f);
-        var magnet = MakePickup("Magnet", sRing, PickupType.Magnet, new Color(0.6f, 0.8f, 1f), 0.5f, 0f);
-        var gold = MakePickup("Gold", sCircle, PickupType.Gold, new Color(1f, 0.8f, 0.2f), 0.3f, 1f);
+        // Sprites de 16 px em Assets/Art/Resources/Pickups, desenhados no tamanho final (escala 1).
+        var gem = MakePickup("XPGem", LoadArt($"{ItemArtDir}/Pickups/gema_xp.png"), PickupType.Experience, Color.white, 1f, 1f);
+        var heal = MakePickup("HealOrb", LoadArt($"{ItemArtDir}/Pickups/cura.png"), PickupType.Heal, Color.white, 1f, 30f);
+        var magnet = MakePickup("Magnet", LoadArt($"{ItemArtDir}/Pickups/ima.png"), PickupType.Magnet, Color.white, 1f, 0f);
+        var gold = MakePickup("Gold", LoadArt($"{ItemArtDir}/Pickups/moeda.png"), PickupType.Gold, Color.white, 1f, 1f);
 
         // ---------- Inimigos ----------
         var slime = MakeEnemy("Slime", sBlob, new Color(0.45f, 0.9f, 0.4f), 0.8f, hp: 10, speed: 1.8f, damage: 6, xp: 1, gem, heal, magnet, gold, 0.2f, 1, 2);
@@ -98,13 +102,19 @@ public static class SurvivorsSetup
         PrefabUtility.SavePrefabAsset(golem.gameObject);
 
         // ---------- Armas ----------
-        var projectile = MakeProjectile("Projectile", sCircle, new Color(1f, 0.95f, 0.5f), new Vector3(0.4f, 0.28f, 1f));
-        var knife = MakeProjectile("Knife", sDiamond, new Color(0.85f, 0.9f, 1f), new Vector3(0.6f, 0.18f, 1f));
+        // Projéteis em escala 1, apontando para a direita. Os raios mantêm as áreas de acerto de antes.
+        var projectile = MakeProjectile("Projectile", LoadArt($"{ItemArtDir}/Weapons/virote.png"), 0.2f);
+        var knife = MakeProjectile("Knife", LoadArt($"{ItemArtDir}/Weapons/faca.png"), 0.3f);
+        // Tiras fatiadas aqui (quadros quadrados). O golpe tem o pivô na mão, a 12 px da esquerda.
+        var bombFrames = ImportSheet($"{ItemArtDir}/Weapons/bomba.png", 16, 16, new Vector2(0.5f, 0.5f));
+        var explosionFrames = ImportSheet($"{ItemArtDir}/Weapons/explosao.png", 48, 48, new Vector2(0.5f, 0.5f));
+        var slashFrames = ImportSheet($"{ItemArtDir}/Weapons/golpe_espada.png", 48, 48, new Vector2(12f / 48f, 0.5f));
         var blade = MakeBlade(sDiamond);
 
         var boltGo = new GameObject("W_MagicBolt");
         var bolt = boltGo.AddComponent<MagicBoltWeapon>();
         bolt.weaponName = "Besta";
+        bolt.icon = LoadArt($"{ItemArtDir}/Weapons/icone_besta.png");
         bolt.description = "Dispara virotes no inimigo mais próximo.";
         bolt.damage = 10f;
         bolt.cooldown = 0.9f;
@@ -132,6 +142,7 @@ public static class SurvivorsSetup
         var knifeGo = new GameObject("W_Knife");
         var knifeW = knifeGo.AddComponent<KnifeWeapon>();
         knifeW.weaponName = "Facas";
+        knifeW.icon = LoadArt($"{ItemArtDir}/Weapons/icone_facas.png");
         knifeW.description = "Arremessa facas na direção em que você anda.";
         knifeW.damage = 7f;
         knifeW.cooldown = 0.6f;
@@ -150,10 +161,12 @@ public static class SurvivorsSetup
         var boomerangGo = new GameObject("W_Boomerang");
         var boomerang = boomerangGo.AddComponent<BoomerangWeapon>();
         boomerang.weaponName = "Machado de arremesso";
+        boomerang.icon = LoadArt($"{ItemArtDir}/Weapons/icone_machado.png");
         boomerang.description = "Vai até o inimigo e volta, acertando duas vezes.";
         boomerang.damage = 9f;
         boomerang.cooldown = 1.6f;
-        boomerang.sprite = sCross;
+        boomerang.sprite = LoadArt($"{ItemArtDir}/Weapons/machado.png");
+        boomerang.color = Color.white;
         boomerang = SavePrefab<BoomerangWeapon>(boomerangGo, "W_Boomerang");
 
         var flaskGo = new GameObject("W_Flask");
@@ -168,10 +181,12 @@ public static class SurvivorsSetup
         var whipGo = new GameObject("W_Whip");
         var whip = whipGo.AddComponent<WhipWeapon>();
         whip.weaponName = "Espada";
+        whip.icon = LoadArt($"{ItemArtDir}/Weapons/icone_espada.png");
         whip.description = "Golpe de espada forte na sua frente.";
         whip.damage = 13f;
         whip.cooldown = 1.3f;
         whip.slashSprite = sDiamond;
+        whip.slashFrames = slashFrames;
         whip = SavePrefab<WhipWeapon>(whipGo, "W_Whip");
 
         var novaGo = new GameObject("W_FrostNova");
@@ -186,11 +201,13 @@ public static class SurvivorsSetup
         var bombGo = new GameObject("W_Bomb");
         var bomb = bombGo.AddComponent<BombWeapon>();
         bomb.weaponName = "Bombas";
+        bomb.icon = LoadArt($"{ItemArtDir}/Weapons/icone_bombas.png");
         bomb.description = "Larga bombas que explodem depois de um tempo.";
         bomb.damage = 30f;
         bomb.cooldown = 3f;
-        bomb.bombSprite = sCircle;
+        bomb.bombSprite = bombFrames.Length > 0 ? bombFrames[0] : sCircle;
         bomb.explosionSprite = sGlow;
+        bomb.explosionFrames = explosionFrames;
         bomb = SavePrefab<BombWeapon>(bombGo, "W_Bomb");
 
         // ---------- Cenas ----------
@@ -556,19 +573,17 @@ public static class SurvivorsSetup
         return asset;
     }
 
-    static Projectile MakeProjectile(string name, Sprite sprite, Color color, Vector3 scale)
+    static Projectile MakeProjectile(string name, Sprite sprite, float radius)
     {
         var go = new GameObject(name);
-        go.transform.localScale = scale;
         var sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = sprite;
-        sr.color = color;
         sr.sortingOrder = 15; // acima dos inimigos, que ficam na camada 10
         var rb = go.AddComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic;
         var col = go.AddComponent<CircleCollider2D>();
         col.isTrigger = true;
-        col.radius = 0.5f;
+        col.radius = radius;
         go.AddComponent<Projectile>();
         return SavePrefab<Projectile>(go, name);
     }
@@ -760,6 +775,14 @@ public static class SurvivorsSetup
         return AssetDatabase.LoadAssetAtPath<Sprite>(path);
     }
 
+    // Sprite único de Assets/Art, com o import que o próprio .meta já traz (24 px por unidade, Point).
+    static Sprite LoadArt(string path)
+    {
+        var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+        if (!sprite) Debug.LogError($"[Survivors] Não achei o sprite {path}");
+        return sprite;
+    }
+
     // Fatia uma spritesheet em grade (frames lidos da esquerda p/ direita, de cima p/ baixo)
     // e devolve os sprites em ordem. Os nomes são "<arquivo>_000", "<arquivo>_001"...
     static Sprite[] ImportSheet(string path, int frameW, int frameH, Vector2 pivot)
@@ -818,24 +841,6 @@ public static class SurvivorsSetup
 
         return AssetDatabase.LoadAllAssetsAtPath(path).OfType<Sprite>()
             .OrderBy(s => s.name, StringComparer.Ordinal).ToArray();
-    }
-
-    static Sprite MakeGroundSprite()
-    {
-        const int size = 32;
-        var rng = new System.Random(42);
-        var pixels = new Color[size * size];
-        var baseColor = new Color(0.2f, 0.29f, 0.18f);
-        for (int i = 0; i < pixels.Length; i++)
-        {
-            float n = (float)rng.NextDouble();
-            var c = baseColor * (0.94f + 0.12f * (float)rng.NextDouble());
-            if (n < 0.06f) c = new Color(0.15f, 0.23f, 0.13f);
-            else if (n > 0.975f) c = new Color(0.28f, 0.38f, 0.22f);
-            c.a = 1f;
-            pixels[i] = c;
-        }
-        return MakeSprite("Ground", size, 16, null, true, pixels);
     }
 
     // Formas desenhadas em branco com contorno escuro, para poderem ser coloridas pelo SpriteRenderer.color.

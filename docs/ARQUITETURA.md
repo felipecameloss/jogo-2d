@@ -46,6 +46,8 @@ MainMenu → Game (Playing) ⇄ Paused / LevelUp / Menu
 
 **Chefes.** Nas noites de chefe, `EnemySpawner.UpdateBossNight` liga `DayNightCycle.HoldNight`, suspende spawns, anéis e elites e cria o chefe: um `Enemy` comum transformado por `Enemy.InitBoss` (vida, colisor, arte, drops, `HuntsPlayer`). O colisor cresce como antes (×2,2 e ×3); a arte troca para `midBossArt` ou `bigBossArt`, desenhada em `bossArtScale` (1,5) e com o componente `Boss` adicionado. `Boss` roda os padrões de ataque em corrotinas; durante a investida, liga `Enemy.externalMovement` para controlar a velocidade sozinho. Os tiros são `EnemyBullet`, sem física: checam a distância até o jogador e atravessam construções. `Enemy.Died` só dispara em morte por dano (não ao sumir no amanhecer); `Boss.Spawned` e `Boss.Defeated` avisam o `HUD` (aviso e barra de vida) e o spawner, que chama `FinishNightIn`. No Editor, N mata o chefe na hora.
 
+**Arte de armas e itens.** O gerador põe nos prefabs os sprites de `Assets/Art/Resources/` (pickups, virote, faca, machado, bomba) em escala 1; os raios de colisão dos projéteis guardam as áreas de acerto antigas. `Weapon.icon` é o ícone do baú e da ferraria; `ChestOffer.Icon` usa esse ícone ou `ChestOffer.GearIcon` (também usado pela armaria); `StationOffer.Icon` leva o da compra. `ChestUI` e `StationUI` mostram o ícone com `UIStyle.Icon`/`SetIcon`, e `ResourceHUD` põe os de `Hud/` ao lado de madeira e pedra. Explosão e golpe da espada são tiras (`BombWeapon.explosionFrames`, `WhipWeapon.slashFrames`) tocadas por `FxManager.Animate`, que espelha com escala negativa em x; sem quadros, voltam ao `Flash` antigo. O golpe é esticado para cobrir a área de acerto da espada. A chave vem de `Resources/Pickups/chave` a 20 px por unidade (o tamanho antigo), em cache e fora de `ownedSprites`.
+
 **Desempenho dos efeitos.** `FxManager` reaproveita partículas, números de dano e flashes em pilhas em vez de criar e destruir objetos, com teto de `maxPopups` e `maxParticles`; cada efeito chama `FxManager.Release` ao terminar. `Pickup.TryMergeXP` soma o XP numa gema existente quando já há 250 no chão.
 
 **Armas e upgrades.** `WeaponHolder` guarda as armas. Cada arma herda de `Weapon` e usa os multiplicadores de `PlayerStats`. `PlayerExperience` acumula level ups pendentes e `UpgradeManager` os consome quando o estado volta a `Playing`, para nenhum se perder durante uma pausa. O level up só oferece atributos. `UpgradeManager.availableWeapons` é o catálogo de armas do jogo, lido por `UpgradeManager.Catalog()` pela ferraria e pelos baús; `WeaponHolder.Unlock` adiciona a arma ou sobe um nível.
@@ -64,7 +66,7 @@ MainMenu → Game (Playing) ⇄ Paused / LevelUp / Menu
 
 - Singletons de cena com `Instance`, limpos em `OnDestroy`.
 - Comunicação entre sistemas por eventos C# (`OnChanged`, `OnPeriodChanged`, `OnLevelUp`, `OnGoldChanged`, `Boss.Spawned`, `Boss.Defeated`, `Enemy.Died`).
-- Efeitos e som por chamadas estáticas: `FxManager.Burst/Popup/Shake`, `AudioManager.Play`.
+- Efeitos e som por chamadas estáticas: `FxManager.Burst/Popup/Shake/Flash/Animate`, `AudioManager.Play`.
 - Input somente por `GameInput`, que abstrai teclado e gamepad e funciona com o Input Manager antigo.
 - Valores ajustáveis em campos públicos com `[Tooltip]`. Valores de balanceamento são registrados em `BALANCEAMENTO.md`.
 - Comentários e textos de jogo em português.
