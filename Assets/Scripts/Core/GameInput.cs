@@ -27,6 +27,28 @@ public static class GameInput
 #endif
     }
 
+    public static bool InteractPressed()
+    {
+#if ENABLE_INPUT_SYSTEM
+        var k = Keyboard.current;
+        var g = Gamepad.current;
+        return (k != null && k.fKey.wasPressedThisFrame) || (g != null && g.buttonNorth.wasPressedThisFrame);
+#else
+        return Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.JoystickButton3);
+#endif
+    }
+
+    public static bool CollectHeld()
+    {
+#if ENABLE_INPUT_SYSTEM
+        var k = Keyboard.current;
+        var g = Gamepad.current;
+        return (k != null && k.eKey.isPressed) || (g != null && g.buttonWest.isPressed);
+#else
+        return Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.JoystickButton2);
+#endif
+    }
+
     public static bool PausePressed()
     {
 #if ENABLE_INPUT_SYSTEM
@@ -36,6 +58,19 @@ public static class GameInput
             || (g != null && g.startButton.wasPressedThisFrame);
 #else
         return Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P);
+#endif
+    }
+
+    // Pula o tutorial: Enter ou Select/Back do controle.
+    public static bool SkipTutorialPressed()
+    {
+#if ENABLE_INPUT_SYSTEM
+        var k = Keyboard.current;
+        var g = Gamepad.current;
+        return (k != null && (k.enterKey.wasPressedThisFrame || k.numpadEnterKey.wasPressedThisFrame))
+            || (g != null && g.selectButton.wasPressedThisFrame);
+#else
+        return Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter);
 #endif
     }
 
@@ -66,7 +101,7 @@ public static class GameInput
 #endif
     }
 
-    // Retorna 0, 1 ou 2 se as teclas 1, 2 ou 3 foram apertadas neste frame; senão -1.
+    // Retorna 0 a 4 se as teclas 1 a 5 foram apertadas neste frame; senão -1.
     public static int OptionPressed()
     {
 #if ENABLE_INPUT_SYSTEM
@@ -75,10 +110,14 @@ public static class GameInput
         if (k.digit1Key.wasPressedThisFrame || k.numpad1Key.wasPressedThisFrame) return 0;
         if (k.digit2Key.wasPressedThisFrame || k.numpad2Key.wasPressedThisFrame) return 1;
         if (k.digit3Key.wasPressedThisFrame || k.numpad3Key.wasPressedThisFrame) return 2;
+        if (k.digit4Key.wasPressedThisFrame || k.numpad4Key.wasPressedThisFrame) return 3;
+        if (k.digit5Key.wasPressedThisFrame || k.numpad5Key.wasPressedThisFrame) return 4;
 #else
         if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) return 0;
         if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) return 1;
         if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) return 2;
+        if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) return 3;
+        if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5)) return 4;
 #endif
         return -1;
     }

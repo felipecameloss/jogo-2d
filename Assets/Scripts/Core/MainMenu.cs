@@ -9,6 +9,9 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         Time.timeScale = 1f;
+        UIStyle.ApplyToScene();
+        // Opções logo abaixo de "Jogar", copiando o botão "Sair" antes de ele sumir no navegador.
+        if (quitButton) UIStyle.CloneButton(quitButton, "Opções", quitButton.transform.GetSiblingIndex(), () => OptionsMenu.Open());
         // No navegador (WebGL/itch.io) não existe "sair do jogo".
         if (quitButton && Application.platform == RuntimePlatform.WebGLPlayer) quitButton.SetActive(false);
     }

@@ -35,7 +35,10 @@ public abstract class Weapon : MonoBehaviour
     protected float Duration => stats ? stats.durationMultiplier : 1f;
     protected int ExtraProjectiles => stats ? stats.bonusProjectiles : 0;
     protected Vector2 FacingDirection => controller ? controller.LastDirection : Vector2.right;
-    protected bool CanAct => stats && !stats.IsDead && (!GameManager.Instance || GameManager.Instance.State == GameState.Playing);
+    // De dia não há monstros: as armas descansam e só voltam a atacar quando anoitece.
+    protected bool CanAct => stats && !stats.IsDead && IsNight
+        && (!GameManager.Instance || GameManager.Instance.State == GameState.Playing);
+    static bool IsNight => !DayNightCycle.Instance || DayNightCycle.Instance.IsNight;
 
     public virtual void Init(PlayerStats owner)
     {

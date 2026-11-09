@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-// Ouro do jogador. Por enquanto só acumula; depois vai ser usado em baús e na loja.
+// Ouro da run, usado para comprar recompensas em baús e itens no mercador.
 public class PlayerWallet : MonoBehaviour
 {
     public int Gold { get; private set; }

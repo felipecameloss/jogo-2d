@@ -25,7 +25,7 @@ public class FxManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        if (!popupFont) popupFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        if (!popupFont || popupFont.name == "LegacyRuntime") popupFont = UIStyle.Font;
     }
 
     void OnDestroy()
@@ -69,8 +69,8 @@ public class FxManager : MonoBehaviour
             var go = new GameObject("Popup");
             var tm = go.AddComponent<TextMesh>();
             tm.font = fx.popupFont;
-            tm.fontSize = 48;
-            tm.characterSize = 0.06f;
+            tm.fontSize = 32; // múltiplo de 16: grid da fonte pixelada
+            tm.characterSize = 0.09f;
             tm.anchor = TextAnchor.MiddleCenter;
             tm.alignment = TextAlignment.Center;
             var mr = go.GetComponent<MeshRenderer>();

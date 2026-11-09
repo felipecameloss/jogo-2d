@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     PlayerStats stats;
     Collider2D body;
     SpriteRenderer visualRenderer;
+    CharacterAnimator animator;
     float bobTime;
 
     float dashTimer;
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviour
         stats = GetComponent<PlayerStats>();
         body = GetComponent<Collider2D>();
         if (visual) visualRenderer = visual.GetComponent<SpriteRenderer>();
+        animator = GetComponent<CharacterAnimator>();
         DashCharges = stats.dashCharges;
     }
 
@@ -86,15 +88,16 @@ public class PlayerController : MonoBehaviour
         dashDirection = MoveInput.sqrMagnitude > 0.01f ? MoveInput.normalized : LastDirection;
         dashTimer = dashDuration;
         afterimageTimer = 0f;
-        // Durante o dash o jogador atravessa os inimigos (e fica invencível, ver PlayerStats).
-        if (body) body.isTrigger = true;
+        // Durante o dash o jogador atravessa os inimigos (e fica invencível, ver PlayerStats),
+        // mas continua parando em muros, árvores e rochas.
+        if (body) body.excludeLayers = LayerMask.GetMask("Enemy");
         AudioManager.Play(Sfx.Select, 0.5f, 0.2f);
     }
 
     void EndDash()
     {
         dashTimer = 0f;
-        if (body) body.isTrigger = false;
+        if (body) body.excludeLayers = 0;
     }
 
     void SpawnAfterimage()
@@ -109,6 +112,14 @@ public class PlayerController : MonoBehaviour
     void UpdateVisual()
     {
         if (!visual) return;
+
+        // Com spritesheet animada (8 direções) não precisa espelhar nem "amassar" o sprite.
+        if (animator)
+        {
+            visual.localScale = Vector3.one;
+            return;
+        }
+
         if (visualRenderer && Mathf.Abs(MoveInput.x) > 0.01f) visualRenderer.flipX = MoveInput.x < 0f;
 
         if (IsDashing)

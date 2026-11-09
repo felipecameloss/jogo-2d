@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// HUD da run. Os textos vêm da cena gerada; no Start eles são reorganizados em painéis opacos:
+// nível e XP no canto superior esquerdo, relógio no topo, dash embaixo.
 public class HUD : MonoBehaviour
 {
     public Image xpFill;
@@ -26,6 +28,7 @@ public class HUD : MonoBehaviour
     float goldPunch;
     DayNightCycle cycle;
     float bannerTimer;
+    Text xpLabel;
 
     // Barra de vida do chefe (criada por código para não precisar regerar a cena).
     RectTransform bossBar;
@@ -35,6 +38,7 @@ public class HUD : MonoBehaviour
 
     void Start()
     {
+        Layout();
         cycle = DayNightCycle.Instance;
         if (cycle) cycle.OnPeriodChanged += ShowBanner;
         Boss.Spawned += OnBossSpawned;
@@ -42,6 +46,87 @@ public class HUD : MonoBehaviour
         if (bannerText) bannerText.gameObject.SetActive(false);
         if (cycle) ShowBanner(cycle.Period);
         BuildBossBar();
+    }
+
+    void Layout()
+    {
+        var root = transform;
+        // Nível, abates e barra de XP rotulada.
+        var player = UIStyle.Panel(root, "Jogador", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -20f), new Vector2(UIStyle.ColumnWidth, 124f));
+        if (levelText)
+        {
+            Place(levelText, player, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(UIStyle.Padding, -56f), new Vector2(-UIStyle.Padding, -6f));
+            levelText.alignment = TextAnchor.MiddleLeft;
+            UIStyle.Style(levelText, UIStyle.Large);
+            UIStyle.Bold(levelText);
+            levelText.color = UIStyle.Gold;
+        }
+        if (killsText)
+        {
+            Place(killsText, player, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(UIStyle.Padding, -56f), new Vector2(-UIStyle.Padding, -6f));
+            killsText.alignment = TextAnchor.MiddleRight;
+            UIStyle.Style(killsText, UIStyle.Body);
+        }
+        if (xpFill)
+        {
+            var bar = (RectTransform)xpFill.transform.parent;
+            bar.SetParent(player, false);
+            bar.anchorMin = new Vector2(0f, 0f);
+            bar.anchorMax = new Vector2(1f, 0f);
+            bar.pivot = new Vector2(0.5f, 0f);
+            bar.offsetMin = new Vector2(UIStyle.Padding, UIStyle.Padding);
+            bar.offsetMax = new Vector2(-UIStyle.Padding, UIStyle.Padding + 40f);
+            var background = bar.GetComponent<Image>();
+            if (background) { background.sprite = null; background.color = new Color(0.05f, 0.03f, 0.02f); }
+            // Preenchimento pela âncora: funciona sem depender do sprite da cena.
+            var fill = xpFill.rectTransform;
+            fill.anchorMin = Vector2.zero;
+            fill.anchorMax = new Vector2(0f, 1f);
+            fill.offsetMin = new Vector2(3f, 3f);
+            fill.offsetMax = new Vector2(-3f, -3f);
+            xpFill.sprite = null;
+            xpFill.type = Image.Type.Simple;
+            xpFill.color = new Color(0.3f, 0.62f, 1f);
+            xpLabel = UIStyle.Label(bar, "", UIStyle.Body, TextAnchor.MiddleCenter, Color.white);
+            UIStyle.Stretch(xpLabel.rectTransform);
+        }
+
+        // Relógio e período no topo.
+        var clock = UIStyle.Panel(root, "Relogio", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -20f), new Vector2(520f, 124f));
+        if (timerText)
+        {
+            Place(timerText, clock, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -72f), new Vector2(0f, -4f));
+            timerText.alignment = TextAnchor.MiddleCenter;
+            UIStyle.Style(timerText, UIStyle.Title);
+        }
+        if (periodText)
+        {
+            Place(periodText, clock, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 6f), new Vector2(0f, 46f));
+            periodText.alignment = TextAnchor.MiddleCenter;
+            UIStyle.Style(periodText, UIStyle.Body);
+        }
+
+        // O ouro foi para o painel de materiais; a dica de teclas está nas opções.
+        if (goldText) goldText.gameObject.SetActive(false);
+        var hint = root.Find("Hint");
+        if (hint) hint.gameObject.SetActive(false);
+        if (dashText)
+        {
+            UIStyle.Style(dashText, UIStyle.Body);
+            dashText.rectTransform.anchoredPosition = new Vector2(0f, 24f);
+        }
+        if (bannerText) UIStyle.Style(bannerText, UIStyle.Huge);
+    }
+
+    static void Place(Text text, RectTransform parent, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax)
+    {
+        var rect = text.rectTransform;
+        rect.SetParent(parent, false);
+        rect.anchorMin = anchorMin;
+        rect.anchorMax = anchorMax;
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.offsetMin = offsetMin;
+        rect.offsetMax = offsetMax;
     }
 
     void OnDestroy()
@@ -60,11 +145,11 @@ public class HUD : MonoBehaviour
         {
             bool big = spawner.BossKindForNight(cycle.NightNumber) == BossKind.Big;
             string hint = big ? "A noite mais escura chegou..." : "Algo grande se aproxima...";
-            ShowBanner($"NOITE {cycle.NightNumber}\n<size=40>{hint}</size>", BossColor);
+            ShowBanner($"NOITE {cycle.NightNumber}\n<size=32>{hint}</size>", BossColor);
             return;
         }
-        ShowBanner(night ? $"NOITE {cycle.NightNumber}\n<size=40>Os monstros estão chegando...</size>"
-                         : $"DIA {cycle.DayNumber}\n<size=40>Prepare-se para a noite</size>",
+        ShowBanner(night ? $"NOITE {cycle.NightNumber}\n<size=32>Os monstros estão chegando...</size>"
+                         : $"DIA {cycle.DayNumber}\n<size=32>Prepare-se para a noite</size>",
                    night ? NightColor : DayColor);
     }
 
@@ -79,15 +164,15 @@ public class HUD : MonoBehaviour
 
     void OnBossSpawned(Boss boss)
     {
-        ShowBanner($"{boss.DisplayName.ToUpper()}\n<size=40>Derrote-o para o sol nascer</size>", BossColor);
+        ShowBanner($"{boss.DisplayName.ToUpper()}\n<size=32>Derrote-o para o sol nascer</size>", BossColor);
         if (bossNameText) bossNameText.text = boss.DisplayName;
     }
 
     void OnBossDefeated(Boss boss)
     {
         ShowBanner(boss.Kind == BossKind.Big
-                ? $"{boss.DisplayName.ToUpper()} CAIU!\n<size=40>Você venceu o chefe final! A run continua...</size>"
-                : $"{boss.DisplayName.ToUpper()} DERROTADO!\n<size=40>O sol está nascendo</size>",
+                ? $"{boss.DisplayName.ToUpper()} CAIU!\n<size=32>Você venceu o chefe final! A run continua...</size>"
+                : $"{boss.DisplayName.ToUpper()} DERROTADO!\n<size=32>O sol está nascendo</size>",
             DayColor);
     }
 
@@ -98,8 +183,9 @@ public class HUD : MonoBehaviour
         bossBar.SetParent(transform, false);
         bossBar.anchorMin = bossBar.anchorMax = new Vector2(0.5f, 1f);
         bossBar.pivot = new Vector2(0.5f, 1f);
-        bossBar.anchoredPosition = new Vector2(0f, -200f);
-        bossBar.sizeDelta = new Vector2(900f, 28f);
+        // Abaixo do painel da fogueira (topo, até y = -244) e sem encostar na coluna da esquerda.
+        bossBar.anchoredPosition = new Vector2(0f, -300f);
+        bossBar.sizeDelta = new Vector2(760f, 28f);
         var bg = go.AddComponent<Image>();
         bg.color = new Color(0f, 0f, 0f, 0.7f);
         bg.raycastTarget = false;
@@ -124,12 +210,11 @@ public class HUD : MonoBehaviour
         nameRt.anchoredPosition = new Vector2(0f, 4f);
         nameRt.sizeDelta = new Vector2(0f, 40f);
         bossNameText = nameGo.AddComponent<Text>();
-        bossNameText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        bossNameText.fontSize = 30;
+        UIStyle.Bold(bossNameText);
+        UIStyle.Style(bossNameText, UIStyle.Body);
         bossNameText.alignment = TextAnchor.LowerCenter;
         bossNameText.color = Color.white;
         bossNameText.raycastTarget = false;
-        nameGo.AddComponent<Outline>().effectColor = new Color(0f, 0f, 0f, 0.8f);
 
         go.SetActive(false);
     }
@@ -159,8 +244,9 @@ public class HUD : MonoBehaviour
         if (!controller) controller = gm.Player.GetComponent<PlayerController>();
         if (!wallet) wallet = gm.Player.GetComponent<PlayerWallet>();
 
-        if (xpFill) xpFill.fillAmount = xp.CurrentXP / xp.XPToNext;
-        if (levelText) levelText.text = $"Nv {xp.Level}";
+        if (xpFill) xpFill.rectTransform.anchorMax = new Vector2(Mathf.Clamp01(xp.CurrentXP / xp.XPToNext), 1f);
+        if (levelText) levelText.text = $"NÍVEL {xp.Level}";
+        if (xpLabel) xpLabel.text = $"XP {Mathf.FloorToInt(xp.CurrentXP)} / {Mathf.CeilToInt(xp.XPToNext)}";
         if (timerText) timerText.text = cycle ? cycle.ClockText : GameManager.FormatTime(gm.ElapsedTime);
         if (periodText && cycle)
         {
@@ -188,7 +274,7 @@ public class HUD : MonoBehaviour
             if (bannerTimer <= 0f) bannerText.gameObject.SetActive(false);
         }
         UpdateBossBar();
-        if (killsText) killsText.text = $"Abates: {gm.Kills}";
+        if (killsText) killsText.text = $"{gm.Kills} abates";
         if (goldText && wallet)
         {
             // "Pulinho" no texto quando ganha ouro.
@@ -208,7 +294,7 @@ public class HUD : MonoBehaviour
             string text = charges > 0 ? $"DASH x{charges}" : "DASH";
             if (wait > 0f) text += $"  ({wait:0.0}s)";
             dashText.text = text;
-            dashText.color = charges > 0 ? Color.white : new Color(1f, 1f, 1f, 0.4f);
+            dashText.color = charges > 0 ? Color.white : UIStyle.Muted;
         }
     }
 }

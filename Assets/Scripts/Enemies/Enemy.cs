@@ -28,14 +28,24 @@ public class Enemy : MonoBehaviour
     [Tooltip("Ouro extra por noite: na noite N o valor é multiplicado por 1 + (N - 1) x isso.")]
     public float goldBonusPerNight = 0.2f;
 
-    [Tooltip("Se ficar mais longe que isso do jogador, reaparece do outro lado (como no Vampire Survivors).")]
+    [Tooltip("Se ficar mais longe que isso do alvo, reaparece do outro lado.")]
     public float relocateDistance = 22f;
+
+    [Header("Ataque à base")]
+    [Tooltip("Persegue o jogador se ele estiver a essa distância; senão, vai até a fogueira.")]
+    public float aggroRadius = 7f;
+    [Tooltip("Segundos entre golpes em construções.")]
+    public float structureHitInterval = 2f;
+    [Tooltip("Fração do dano de contato aplicada em construções.")]
+    [Range(0f, 1f)] public float structureDamageFactor = 0.5f;
 
     public bool IsDead { get; private set; }
     public bool IsElite { get; private set; }
     public bool IsBoss { get; private set; }
     public float Health => health;
     public float HealthFraction => maxHealth > 0f ? Mathf.Clamp01(health / maxHealth) : 0f;
+    // Nasceu perto do jogador longe da base: persegue só ele, sem desviar para a fogueira.
+    public bool HuntsPlayer { get; private set; }
 
     // Quando true, quem controla a velocidade é outro script (ex.: o Boss durante uma investida).
     [HideInInspector] public bool externalMovement;
@@ -50,16 +60,29 @@ public class Enemy : MonoBehaviour
     Vector3 baseScale;
     float flashTimer;
     Vector2 knockbackVelocity;
+    Transform player;
+    Transform heart;
     Transform target;
+    float retargetTimer;
+    float nextStructureHit;
+    float lastStructureContact;
+    Vector2 stuckCheckPosition;
+    float stuckCheckTimer = 1f;
+    float sidestepTimer;
+    float sidestepSign = 1f;
     float slowTimer;
     float slowFactor = 1f;
     PlayerStats touchingPlayer;
+    // Construções encostadas agora: uma entrada por contato de colisor (ver OnCollisionEnter2D).
+    readonly List<Structure> touchingStructures = new List<Structure>(2);
 
     static readonly Color SlowTint = new Color(0.55f, 0.85f, 1f);
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        int layer = LayerMask.NameToLayer("Enemy");
+        if (layer >= 0) gameObject.layer = layer;
         sr = GetComponentInChildren<SpriteRenderer>();
         baseColor = sr.color;
         baseScale = transform.localScale;
@@ -71,13 +94,27 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        if (GameManager.Instance && GameManager.Instance.Player) target = GameManager.Instance.Player.transform;
+        if (GameManager.Instance && GameManager.Instance.Player) player = GameManager.Instance.Player.transform;
+        var camp = CampSystem.Instance;
+        if (camp && camp.Heart) heart = camp.Heart.transform;
+        ChooseTarget();
+        if (rb) stuckCheckPosition = rb.position;
+    }
+
+    void ChooseTarget()
+    {
+        target = player;
+        if (HuntsPlayer || !heart) return;
+        bool playerNear = player && ((Vector2)(player.position - transform.position)).sqrMagnitude <= aggroRadius * aggroRadius;
+        if (!playerNear) target = heart;
     }
 
     // Chamado pelo spawner logo depois de instanciar.
-    public void Init(float healthMultiplier, bool elite)
+    public void Init(float healthMultiplier, bool elite, bool huntsPlayer = false, float damageMultiplier = 1f)
     {
+        HuntsPlayer = huntsPlayer;
         maxHealth *= healthMultiplier;
+        contactDamage *= damageMultiplier;
         if (elite)
         {
             IsElite = true;
@@ -102,6 +139,7 @@ public class Enemy : MonoBehaviour
         float xpAmount, int goldAmount)
     {
         IsBoss = true;
+        HuntsPlayer = true; // a luta é contra o jogador: o chefe não desvia para a fogueira
         maxHealth = health;
         this.health = health;
         contactDamage *= damageMultiplier;
@@ -129,21 +167,70 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (IsDead || !target) return;
+        if (IsDead) return;
+        ApplyContactDamage();
 
-        if (touchingPlayer) touchingPlayer.TakeDamage(contactDamage);
-
-        Vector2 toPlayer = (Vector2)target.position - rb.position;
-        if (toPlayer.sqrMagnitude > relocateDistance * relocateDistance)
+        retargetTimer -= Time.fixedDeltaTime;
+        if (retargetTimer <= 0f || !target)
         {
-            rb.position = (Vector2)target.position + toPlayer.normalized * (relocateDistance * 0.7f);
+            retargetTimer = 0.25f;
+            ChooseTarget();
+        }
+        if (!target) return;
+
+        Vector2 toTarget = (Vector2)target.position - rb.position;
+        if (toTarget.sqrMagnitude > relocateDistance * relocateDistance)
+        {
+            rb.position = (Vector2)target.position + toTarget.normalized * (relocateDistance * 0.7f);
             return;
         }
         if (externalMovement) return;
 
         float speed = slowTimer > 0f ? moveSpeed * slowFactor : moveSpeed;
-        rb.linearVelocity = toPlayer.normalized * speed + knockbackVelocity;
+        rb.linearVelocity = MoveDirection(toTarget) * speed + knockbackVelocity;
         knockbackVelocity = Vector2.MoveTowards(knockbackVelocity, Vector2.zero, 25f * Time.fixedDeltaTime);
+    }
+
+    // Dano em quem está encostado. O jogador apanha a cada passo de física (a invencibilidade dele
+    // limita o ritmo); construções levam um golpe a cada structureHitInterval.
+    void ApplyContactDamage()
+    {
+        if (touchingPlayer) touchingPlayer.TakeDamage(contactDamage);
+        if (touchingStructures.Count == 0) return;
+
+        Structure structure = null;
+        for (int i = touchingStructures.Count - 1; i >= 0; i--)
+        {
+            if (touchingStructures[i]) structure = touchingStructures[i];
+            else touchingStructures.RemoveAt(i); // construção destruída enquanto encostada
+        }
+        if (!structure) return;
+        lastStructureContact = Time.time;
+        if (Time.time < nextStructureHit) return;
+        nextStructureHit = Time.time + structureHitInterval;
+        structure.TakeDamage(contactDamage * structureDamageFactor);
+    }
+
+    // Sem pathfinding: anda reto e, se ficar parado contra árvore ou baú, desvia de lado por um instante.
+    Vector2 MoveDirection(Vector2 toTarget)
+    {
+        Vector2 direction = toTarget.normalized;
+        stuckCheckTimer -= Time.fixedDeltaTime;
+        if (stuckCheckTimer <= 0f)
+        {
+            stuckCheckTimer = 1f;
+            bool attacking = Time.time - lastStructureContact < 0.5f;
+            bool arrived = toTarget.sqrMagnitude < 2.25f;
+            if (!attacking && !arrived && (rb.position - stuckCheckPosition).sqrMagnitude < 0.04f)
+            {
+                sidestepTimer = 0.6f;
+                sidestepSign = Random.value < 0.5f ? -1f : 1f;
+            }
+            stuckCheckPosition = rb.position;
+        }
+        if (sidestepTimer <= 0f) return direction;
+        sidestepTimer -= Time.fixedDeltaTime;
+        return new Vector2(-direction.y, direction.x) * sidestepSign;
     }
 
     void Update()
@@ -204,15 +291,28 @@ public class Enemy : MonoBehaviour
     // Antes era OnCollisionStay2D, que o Unity chama a cada passo de física para TODO par de
     // colisores encostados — inclusive inimigo com inimigo. Com centenas de inimigos amontoados
     // à noite isso virava milhares de chamadas por frame. Agora só registramos quando o contato
-    // com o jogador começa/termina e aplicamos o dano no FixedUpdate.
+    // com o jogador ou com uma construção começa/termina e aplicamos o dano no FixedUpdate.
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (target && collision.gameObject == target.gameObject) touchingPlayer = collision.gameObject.GetComponent<PlayerStats>();
+        if (player && collision.gameObject == player.gameObject)
+        {
+            touchingPlayer = collision.gameObject.GetComponent<PlayerStats>();
+            return;
+        }
+        // Estruturas não têm Rigidbody2D: evita procurar componente a cada contato entre inimigos.
+        if (!collision.rigidbody && collision.gameObject.TryGetComponent(out Structure structure))
+            touchingStructures.Add(structure);
     }
 
     void OnCollisionExit2D(Collision2D collision)
     {
-        if (target && collision.gameObject == target.gameObject) touchingPlayer = null;
+        if (player && collision.gameObject == player.gameObject)
+        {
+            touchingPlayer = null;
+            return;
+        }
+        if (!collision.rigidbody && collision.gameObject.TryGetComponent(out Structure structure))
+            touchingStructures.Remove(structure);
     }
 
     void DropGold(Vector3 pos)
