@@ -1,6 +1,10 @@
-# Survivors 2D (nome provisório)
+# Brasa Viva
 
 Roguelike de sobrevivência top-down 2D feito em Unity 6 (6000.6.5f1) para o Projeto 2D de Jogos Digitais do Insper 2026.2. De dia você explora e coleta; de noite, sobrevive às ondas de inimigos.
+
+## História
+
+O vale de Alvorada vivia em paz até o Rei da Noite despertar sob as ruínas. Sua maldição dá vida à escuridão a cada anoitecer: lodo, morcegos e pedras antigas viram monstros, que se desfazem ao amanhecer. A aldeia caiu em uma só noite, e os sobreviventes se perderam na floresta. Bento, um jovem lenhador, salvou a última brasa da forja e acendeu uma fogueira. Só o fogo resiste à maldição, e é atrás dele que os monstros vêm. Mantenha a brasa viva.
 
 Inspirações de gênero: Vampire Survivors e MegaBonk.
 
@@ -14,6 +18,8 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 | Construir, reparar, resgatar, abrir baú e estação | F | Botão norte (Y no Xbox, triângulo no PlayStation) |
 | Escolher upgrade, recompensa ou compra | 1 a 5 ou clique | Não testado |
 | Pausar | Esc / P | Start |
+| Avançar a introdução | Espaço ou clique | Botão sul (A no Xbox, X no PlayStation) |
+| Pular a introdução ou o tutorial | Enter (Esc também pula a introdução) | Select |
 
 - As armas atacam sozinhas, só à noite. Você começa com a Besta; Espada, Facas, Machado de arremesso e Bombas vêm de baús e da ferraria.
 - Colete as gemas que os inimigos derrubam para subir de nível e escolher atributos.
@@ -61,9 +67,11 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 
 Inimigos têm chance de dropar ouro, e o valor cresce a cada noite. O ouro ainda não tem uso no jogo (ver `docs/GDD.md`).
 
-### Tutorial
+### Introdução e tutorial
 
-Na primeira run, o topo das **missões** (canto esquerdo) mostra um objetivo por vez durante o primeiro dia: coletar, construir, resgatar e abrir um baú. **Enter** pula. Para ver de novo, use **Opções > Tutorial na próxima run**.
+Na primeira run, uma introdução curta conta a história antes do primeiro dia, com o jogo parado. **Espaço** ou clique avança; **Enter** ou **Esc** pula.
+
+Depois, o topo das **missões** (canto esquerdo) mostra um objetivo por vez durante o primeiro dia: coletar, construir, resgatar e abrir um baú. **Enter** pula. Para ver os dois de novo, use **Opções > Introdução e tutorial na próxima run**.
 
 As missões também mostram, o tempo todo, quem falta resgatar e o baú mais próximo, com distância e direção.
 

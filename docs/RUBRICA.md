@@ -43,7 +43,7 @@ Avaliação feita a partir do código em 05/11/2026, sem jogar o build. Serve pa
 
 | # | Frente | Situação observada | Lacuna principal |
 |---|---|---|---|
-| 1 | Blueprint | Conceito medieval definido; ainda não aparece no jogo | Nome, personagens, história e arte coerente |
+| 1 | Blueprint | Nome (*Brasa Viva*), protagonista, origem dos monstros e introdução no jogo (09/11/2026); arte própria de jogador, acampamento e monstros | Levar a história ao Milanote e à página do itch.io |
 | 2 | Mechanics | Combate, level up, dash, coleta, baús | Ouro e materiais não têm uso |
 | 3 | Feedback | Flash de dano, números, partículas, shake, SFX | Som é placeholder; revisar clareza |
 | 4 | UI/HUD e menus | HUD e menus funcionais; menu sem opções | Falta opções e identidade visual |
