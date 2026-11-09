@@ -15,7 +15,7 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 | Escolher upgrade, recompensa ou compra | 1 a 5 ou clique | Não testado |
 | Pausar | Esc / P | Start |
 
-- As armas atacam sozinhas. Você começa com a Besta; Espada, Facas, Machado de arremesso e Bombas vêm de baús e da ferraria.
+- As armas atacam sozinhas, só à noite. Você começa com a Besta; Espada, Facas, Machado de arremesso e Bombas vêm de baús e da ferraria.
 - Colete as gemas que os inimigos derrubam para subir de nível e escolher atributos.
 - Cada dia e cada noite duram 3 minutos. De dia não aparecem inimigos. De noite eles vêm, e os que sobrarem somem ao amanhecer. O relógio e o período ficam no topo da tela.
 - Objetivo: sobreviver ao máximo de noites. A run não tem fim.

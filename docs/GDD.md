@@ -73,14 +73,14 @@ Nome, protagonista e origem dos monstros: **a definir**.
 
 **Sistemas**
 
-- **Combate:** as armas atacam sozinhas; o jogador decide posição e dash, que dá invencibilidade.
+- **Combate:** as armas atacam sozinhas, só à noite; o jogador decide posição e dash, que dá invencibilidade.
 - **Progressão:** inimigos soltam gemas de XP; cada nível oferece 3 opções entre armas novas, melhorias de arma e atributos.
 - **Coleta:** de dia, segurar E junto a árvores e rochas rende madeira e pedra. Pontos ricos rendem o dobro e tudo renova ao amanhecer. **Os materiais ainda não têm uso.**
 - **Baús:** três por run, perto do início, cada vez mais distantes e mais fortes. Cada abertura consome uma chave encontrada no mapa, e o jogador escolhe 1 de 3 bônus permanentes.
 - **Ouro:** inimigos soltam ouro, mas **ainda não há onde gastá-lo**.
 - **Acampamento:** o jogador começa ao lado da fogueira, cercada por um anel quadrado de 12 pontos de muralha (4 cantos e 2 trechos por lado) e 4 de portão, um no meio de cada lado. Se ela for destruída, a run termina.
 - **Construção e reparo:** com F, em pontos fixos, pagando madeira e pedra. Cercas viram muros, portões de madeira viram portões de pedra e estruturas danificadas podem ser reparadas. Portões bloqueiam monstros e deixam o jogador passar; eles se abrem quando o jogador chega perto, para o lado oposto ao dele.
-- **Armas:** cinco armas medievais e automáticas: Besta (inicial), Espada, Facas, Machado de arremesso e Bombas. Vêm de baús e da ferraria; o level up não dá armas.
+- **Armas:** cinco armas medievais e automáticas, que só atacam à noite (de dia não há monstros): Besta (inicial), Espada, Facas, Machado de arremesso e Bombas. Vêm de baús e da ferraria; o level up não dá armas.
 - **Level up:** 3 opções entre 15 atributos e passivas.
 - **Baús com equipamento:** cada baú oferece 1 arma e 2 equipamentos (amuleto, pedra de amolar, cota de malha, luvas, alforje, ervas, moeda); a força cresce com a distância do baú.
 - **Pessoas perdidas:** o ferreiro e a ferreira começam perdidos, em direções opostas, longe do acampamento. De dia, o HUD aponta o mais próximo. Com F, a pessoa é resgatada e anda sozinha até o acampamento.
@@ -123,6 +123,7 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
+| 08/11/2026 | As armas só atacam à noite. | De dia não há monstros; os ataques só faziam barulho e poluíam a tela durante a coleta |
 | 08/11/2026 | Fonte trocada de Jersey 10 para Pixel Operator, maior (32/64) e com letras inequívocas. | A Jersey 10 estava difícil de ler; a Pixelify Sans confundia B/G, 5/S e C/O |
 | 08/11/2026 | UI refeita: fonte pixelada, painéis opacos, missões no canto esquerdo (com o tutorial e as direções de pessoas e baús), XP rotulada junto do nível, minimapa sozinho no canto direito. | Pedido da equipe: textos borrados, minimapa sobreposto e caixa de coleta sempre visível |
 | 08/11/2026 | Tutorial do primeiro dia e tela de opções com volume e controles; fonte medieval na interface. | Ensinar o laço do jogo e dar identidade à UI |
