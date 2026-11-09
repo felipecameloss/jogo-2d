@@ -35,6 +35,20 @@ Inventário dos assets do jogo. A rubrica exige referências e créditos no `REA
 
 As folhas de `Resources/Enemies/` são tiras de 8 quadros olhando para a direita (o jogo vira com `flipX`), com a sombra desenhada no chão. São importadas como sprite único (filtro *Point*, sem compressão, 24 px por unidade) e fatiadas por `EnemyArt`, que guarda o pivô de cada uma: o centro do corpo, a 12 px da base no Slime, 19 no Morcego, 23 no Golem, 29 no Golem Ancião e 40 no Rei da Noite. A fonte é o script `tools/sprites-inimigos/gerar.py` (Python com Pillow): mude cores ou formas lá e rode de novo, em vez de editar os PNGs.
 
+### Áudio (`Assets/Art/Resources/Audio/`)
+
+Gerado pelo script `tools/sons/gerar.py` (Python com numpy e soundfile), por síntese: nenhum sample de terceiros. Para ajustar, mude o script e rode de novo. Para trocar por um arquivo de outra fonte, registre aqui origem e licença e salve com o mesmo nome. Os WAV são importados com as opções padrão do Unity, que os comprime no build.
+
+| Arquivo | Uso | Autoria e licença |
+|---|---|---|
+| `musica_dia.wav` | Dia: alaúde em arpejos e flauta doce, ré maior/mixolídio, 80 BPM, loop de 48 s | Equipe, com auxílio do Claude (Anthropic) (autoral) |
+| `musica_noite.wav` | Noite: ostinato grave, cordas em trêmulo e taikos, ré menor, 96 BPM, loop de 40 s | Idem |
+| `musica_chefe.wav` | Noite de chefe, a partir do aparecimento: ostinato no frígio, tambores de guerra, metais e coro, 112 BPM, loop de 34 s | Idem |
+| `sfx_passo_1` a `_4.wav` | Passo do jogador, sorteado a cada passada | Idem |
+| `sfx_machado_1` a `_3.wav` | Golpes ao coletar madeira | Idem |
+| `sfx_picareta_1` a `_3.wav` | Golpes ao coletar pedra | Idem |
+| `sfx_chave.wav` | Chave coletada | Idem |
+
 ### Placeholders por substituir
 
 | Item | Hoje | Destino |
@@ -44,8 +58,8 @@ As folhas de `Resources/Enemies/` são tiras de 8 quadros olhando para a direita
 | Chave | Pixel art gerada por código em `ChestArt` | Avaliar se mantém |
 | Marca de ponto de construção | Gerada em `CampArt` | `spot.png` em `Assets/Art/Resources/Camp/` |
 | Chão | Textura gerada em `Assets/Generated/Sprites` | Sprite ou tileset final |
-| SFX | Sons 8-bit de `SfxGenerator` | `AudioClip` final no `AudioManager` |
-| Música | **Nenhuma** (`music` vazio em `Game.unity`) | Trilha de dia e de noite |
+| SFX de tiro, acerto, morte, coleta, nível, dano e seleção | Sons 8-bit de `SfxGenerator` | WAV em `Resources/Audio` com o nome que o `AudioManager` procura (ex.: `sfx_tiro.wav`) |
+| Música do menu | Nenhuma | Opcional: `music` no `AudioManager` do menu |
 
 ## Disponível, sem uso no jogo
 
@@ -58,3 +72,4 @@ Mantenha esta lista igual à seção Créditos do `README.md`.
 - Fonte: Pixel Operator, de Jayvee Enaguas (HarvettFox96), CC0 1.0 (`docs/licencas/PixelOperator-CC0.txt`).
 - Código-base do protótipo: gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
 - Inimigos e chefes: sprites gerados por código com auxílio do Claude (Anthropic), no estilo do jogador de Pedro Nadotti.
+- Músicas (dia, noite e chefe) e efeitos de passo, machado, picareta e chave: compostos e sintetizados por código com auxílio do Claude (Anthropic), sem samples de terceiros (`tools/sons/gerar.py`).
