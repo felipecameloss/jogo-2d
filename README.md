@@ -94,6 +94,7 @@ No menu principal ou na pausa, **Opções** ajusta o volume da música e dos efe
 | [Arquitetura](docs/ARQUITETURA.md) | Estrutura do código e como estender |
 | [Assets](docs/ASSETS.md) | Inventário, origem e licenças |
 | [Contribuindo](docs/CONTRIBUINDO.md) | Equipe, responsabilidades e fluxo de trabalho |
+| [Página do itch.io](docs/ITCH.md) | Texto, imagens e configuração da página na jam |
 
 ## Estrutura do projeto
 

@@ -15,6 +15,7 @@ Consulte estes documentos antes de trabalhar e siga o que definem:
 | `docs/ARQUITETURA.md` | Estrutura do código, convenções e como estender. |
 | `docs/ASSETS.md` | Inventário, origem e licenças. |
 | `docs/CONTRIBUINDO.md` | Equipe, responsabilidades e fluxo de trabalho. |
+| `docs/ITCH.md` | Texto e configuração da página do itch.io. |
 
 ## Regras
 
