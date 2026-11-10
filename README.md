@@ -135,12 +135,11 @@ O build usa Gzip com *decompression fallback* ligado, porque o itch.io não envi
 
 ## Créditos
 
-- Equipe: ver [Contribuindo](docs/CONTRIBUINDO.md).
-- Código-base do protótipo gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
-- Fonte: Pixel Operator, de Jayvee Enaguas (HarvettFox96), sob CC0 1.0 ([licença](docs/licencas/PixelOperator-CC0.txt)).
-- Jogador: sprites feitos no Aseprite por Pedro Nadotti.
-- Cercas, muros, portões e estações do acampamento: sprites feitos no Aseprite por Pedro Nadotti.
-- Árvore, arbustos, rochas, fogueira e baú: feitos no Aseprite (autoria a confirmar em [Assets](docs/ASSETS.md)).
+- Equipe: ver [`docs/CONTRIBUINDO.md`](/docs/CONTRIBUINDO.md).
+- Código-base do protótipo: gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
+- Fonte: Pixel Operator, de Jayvee Enaguas (HarvettFox96), CC0 1.0 ([licença](/docs/licencas/PixelOperator-CC0.txt)).
+- Jogador, cercas, muros, portões e estações do acampamento: sprites feitos no Aseprite por Pedro Nadotti.
+- Ferreira, árvore, arbustos, rochas, fogueira e baú: sprites feitos pela equipe com auxílio do Claude (Anthropic).
 - Inimigos e chefes: sprites gerados por código com auxílio do Claude (Anthropic), no estilo do jogador de Pedro Nadotti.
 - Armas, equipamentos, drops, ícones de recurso e chão: sprites gerados por código com auxílio do Claude (Anthropic), no mesmo estilo.
 - Músicas (dia, noite e chefe) e efeitos de passo, machado, picareta e chave: compostos e sintetizados por código com auxílio do Claude (Anthropic), sem samples de terceiros (`tools/sons/gerar.py`).

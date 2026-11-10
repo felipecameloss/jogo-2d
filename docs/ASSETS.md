@@ -17,17 +17,17 @@ Inventário dos assets do jogo. A rubrica exige referências e créditos no `REA
 | Arquivo | Uso | Origem | Autoria e licença |
 |---|---|---|---|
 | `player.png` | Jogador animado em 8 direções, 192 quadros de 32 px; tingido, também é o ferreiro (NPC) | Aseprite (`player.ase`) | Pedro Nadotti (autoral) |
-| `Resources/Characters/character_women.png` | Ferreira (NPC), 192 quadros de 32 px no mesmo formato do jogador | Aseprite (`basic_sprites_character_women.ase`) | **A confirmar** |
-| `tree.png` | Árvore coletável | Aseprite (`tree_topdown.ase`) | **A confirmar** |
-| `bush_a.png`, `bush_b.png` | Decoração | Aseprite (`bush_*_topdown.ase`) | **A confirmar** |
-| `rock_1_small` a `rock_5_cluster.png` | Rochas coletáveis | Aseprite (`rock_*.ase`) | **A confirmar** |
-| `Resources/Camp/heart.png` | Fogueira animada, 16 quadros de 32 px | Aseprite (`campfire.ase`) | **A confirmar** |
+| `Resources/Characters/character_women.png` | Ferreira (NPC), 192 quadros de 32 px no mesmo formato do jogador | Aseprite (`basic_sprites_character_women.ase`) | Equipe, com auxílio do Claude (Anthropic) (autoral) |
+| `tree.png` | Árvore coletável | Aseprite (`tree_topdown.ase`) | Equipe, com auxílio do Claude (Anthropic) (autoral) |
+| `bush_a.png`, `bush_b.png` | Decoração | Aseprite (`bush_*_topdown.ase`) | Equipe, com auxílio do Claude (Anthropic) (autoral) |
+| `rock_1_small` a `rock_5_cluster.png` | Rochas coletáveis | Aseprite (`rock_*.ase`) | Equipe, com auxílio do Claude (Anthropic) (autoral) |
+| `Resources/Camp/heart.png` | Fogueira animada, 16 quadros de 32 px | Aseprite (`campfire.ase`) | Equipe, com auxílio do Claude (Anthropic) (autoral) |
 | `Resources/Camp/fence.png`, `wall.png` | Cerca e muro do anel: 13 peças de 48 × 64 (retas, diagonais, cantos e poste) | Aseprite (`fence.ase`, `wall.ase`) | Pedro Nadotti (autoral) |
 | `Resources/Camp/gate_wood.png`, `gate_stone.png` | Portões de madeira e de pedra abrindo nos 4 sentidos, 24 quadros de 48 × 64 | Aseprite (`gate_wood.ase`, `gate_stone.ase`) | Pedro Nadotti (autoral) |
 | `Resources/Camp/station_weapon_npc.png`, `station_armor_npc.png` | Ferraria e armaria com o NPC trabalhando, 8 quadros de 64 × 68 | Aseprite (`station_*_npc.ase`) | Pedro Nadotti (autoral) |
 | `Resources/Camp/station_weapon.png`, `station_armor.png` | Estações vazias e fechadas, enquanto o NPC está perdido | Aseprite (`station_weapons.ase`, `station_armor.ase`) | Pedro Nadotti (autoral) |
 | `Resources/Fonts/PixelOperator.ttf`, `PixelOperator-Bold.ttf` | Fonte pixelada de toda a interface e dos números de dano. Importadas em *Hinted Raster* (sem suavização); use 32 ou 64 | [Pixel Operator](https://www.dafont.com/pixel-operator.font) | Jayvee Enaguas (HarvettFox96), CC0 1.0 (domínio público). Licença em `docs/licencas/PixelOperator-CC0.txt` |
-| `Resources/Chests/chest.png` | Baú animado, 20 quadros de 32 px | Aseprite (`chest.ase`) | **A confirmar** |
+| `Resources/Chests/chest.png` | Baú animado, 20 quadros de 32 px | Aseprite (`chest.ase`) | Equipe, com auxílio do Claude (Anthropic) (autoral) |
 | `Resources/Enemies/slime.png`, `bat.png` | Slime (salto) e Morcego (voo), 8 quadros de 32 × 32 | Gerados por código (`tools/sprites-inimigos/gerar.py`) no estilo do `player.png` | Equipe, com auxílio do Claude (Anthropic) (autoral) |
 | `Resources/Enemies/golem.png` | Golem (passo pesado), 8 quadros de 48 × 48 | Idem | Idem |
 | `Resources/Enemies/golem_anciao.png` | Golem Ancião, chefe da Noite 4 (passo, runa pulsando), 8 quadros de 64 × 64, desenhado a 1,5× | Idem | Idem |
@@ -41,6 +41,12 @@ Inventário dos assets do jogo. A rubrica exige referências e créditos no `REA
 | `Resources/Pickups/gema_xp.png`, `moeda.png`, `cura.png`, `ima.png`, `chave.png` | Drops no chão, 16 × 16 | Idem | Idem |
 | `Resources/Hud/madeira.png`, `pedra.png` | Ícones de recurso no HUD e na loja, 16 × 16 | Idem | Idem |
 | `Sprites/chao.png` | Ladrilho contínuo de grama, 48 × 48 (2 unidades, igual ao `tileSize` do `InfiniteBackground`), importado com *Repeat* | Idem | Idem |
+
+Autoria confirmada por Pedro Nadotti em 09/11/2026: ferreira, árvore, arbustos, rochas, fogueira e baú foram feitos pela equipe com auxílio do Claude (Anthropic); jogador, cercas, muros, portões e estações são de Pedro Nadotti.
+
+### Formas geradas (`Assets/Generated/Sprites/`)
+
+Formas simples (`Blob`, `Circle`, `Cross`, `Diamond`, `Glow`, `Pixel`, `Ring`, `Square`) desenhadas por código em `SurvivorsSetup` a cada execução do gerador: corpo provisório dos inimigos sem folha, partículas, brilhos e as armas mágicas fora do escopo. Fazem parte do código-base (equipe, com auxílio do Claude). `Ground.png` é o chão antigo: o gerador não o cria mais e nada o usa.
 
 As folhas de `Resources/Enemies/` são tiras de 8 quadros olhando para a direita (o jogo vira com `flipX`), com a sombra desenhada no chão. São importadas como sprite único (filtro *Point*, sem compressão, 24 px por unidade) e fatiadas por `EnemyArt`, que guarda o pivô de cada uma: o centro do corpo, a 12 px da base no Slime, 19 no Morcego, 23 no Golem, 29 no Golem Ancião e 40 no Rei da Noite. A fonte é o script `tools/sprites-inimigos/gerar.py` (Python com Pillow): mude cores ou formas lá e rode de novo, em vez de editar os PNGs.
 
@@ -76,10 +82,14 @@ Gerado pelo script `tools/sons/gerar.py` (Python com numpy e soundfile), por sí
 
 ## Créditos ao vivo
 
-Mantenha esta lista igual à seção Créditos do `README.md`.
+Mantenha esta lista igual à seção Créditos do `README.md` (links a partir da raiz do repositório, com `/`, para funcionarem nos dois arquivos).
 
-- Fonte: Pixel Operator, de Jayvee Enaguas (HarvettFox96), CC0 1.0 (`docs/licencas/PixelOperator-CC0.txt`).
+- Equipe: ver [`docs/CONTRIBUINDO.md`](/docs/CONTRIBUINDO.md).
 - Código-base do protótipo: gerado com auxílio do Claude (Anthropic) e adaptado pela equipe.
+- Fonte: Pixel Operator, de Jayvee Enaguas (HarvettFox96), CC0 1.0 ([licença](/docs/licencas/PixelOperator-CC0.txt)).
+- Jogador, cercas, muros, portões e estações do acampamento: sprites feitos no Aseprite por Pedro Nadotti.
+- Ferreira, árvore, arbustos, rochas, fogueira e baú: sprites feitos pela equipe com auxílio do Claude (Anthropic).
 - Inimigos e chefes: sprites gerados por código com auxílio do Claude (Anthropic), no estilo do jogador de Pedro Nadotti.
 - Armas, equipamentos, drops, ícones de recurso e chão: sprites gerados por código com auxílio do Claude (Anthropic), no mesmo estilo.
 - Músicas (dia, noite e chefe) e efeitos de passo, machado, picareta e chave: compostos e sintetizados por código com auxílio do Claude (Anthropic), sem samples de terceiros (`tools/sons/gerar.py`).
+- Demais sprites e sons: placeholders gerados por código.
