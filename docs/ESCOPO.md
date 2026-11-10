@@ -10,7 +10,7 @@ Sem negociação; ver `RUBRICA.md`.
 
 - [ ] Build WebGL publicado no itch.io e inscrito na jam
 - [ ] Página do itch.io com descrição, controles e imagens ou vídeo
-- [ ] Repositório no GitHub com créditos dos assets no `README.md`
+- [x] Repositório no GitHub com créditos dos assets no `README.md`
 - [ ] GDD atualizado no Milanote
 - [ ] Projeto informado por completo no Blackboard
 - [ ] Rubricas de maior e menor importância validadas com o professor
