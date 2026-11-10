@@ -1,6 +1,6 @@
 # Escopo
 
-**Entrega: 10/11/2026 às 23:50.** Em 05/11/2026 restam 5 dias. Prioridade: um jogo completo e bem acabado, em vez de muitos sistemas pela metade.
+**Entrega: 10/11/2026 às 23:50.** Situação revista no dia da entrega: núcleo e acabamento implementados, faltam os entregáveis externos e o teste de jogo. Prioridade: um jogo completo e bem acabado, em vez de muitos sistemas pela metade.
 
 > O núcleo está aprovado. Detalhes de cada item dependem das decisões abertas do `GDD.md`.
 
@@ -20,9 +20,9 @@ Sem negociação; ver `RUBRICA.md`.
 ### Já existe
 
 - Movimento, dash e combate automático
-- 10 armas, 15 upgrades de atributo e level up
+- 5 armas medievais no jogo (outras 5 no código, fora do jogo), 15 upgrades de atributo e level up
 - 3 inimigos, elites e anéis de inimigos
-- Chefes nas Noites 4 e 7, com padrões de ataque e barra de vida (proposto em 09/11/2026 por Carlos; a equipe confirma no PR da branch `feature/inimigos`)
+- Chefes nas Noites 4 e 7, com padrões de ataque e barra de vida (proposto em 09/11/2026 por Carlos; entrou no PR #42)
 - Dia e noite, com iluminação noturna
 - Coleta de madeira e pedra
 - 3 baús com chaves espalhadas
@@ -39,23 +39,23 @@ Sem negociação; ver `RUBRICA.md`.
 
 Versão mínima do conceito do `GDD.md`, em ordem de prioridade. Aprovada em 05/11/2026:
 
-1. Acampamento no ponto inicial, com vida e representação visual
-2. Construção de cercas e muros com madeira e pedra
-3. Monstros que atacam e destroem construções
-4. Pessoas perdidas pelo mapa e resgate
-5. Duas estações de trabalho: ferreiro de armas e ferreiro de armadura
-6. Reparo da base
-7. Baús com armas básicas e gear
+1. [x] Acampamento no ponto inicial, com vida e representação visual
+2. [x] Construção de cercas e muros com madeira e pedra
+3. [x] Monstros que atacam e destroem construções
+4. [x] Pessoas perdidas pelo mapa e resgate
+5. [x] Duas estações de trabalho: ferreiro de armas e ferreiro de armadura
+6. [x] Reparo da base
+7. [x] Baús com armas básicas e gear
 
 ### Acabamento obrigatório pela rubrica
 
-8. Nome, história e introdução curta
-9. Tutorial ou introdução guiada das mecânicas
-10. Música de dia e de noite, e SFX finais
-11. Sprites medievais de inimigos, armas e pickups
-12. Dificuldade que continue crescendo após a Noite 4
-13. Tela de opções com volume e identidade visual da UI
-14. Teste de jogo e ajuste, com registro em `BALANCEAMENTO.md`
+8. [x] Nome, história e introdução curta
+9. [x] Tutorial ou introdução guiada das mecânicas
+10. [ ] Música de dia e de noite, e SFX finais: música pronta; faltam 7 efeitos 8-bit e os sons de construir, reparar e resgatar
+11. [x] Sprites medievais de inimigos, armas e pickups
+12. [x] Dificuldade que continue crescendo após a Noite 4
+13. [x] Tela de opções com volume e identidade visual da UI
+14. [ ] Teste de jogo e ajuste, com registro em `BALANCEAMENTO.md`: nenhuma sessão registrada
 
 ### Se sobrar tempo
 

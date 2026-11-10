@@ -39,22 +39,22 @@ As rubricas desconsideradas não contam nessas condições. **Gerenciamento de E
 
 ## Situação atual do projeto
 
-Avaliação feita a partir do código em 05/11/2026, sem jogar o build. Serve para priorizar trabalho; não é uma previsão de nota. Atualize a cada entrega importante.
+Avaliação revista a partir do código em 10/11/2026, dia da entrega, ainda sem teste de jogo registrado. Serve para priorizar trabalho; não é uma previsão de nota. Atualize a cada entrega importante.
 
 | # | Frente | Situação observada | Lacuna principal |
 |---|---|---|---|
-| 1 | Blueprint | Nome (*Brasa Viva*), protagonista, origem dos monstros e introdução no jogo (09/11/2026); arte própria de jogador, acampamento e monstros | Levar a história ao Milanote e à página do itch.io |
-| 2 | Mechanics | Combate, level up, dash, coleta, baús | Ouro e materiais não têm uso |
-| 3 | Feedback | Flash de dano, números, partículas, shake, SFX | Som é placeholder; revisar clareza |
-| 4 | UI/HUD e menus | HUD e menus funcionais; menu sem opções | Falta opções e identidade visual |
-| 5 | Engajamento | Dia sem ameaça e sem objetivo além de coletar | Implementar base, resgate e estações |
-| 6 | Level design | Mapa infinito; dificuldade por curvas | Sem tutorial; dificuldade para de subir na noite 4 |
-| 7 | Som e música | Música de dia, noite e chefe com fade; passos, coleta e chave com som próprio (09/11/2026) | Trocar os 7 efeitos 8-bit restantes; sons de construção, reparo e resgate |
-| 8 | VFX | Partículas, shake, noite com luz em volta do jogador | Coesão e polimento |
-| 9 | Replayability | Armas e upgrades sorteados; sem progresso entre runs | Incentivo para jogar de novo |
-| 10 | Balanceamento | Valores iniciais sem teste registrado | Ver `BALANCEAMENTO.md` |
-| 11 | Estados e erros | Pausa, game over e reinício existem | Testar saídas e casos-limite no build WebGL |
-| 12 | GDD | Rascunho em `GDD.md`; Milanote não verificado | Fechar decisões e publicar no Milanote |
+| 1 | Blueprint | Nome (*Brasa Viva*), protagonista, origem dos monstros, chefes e introdução em seis cartões; arte própria de jogador, acampamento, monstros, armas e itens | Levar a história ao Milanote e à página do itch.io |
+| 2 | Mechanics | Combate automático com 5 armas, level up, dash, coleta, construção e reforço, reparo, resgate, ferraria e armaria, baús, chefes nas Noites 4 e 7 | Ouro ainda sem uso |
+| 3 | Feedback | Flash de dano, números, partículas, shake, estruturas que escurecem com o dano, barra da fogueira, SFX | 7 efeitos ainda 8-bit; sem som de construir, reparar e resgatar |
+| 4 | UI/HUD e menus | Fonte pixelada, painéis opacos, missões com distância e direção, minimapa, opções com volume e controles | Testar leitura e cliques no build WebGL |
+| 5 | Engajamento | Dia com objetivos (coletar, construir, resgatar, baús) e noite de defesa da base; história e chefes dão marcos | Confirmar ritmo em teste de jogo |
+| 6 | Level design | Tutorial no primeiro dia; dificuldade cresce sem limite após a Noite 4; chefes nas Noites 4 e 7 | Confirmar a curva em teste de jogo |
+| 7 | Som e música | Música de dia, noite e chefe com fade; passos, coleta e chave com som próprio | Trocar os 7 efeitos 8-bit restantes; sons de construção, reparo e resgate |
+| 8 | VFX | Partículas, shake, noite com luz em volta do jogador, golpes e explosões animados | Coesão e polimento |
+| 9 | Replayability | Armas, equipamentos e upgrades sorteados; run infinita | Sem recorde nem progresso entre runs |
+| 10 | Balanceamento | Valores documentados e ajustados por teste automático; nenhuma sessão de teste com jogador registrada | Registrar sessões em `BALANCEAMENTO.md` |
+| 11 | Estados e erros | Pausa, game over e reinício; baú não gasta chave ao cancelar; residentes derrotados voltam a ficar perdidos | Testar saídas e casos-limite no build WebGL |
+| 12 | GDD | `GDD.md` organizado em DDE e com histórico até 09/11/2026 | Publicar no Milanote |
 
 ## Critérios por frente
 
