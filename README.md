@@ -60,12 +60,12 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 - O ferreiro e a ferreira estão perdidos longe do acampamento. As missões, no canto esquerdo, mostram a distância e a direção de cada um.
 - Perto da pessoa, aperte **F** para resgatá-la. Ela anda sozinha até o acampamento.
 - Cada residente libera um ponto de estação: **ferraria** (ferreiro) e **armaria** (ferreira), por 30 madeira e 20 pedra.
-- Perto da estação, **F** abre as compras: a ferraria ensina e melhora armas; a armaria dá armadura e vida. Pague com madeira e pedra (1 a 5 ou clique; Esc fecha).
+- Perto da estação, **F** abre as compras: a ferraria ensina e melhora armas; a armaria dá armadura e vida. Pague com ouro (1 a 5 ou clique; Esc fecha).
 - Monstros encostados ferem os residentes. Derrotado, o residente se perde de novo e a estação fecha até o novo resgate. O que você comprou continua.
 
 ### Ouro
 
-Inimigos têm chance de dropar ouro, e o valor cresce a cada noite. O ouro ainda não tem uso no jogo (ver `docs/GDD.md`).
+Inimigos têm chance de dropar ouro, e o valor cresce a cada noite; elites e chefes sempre dropam. O ouro paga as compras da ferraria e da armaria. Como ele só cai à noite, as primeiras compras ficam para o segundo dia.
 
 ### Introdução e tutorial
 

@@ -50,7 +50,7 @@ Bento, um jovem lenhador, salvou a última brasa da forja e acendeu uma fogueira
 *Brasa Viva* é um jogo de sobrevivência top-down com defesa de base.
 
 - **De dia** não há monstros, e o primeiro dia é mais longo para você se preparar. Corte árvores e quebre rochas, construa cercas, muros e portões em volta da fogueira, procure chaves e abra baús.
-- **Resgate** o ferreiro e a ferreira, perdidos pela floresta. Cada um abre uma estação no acampamento: a **ferraria** ensina e melhora armas, e a **armaria** dá armadura e vida.
+- **Resgate** o ferreiro e a ferreira, perdidos pela floresta. Cada um abre uma estação no acampamento: a **ferraria** ensina e melhora armas, e a **armaria** dá armadura e vida, pagas com o ouro que os monstros deixam.
 - **De noite** os monstros vêm atrás da fogueira e destroem o que estiver no caminho. Suas armas atacam sozinhas: posicione-se, use o dash e escolha melhorias a cada nível.
 - Na **quarta noite** desperta o Golem Ancião, e na **sétima** o próprio Rei da Noite vem apagar a brasa.
 - A run não tem fim: cada noite é mais difícil que a anterior. Quantas noites você aguenta?

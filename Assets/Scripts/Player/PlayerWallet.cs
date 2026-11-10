@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-// Ouro da run, usado para comprar recompensas em baús e itens no mercador.
+// Ouro da run: cai dos inimigos e paga as compras da ferraria e da armaria.
 public class PlayerWallet : MonoBehaviour
 {
     public int Gold { get; private set; }

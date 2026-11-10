@@ -75,6 +75,13 @@ public static class CampDebug
         bag.Add(ResourceKind.Stone, 100);
     }
 
+    [MenuItem("Survivors/Testes/Adicionar 100 de ouro")]
+    static void AddGold()
+    {
+        var wallet = Application.isPlaying ? Object.FindAnyObjectByType<PlayerWallet>() : null;
+        if (wallet) wallet.Add(100);
+    }
+
         [MenuItem("Survivors/Testes/Derrotar os NPCs residentes")]
     static void DefeatResidents()
     {

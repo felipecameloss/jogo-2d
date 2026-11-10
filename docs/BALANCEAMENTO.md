@@ -151,14 +151,15 @@ Cada baú oferece 1 arma (diferente em cada baú, sem a Besta) e 2 equipamentos.
 | Luvas de couro | −5% recarga |
 | Alforje | +1 alcance de coleta |
 | Ervas do curandeiro | +0,3 vida/s |
-| Moeda da fortuna | +15% ouro (fica até decidirem o destino do ouro) |
+| Moeda da fortuna | +15% ouro |
 
 ### Pessoas e estações
 
 - **Pessoas perdidas:** 2 por run (ferreiro e ferreira), em direções opostas (180° ± 40°), a 25–40 unidades da fogueira, em ponto sem colisão. Andam até o acampamento a 3,5 unidades/s.
 - **Residentes:** 40 de vida. Monstros encostados (raio 0,6) causam 50% do dano de contato a cada 2 s. Derrotado, volta a ficar perdido a 25–40 unidades; o novo resgate restaura a vida.
-- **Ferraria:** aprender ou subir uma arma para o nível N custa `10 + 5 × (N − 1)` de madeira e o mesmo de pedra.
-- **Armaria:** 5 níveis; cada um dá +1 de armadura e +10 de vida máxima, e custa `15 + 5 × (nível atual)` de pedra (15, 20, 25, 30, 35).
+- **Ferraria:** aprender ou subir uma arma para o nível N custa `15 + 10 × (N − 1)` de ouro (15, 25, 35, 45, 55). Uma arma do zero ao nível 5 custa 175; a Besta, do 2 ao 5, 160.
+- **Armaria:** 5 níveis; cada um dá +1 de armadura e +10 de vida máxima, e custa `20 + 10 × (nível atual)` de ouro (20, 30, 40, 50, 60).
+- **Ouro esperado** (estimativa pelas taxas de drop, supondo que 70% dos monstros morram; não medido): cerca de 100 na Noite 1, 300 acumulados ao fim da Noite 2 e 650 ao fim da Noite 3, mais 100 do Golem Ancião. Tudo à venda soma cerca de 1.060, alcançável perto da Noite 5. Como o ouro só cai à noite, a primeira compra acontece no segundo dia.
 
 ## Problemas conhecidos
 
@@ -166,8 +167,8 @@ Identificados por leitura do código; ainda não medidos em jogo.
 
 | # | Problema | Efeito | Direção |
 |---|---|---|---|
-| 1 | **Ouro não tem uso:** nada chama `PlayerWallet.TrySpend` | Drop sem valor; Moeda da fortuna é recompensa inútil | Definir uso no GDD ou remover |
-| 2 | **Madeira e pedra não têm uso:** nada chama `ResourceInventory.TrySpend` | Viola "Dia com valor"; o dia inteiro perde sentido | Custos de cercas, muros e estações |
+| 1 | ~~Ouro não tem uso~~ | Resolvido em 10/11/2026: o ouro paga a ferraria e a armaria | — |
+| 2 | ~~Madeira e pedra não têm uso~~ | Resolvido: pagam construção, reforço, reparo e as estações | — |
 | 3 | **Dificuldade para de subir** em `t = 600`, enquanto o jogador segue evoluindo | Viola "Sem estagnação"; a run pode ficar trivial | Ampliar a curva ou criar novas ameaças |
 | 4 | **Dano de contato fixo** enquanto a armadura se acumula | Armadura pode reduzir golpes de Slime e Bat ao mínimo de 1 | Testar e escalar o dano |
 | 5 | **Baús só no início:** depois de abertos, não há mais recompensas no mapa | Exploração perde objetivo | Avaliar no GDD |
@@ -185,6 +186,7 @@ Registre aqui cada sessão: data, quem jogou, versão, noite alcançada, causa d
 
 | Data | Valor | De → Para | Motivo |
 |---|---|---|---|
+| 10/11/2026 | Moeda das compras nas estações | Ferraria `10 + 5 × (N − 1)` de madeira e de pedra → `15 + 10 × (N − 1)` de ouro; armaria `15 + 5 × nível` de pedra → `20 + 10 × nível` de ouro | O ouro não tinha uso. Madeira e pedra ficam só para construir e reparar, o que sobra para os muros e ajuda na Noite 1. Preços calculados pelo ouro estimado por noite; a confirmar em teste |
 | 10/11/2026 | Duração do primeiro dia | 180 s → 360 s; demais dias e noites seguem em 180 s | Teste de jogo de Pedro: sem tempo de se preparar, o acampamento inteiro era destruído na Noite 1 e a fogueira terminava com metade da vida. A intensidade da noite foi mantida, porque estava divertida |
 | 09/11/2026 | Chefes | — → Golem Ancião na Noite 4, Rei da Noite na Noite 7 (valores acima) | Proposta da branch `feature/inimigos`; ainda sem teste com o acampamento |
 | 09/11/2026 | Vida do Rei da Noite | multiplicador preso em 4 depois de `t = 600` → cresce como o dos monstros comuns (≈ 20.000 → ≈ 32.000 a 35.000) | Seguir a regra da run infinita: a vida dos monstros cresce sem limite |

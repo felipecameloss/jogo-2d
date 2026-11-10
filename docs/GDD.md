@@ -38,9 +38,8 @@ Detalhes em `docs/superpowers/specs/2026-11-05-base-do-acampamento-design.md`. A
 
 ## Decisões abertas
 
-1. Ouro continua no jogo? Com qual uso?
-2. Quais são os "outros materiais" além de madeira e pedra?
-3. Qual o incentivo para jogar de novo
+1. Quais são os "outros materiais" além de madeira e pedra?
+2. Qual o incentivo para jogar de novo
 
 ## 1. Design
 
@@ -87,16 +86,16 @@ Mundo medieval. O protagonista começa sozinho num acampamento e tem uma missão
 
 - **Combate:** as armas atacam sozinhas, só à noite; o jogador decide posição e dash, que dá invencibilidade.
 - **Progressão:** inimigos soltam gemas de XP; cada nível oferece 3 opções entre armas novas, melhorias de arma e atributos.
-- **Coleta:** de dia, segurar E junto a árvores e rochas rende madeira e pedra. Pontos ricos rendem o dobro e tudo renova ao amanhecer. **Os materiais ainda não têm uso.**
+- **Coleta:** de dia, segurar E junto a árvores e rochas rende madeira e pedra. Pontos ricos rendem o dobro e tudo renova ao amanhecer. Os materiais pagam construção, reforço, reparo e as estações.
 - **Baús:** três por run, perto do início, cada vez mais distantes e mais fortes. Cada abertura consome uma chave encontrada no mapa, e o jogador escolhe 1 de 3 bônus permanentes.
-- **Ouro:** inimigos soltam ouro, mas **ainda não há onde gastá-lo**.
+- **Ouro:** inimigos soltam ouro, que cresce a cada noite; elites e chefes soltam mais. É a moeda da ferraria e da armaria.
 - **Acampamento:** o jogador começa ao lado da fogueira, cercada por um anel quadrado de 12 pontos de muralha (4 cantos e 2 trechos por lado) e 4 de portão, um no meio de cada lado. Se ela for destruída, a run termina.
 - **Construção e reparo:** com F, em pontos fixos, pagando madeira e pedra. Cercas viram muros, portões de madeira viram portões de pedra e estruturas danificadas podem ser reparadas. Portões bloqueiam monstros e deixam o jogador passar; eles se abrem quando o jogador chega perto, para o lado oposto ao dele.
 - **Armas:** cinco armas medievais e automáticas, que só atacam à noite (de dia não há monstros): Besta (inicial), Espada, Facas, Machado de arremesso e Bombas. Vêm de baús e da ferraria; o level up não dá armas.
 - **Level up:** 3 opções entre 15 atributos e passivas.
 - **Baús com equipamento:** cada baú oferece 1 arma e 2 equipamentos (amuleto, pedra de amolar, cota de malha, luvas, alforje, ervas, moeda); a força cresce com a distância do baú.
 - **Pessoas perdidas:** o ferreiro e a ferreira começam perdidos, em direções opostas, longe do acampamento. De dia, o HUD aponta o mais próximo. Com F, a pessoa é resgatada e anda sozinha até o acampamento.
-- **Estações:** cada residente libera a construção da sua estação. A ferraria ensina e melhora armas (Besta sempre; Espada e Facas com 1 residente; Machado e Bombas com os 2). A armaria dá até 5 níveis de armadura e vida. Compras são pagas com madeira e pedra e continuam valendo se a estação cair.
+- **Estações:** cada residente libera a construção da sua estação. A ferraria ensina e melhora armas (Besta sempre; Espada e Facas com 1 residente; Machado e Bombas com os 2). A armaria dá até 5 níveis de armadura e vida. Compras são pagas com ouro e continuam valendo se a estação cair. Assim, o dia rende materiais para a base, e a noite rende ouro para equipar o jogador.
 - **Residentes em perigo:** monstros não procuram os residentes, mas ferem quem estiver encostado. Derrotado, o residente volta a ficar perdido em outro ponto do mapa; a estação fica fechada, e as armas que dependem dos dois residentes somem da ferraria até o novo resgate.
 - **Inimigos:** vão até a fogueira, atacam o que os bloqueia e perseguem o jogador se ele estiver perto. Longe da base, o jogador é caçado enquanto ela é atacada. Causam dano por contato. Variam entre Slime (básico), Bat (rápido) e Golem (resistente), além de elites, anéis que cercam o jogador e chefes.
 - **Chefes:** na Noite 4 vem o Golem Ancião; na Noite 7, o Rei da Noite. Nessas noites não aparecem outros monstros: o relógio para à meia-noite até o chefe morrer, e então amanhece em poucos segundos. O chefe persegue só o jogador, investe depois de um aviso em linha vermelha e dispara anéis de tiros. O Rei da Noite também solta espirais e leques mirados, e entra em fúria com metade da vida. Derrotado, solta muito XP e ouro, cura e ímã.
@@ -137,6 +136,7 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
+| 10/11/2026 | Ferraria e armaria passam a cobrar ouro, e não mais madeira e pedra. Fecha a decisão aberta sobre o uso do ouro. Não é o mercador removido em 04/11: as compras continuam nas estações dos residentes. | O ouro não tinha uso, e as compras disputavam material com os muros |
 | 10/11/2026 | O primeiro dia dura 6 minutos; os demais dias e as noites seguem com 3. | No teste de jogo não dava tempo de se preparar, e o acampamento caía na primeira noite |
 | 09/11/2026 | Arte das armas, itens e chão no jogo: projéteis, bomba, explosão e golpe da espada animados, drops, chave e ladrilho de grama; ícones das armas e equipamentos no baú e na ferraria, e de madeira e pedra no HUD. | Rubrica pede arte medieval no lugar das formas geradas |
 | 09/11/2026 | Música de dia, noite e chefe, com troca por fade; sons de passo, coleta de madeira e pedra e chave. | Rubrica (Som e música) e item 10 do `ESCOPO.md`; a música separa a calma do dia da tensão da noite |
