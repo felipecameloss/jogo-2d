@@ -52,7 +52,7 @@ Avaliação revista a partir do código em 10/11/2026, dia da entrega, ainda sem
 | 7 | Som e música | Música de dia, noite e chefe com fade; passos, coleta e chave com som próprio | Trocar os 7 efeitos 8-bit restantes; sons de construção, reparo e resgate |
 | 8 | VFX | Partículas, shake, noite com luz em volta do jogador, golpes e explosões animados | Coesão e polimento |
 | 9 | Replayability | Armas, equipamentos e upgrades sorteados; run infinita | Sem recorde nem progresso entre runs |
-| 10 | Balanceamento | Valores documentados e ajustados por teste automático; nenhuma sessão de teste com jogador registrada | Registrar sessões em `BALANCEAMENTO.md` |
+| 10 | Balanceamento | Valores documentados; uma sessão de teste registrada (10/11/2026), que alongou o primeiro dia | Registrar mais sessões, de preferência com quem não é da equipe |
 | 11 | Estados e erros | Pausa, game over e reinício; baú não gasta chave ao cancelar; residentes derrotados voltam a ficar perdidos | Testar saídas e casos-limite no build WebGL |
 | 12 | GDD | `GDD.md` organizado em DDE e com histórico até 09/11/2026 | Publicar no Milanote |
 

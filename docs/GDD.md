@@ -137,6 +137,7 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
+| 10/11/2026 | O primeiro dia dura 6 minutos; os demais dias e as noites seguem com 3. | No teste de jogo não dava tempo de se preparar, e o acampamento caía na primeira noite |
 | 09/11/2026 | Arte das armas, itens e chão no jogo: projéteis, bomba, explosão e golpe da espada animados, drops, chave e ladrilho de grama; ícones das armas e equipamentos no baú e na ferraria, e de madeira e pedra no HUD. | Rubrica pede arte medieval no lugar das formas geradas |
 | 09/11/2026 | Música de dia, noite e chefe, com troca por fade; sons de passo, coleta de madeira e pedra e chave. | Rubrica (Som e música) e item 10 do `ESCOPO.md`; a música separa a calma do dia da tensão da noite |
 | 09/11/2026 | Nome *Brasa Viva*, protagonista Bento, origem dos monstros (maldição do Rei da Noite) e introdução em seis cartões na primeira run, com opção de pular. As opções reativam a introdução junto com o tutorial. | Rubrica (Blueprint) pede nome, personagens e história; a história explica por que os monstros vão atrás da fogueira e somem ao amanhecer |
