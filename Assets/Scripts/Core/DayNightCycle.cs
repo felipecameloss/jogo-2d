@@ -11,6 +11,8 @@ public class DayNightCycle : MonoBehaviour
 
     [Tooltip("Duração de cada período (dia ou noite) em segundos.")]
     public float periodDuration = 180f;
+    [Tooltip("Duração do primeiro dia em segundos: mais tempo para coletar, construir, resgatar e abrir baús antes da primeira noite.")]
+    public float firstDayDuration = 360f;
     public DayPeriod startPeriod = DayPeriod.Day;
 
     [Header("Visual")]
@@ -33,9 +35,11 @@ public class DayNightCycle : MonoBehaviour
     // Tempo total já passado de noite. O spawner usa isso para a dificuldade.
     public float NightElapsed { get; private set; }
     public float PeriodTime { get; private set; }
-    public float TimeLeftInPeriod => Mathf.Max(0f, periodDuration - PeriodTime);
+    // Duração do período atual: o primeiro dia é mais longo que os demais.
+    public float CurrentDuration => !IsNight && DayNumber == 1 ? firstDayDuration : periodDuration;
+    public float TimeLeftInPeriod => Mathf.Max(0f, CurrentDuration - PeriodTime);
     // Hora do relógio do jogo (0 a 24). O dia vai de 06:00 às 18:00 e a noite de 18:00 às 06:00.
-    public float Hour => Mathf.Repeat((IsNight ? 18f : 6f) + 12f * PeriodTime / periodDuration, 24f);
+    public float Hour => Mathf.Repeat((IsNight ? 18f : 6f) + 12f * PeriodTime / CurrentDuration, 24f);
     public string ClockText
     {
         get
@@ -93,10 +97,10 @@ public class DayNightCycle : MonoBehaviour
         {
             float dt = Time.deltaTime;
             if (IsNight) NightElapsed += dt;
-            if (IsNight && HoldNight) PeriodTime = Mathf.Min(PeriodTime + dt, periodDuration * HoldAtFraction);
+            if (IsNight && HoldNight) PeriodTime = Mathf.Min(PeriodTime + dt, CurrentDuration * HoldAtFraction);
             else PeriodTime += dt * fastForwardRate;
-            if (GameInput.DebugSkipPeriodPressed() && !(IsNight && HoldNight)) PeriodTime = periodDuration;
-            if (PeriodTime >= periodDuration) EnterPeriod(IsNight ? DayPeriod.Day : DayPeriod.Night, true);
+            if (GameInput.DebugSkipPeriodPressed() && !(IsNight && HoldNight)) PeriodTime = CurrentDuration;
+            if (PeriodTime >= CurrentDuration) EnterPeriod(IsNight ? DayPeriod.Day : DayPeriod.Night, true);
         }
         UpdateVisuals();
     }

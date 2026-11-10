@@ -55,7 +55,7 @@ Versão mínima do conceito do `GDD.md`, em ordem de prioridade. Aprovada em 05/
 11. [x] Sprites medievais de inimigos, armas e pickups
 12. [x] Dificuldade que continue crescendo após a Noite 4
 13. [x] Tela de opções com volume e identidade visual da UI
-14. [ ] Teste de jogo e ajuste, com registro em `BALANCEAMENTO.md`: nenhuma sessão registrada
+14. [ ] Teste de jogo e ajuste, com registro em `BALANCEAMENTO.md`: uma sessão registrada em 10/11/2026; faltam testes com quem não é da equipe
 
 ### Se sobrar tempo
 

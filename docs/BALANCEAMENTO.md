@@ -35,7 +35,7 @@ Fonte: código e `Assets/Scenes/Game.unity`, em 05/11/2026.
 
 ### Ritmo e dificuldade
 
-Cada dia ou noite dura 180 s, inclusive o primeiro dia: o tutorial não o encurta, porque ele já é curto para coletar, construir e procurar pessoas. A dificuldade depende de `t`, o total de segundos de noite já passados. Durante o dia, nada avança.
+Cada dia ou noite dura 180 s, exceto o primeiro dia, que dura 360 s (`DayNightCycle.firstDayDuration`): com 180 s não dava tempo de abrir baús, fechar o anel, resgatar as pessoas e montar as estações, e o acampamento caía na primeira noite. A dificuldade depende de `t`, o total de segundos de noite já passados. Durante o dia, nada avança.
 
 | Noite | `t` (s) | Inimigos/s | Multiplicador de vida | Multiplicador de dano |
 |---|---|---|---|---|
@@ -171,7 +171,7 @@ Identificados por leitura do código; ainda não medidos em jogo.
 | 3 | **Dificuldade para de subir** em `t = 600`, enquanto o jogador segue evoluindo | Viola "Sem estagnação"; a run pode ficar trivial | Ampliar a curva ou criar novas ameaças |
 | 4 | **Dano de contato fixo** enquanto a armadura se acumula | Armadura pode reduzir golpes de Slime e Bat ao mínimo de 1 | Testar e escalar o dano |
 | 5 | **Baús só no início:** depois de abertos, não há mais recompensas no mapa | Exploração perde objetivo | Avaliar no GDD |
-| 6 | **Primeiro dia longo:** 3 min sem ameaça antes de qualquer combate | Risco de início lento e de perder testadores | Encurtar o dia ou dar objetivo |
+| 6 | ~~Primeiro dia longo~~ | Resolvido ao contrário: o tutorial deu objetivos ao dia, e o teste de 10/11/2026 mostrou que 3 min eram pouco. O primeiro dia passou a 6 min | — |
 
 ## Roteiro de teste
 
@@ -179,12 +179,13 @@ Registre aqui cada sessão: data, quem jogou, versão, noite alcançada, causa d
 
 | Data | Jogador | Versão | Noite | Morte | Observações |
 |---|---|---|---|---|---|
-| — | — | — | — | — | — |
+| 10/11/2026 | Pedro Nadotti (equipe) | Build WebGL de 10/11 | 1 | Fogueira com metade da vida e acampamento destruído do meio para o fim da noite | Primeiro dia curto demais para abrir baús, construir o anel, resgatar e montar as estações. Ajuste: primeiro dia de 360 s |
 
 ## Registro de mudanças
 
 | Data | Valor | De → Para | Motivo |
 |---|---|---|---|
+| 10/11/2026 | Duração do primeiro dia | 180 s → 360 s; demais dias e noites seguem em 180 s | Teste de jogo de Pedro: sem tempo de se preparar, o acampamento inteiro era destruído na Noite 1 e a fogueira terminava com metade da vida. A intensidade da noite foi mantida, porque estava divertida |
 | 09/11/2026 | Chefes | — → Golem Ancião na Noite 4, Rei da Noite na Noite 7 (valores acima) | Proposta da branch `feature/inimigos`; ainda sem teste com o acampamento |
 | 09/11/2026 | Vida do Rei da Noite | multiplicador preso em 4 depois de `t = 600` → cresce como o dos monstros comuns (≈ 20.000 → ≈ 32.000 a 35.000) | Seguir a regra da run infinita: a vida dos monstros cresce sem limite |
 | 09/11/2026 | Gemas de XP no chão | sem limite → 250; acima disso, o XP entra numa gema antiga | Desempenho com a tela cheia à noite |
