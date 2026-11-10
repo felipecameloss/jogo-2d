@@ -44,7 +44,7 @@ Avaliação revista a partir do código em 10/11/2026, dia da entrega, ainda sem
 | # | Frente | Situação observada | Lacuna principal |
 |---|---|---|---|
 | 1 | Blueprint | Nome (*Brasa Viva*), protagonista, origem dos monstros, chefes e introdução em seis cartões; arte própria de jogador, acampamento, monstros, armas e itens | Levar a história ao Milanote e à página do itch.io |
-| 2 | Mechanics | Combate automático com 5 armas, level up, dash, coleta, construção e reforço, reparo, resgate, ferraria e armaria, baús, chefes nas Noites 4 e 7 | Ouro ainda sem uso |
+| 2 | Mechanics | Combate automático com 5 armas, level up, dash, coleta, construção e reforço, reparo, resgate, ferraria e armaria, baús, chefes nas Noites 4 e 7; ouro paga as estações | Confirmar preços em teste de jogo |
 | 3 | Feedback | Flash de dano, números, partículas, shake, estruturas que escurecem com o dano, barra da fogueira, SFX | 7 efeitos ainda 8-bit; sem som de construir, reparar e resgatar |
 | 4 | UI/HUD e menus | Fonte pixelada, painéis opacos, missões com distância e direção, minimapa, opções com volume e controles | Testar leitura e cliques no build WebGL |
 | 5 | Engajamento | Dia com objetivos (coletar, construir, resgatar, baús) e noite de defesa da base; história e chefes dão marcos | Confirmar ritmo em teste de jogo |

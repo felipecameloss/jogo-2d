@@ -56,9 +56,9 @@ public class StationUI : MonoBehaviour
         modal.SetActive(open);
         if (!open) { wasOpen = false; return; }
 
-        var bag = source.Inventory;
+        var wallet = source.Wallet;
         heading.text = source.Heading;
-        materials.text = bag ? $"Madeira {bag.Wood}   •   Pedra {bag.Stone}   •   compre com 1 a 5 ou clique" : "";
+        materials.text = wallet ? $"<color=#FFD45E>Ouro {wallet.Gold}</color>   •   compre com 1 a 5 ou clique" : "";
         message.text = source.Message;
         message.color = source.Message.StartsWith("Comprado") ? UIStyle.Good : UIStyle.Bad;
         var offers = source.Offers;
@@ -72,8 +72,8 @@ public class StationUI : MonoBehaviour
             titles[i].text = $"[{i + 1}] {offer.Title}";
             descriptions[i].text = offer.Description;
             UIStyle.SetIcon(icons[i], offer.Icon);
-            costs[i].text = BuildSpot.Cost(offer.Wood, offer.Stone);
-            costs[i].color = bag && bag.CanAfford(offer.Wood, offer.Stone) ? UIStyle.Good : UIStyle.Bad;
+            costs[i].text = $"{offer.Gold} de ouro";
+            costs[i].color = wallet && wallet.CanAfford(offer.Gold) ? UIStyle.Good : UIStyle.Bad;
         }
         if (!wasOpen && EventSystem.current && offers.Count > 0) EventSystem.current.SetSelectedGameObject(buttons[0].gameObject);
         wasOpen = true;

@@ -7,17 +7,17 @@ public class StationOffer
 {
     public string Title;
     public string Description;
-    public int Wood, Stone;
+    public int Gold;
     public Sprite Icon;
     public Action Apply;
 }
 
-// Ferraria e armaria: liberadas pelo resgate do NPC, fechadas sem ele, com compras que
-// continuam valendo mesmo se a estação cair.
+// Ferraria e armaria: liberadas pelo resgate do NPC, fechadas sem ele, com compras pagas em ouro
+// que continuam valendo mesmo se a estação cair.
 public class StationSystem : MonoBehaviour
 {
-    public const int WeaponWood = 10, WeaponStone = 10, WeaponStep = 5;
-    public const int ArmorStone = 15, ArmorStep = 5, ArmorLevels = 5;
+    public const int WeaponGold = 15, WeaponStep = 10;
+    public const int ArmorGold = 20, ArmorStep = 10, ArmorLevels = 5;
     public const float ArmorPerLevel = 1f, HealthPerLevel = 10f;
 
     public CampSystem camp;
@@ -26,7 +26,7 @@ public class StationSystem : MonoBehaviour
     public string Heading => Open ? $"{Open.StationName} • {PersonAt(Open).Title}" : "";
     public string Message { get; private set; } = "";
     public IReadOnlyList<StationOffer> Offers => offers;
-    public ResourceInventory Inventory => camp ? camp.Inventory : null;
+    public PlayerWallet Wallet { get; private set; }
 
     readonly List<StationOffer> offers = new List<StationOffer>();
     PlayerStats player;
@@ -38,6 +38,7 @@ public class StationSystem : MonoBehaviour
     {
         player = GameManager.Instance ? GameManager.Instance.Player : FindAnyObjectByType<PlayerStats>();
         holder = player ? player.GetComponent<WeaponHolder>() : null;
+        Wallet = player ? player.GetComponent<PlayerWallet>() : null;
         catalog = UpgradeManager.Catalog();
         gameObject.AddComponent<StationUI>().source = this;
     }
@@ -95,11 +96,11 @@ public class StationSystem : MonoBehaviour
 
     public void Buy(int index)
     {
-        if (!Open || index < 0 || index >= offers.Count || !Inventory) return;
+        if (!Open || index < 0 || index >= offers.Count || !Wallet) return;
         var offer = offers[index];
-        if (!Inventory.TrySpend(offer.Wood, offer.Stone))
+        if (!Wallet.TrySpend(offer.Gold))
         {
-            Message = $"Materiais insuficientes: {offer.Title} custa {BuildSpot.Cost(offer.Wood, offer.Stone)}";
+            Message = $"Ouro insuficiente: {offer.Title} custa {offer.Gold} de ouro";
             AudioManager.Play(Sfx.PlayerHurt, 0.4f);
             return;
         }
@@ -140,14 +141,12 @@ public class StationSystem : MonoBehaviour
             var owned = holder.Get(prefab);
             if (owned && owned.IsMaxLevel) continue;
             int level = owned ? owned.Level + 1 : 1;
-            int extra = WeaponStep * (level - 1);
             var weapon = prefab;
             offers.Add(new StationOffer
             {
                 Title = owned ? $"{weapon.weaponName} Nv {level}" : $"Aprender {weapon.weaponName}",
                 Description = owned ? owned.NextLevelDescription() : weapon.description,
-                Wood = WeaponWood + extra,
-                Stone = WeaponStone + extra,
+                Gold = WeaponGold + WeaponStep * (level - 1),
                 Icon = weapon.icon,
                 Apply = () => holder.Unlock(weapon),
             });
@@ -161,7 +160,7 @@ public class StationSystem : MonoBehaviour
         {
             Title = $"Armadura Nv {armorLevel + 1}/{ArmorLevels}",
             Description = $"+{ArmorPerLevel:0} de armadura contra cada golpe e +{HealthPerLevel:0} de vida máxima.",
-            Stone = ArmorStone + ArmorStep * armorLevel,
+            Gold = ArmorGold + ArmorStep * armorLevel,
             Icon = ChestOffer.GearIcon(ChestReward.Armor),
             Apply = () =>
             {
