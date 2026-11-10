@@ -7,7 +7,7 @@ using UnityEngine.UI;
 // Mostra só a fogueira e os baús fechados; as chaves continuam tendo de ser achadas.
 public class Minimap : MonoBehaviour
 {
-    const float PanelSize = 240f;
+    const float PanelSize = 200f;
     const float EdgeMargin = 10f;
     const float MarkerSize = 12f;
     const float WorldRange = 24f; // Unidades do centro até a borda; cobre os baús vistos da fogueira.

@@ -12,6 +12,7 @@ public class OptionsMenu : MonoBehaviour
         "Dash: Shift\n" +
         "Coletar (segurar): E  •  botão oeste\n" +
         "Construir, reparar, resgatar e abrir: F  •  botão norte\n" +
+        "Missões: M\n" +
         "Escolher opção: 1 a 5 ou clique\n" +
         "Pausar: Esc ou P";
 
@@ -24,6 +25,10 @@ public class OptionsMenu : MonoBehaviour
 
     Action onClose;
     Text musicValue, sfxValue;
+    GameObject optionsWindow, guideWindow;
+    Text guideTitle, guideBody;
+    Button openGuideButton, previousPageButton, nextPageButton;
+    int guidePage;
 
     public static void Open(Action onClose = null)
     {
@@ -47,7 +52,9 @@ public class OptionsMenu : MonoBehaviour
 
     void Update()
     {
-        if (GameInput.PausePressed()) Close();
+        if (!GameInput.PausePressed()) return;
+        if (guideWindow && guideWindow.activeSelf) ShowOptions();
+        else Close();
     }
 
     void OnDestroy()
@@ -61,7 +68,8 @@ public class OptionsMenu : MonoBehaviour
         var shade = UIStyle.Image(canvas, "Veu", UIStyle.Veil);
         UIStyle.Stretch(shade.rectTransform);
         shade.raycastTarget = true;
-        var window = UIStyle.Panel(shade.transform, "Janela", Vector2.one * 0.5f, Vector2.one * 0.5f, Vector2.zero, new Vector2(1100, 880));
+        var window = UIStyle.Panel(shade.transform, "Janela", Vector2.one * 0.5f, Vector2.one * 0.5f, Vector2.zero, new Vector2(1100, 960));
+        optionsWindow = window.parent.gameObject;
 
         Label(window, "OPÇÕES", new Vector2(0, 370), new Vector2(1000, 80), 60).color = UIStyle.Gold;
         var music = VolumeRow(window, "Música", 260, GameSettings.MusicVolume, v => GameSettings.MusicVolume = v, out musicValue);
@@ -80,10 +88,68 @@ public class OptionsMenu : MonoBehaviour
             tutorialLabel.text = TutorialText();
         });
         tutorialLabel.text = TutorialText();
-        MakeButton(window, new Vector2(0, -365), new Vector2(360, 70), "Voltar  [Esc]", 40, out _).onClick.AddListener(Close);
+        openGuideButton = MakeButton(window, new Vector2(0, -335), new Vector2(760, 60), "Ver tutorial agora", 32, out _);
+        openGuideButton.onClick.AddListener(ShowGuide);
+        MakeButton(window, new Vector2(0, -425), new Vector2(360, 70), "Voltar  [Esc]", 40, out _).onClick.AddListener(Close);
+        BuildGuide(shade.transform);
         Refresh();
 
         if (EventSystem.current) EventSystem.current.SetSelectedGameObject(music.gameObject);
+    }
+
+    void BuildGuide(Transform parent)
+    {
+        var inner = UIStyle.Panel(parent, "GuiaTutorial", Vector2.one * 0.5f, Vector2.one * 0.5f,
+            Vector2.zero, new Vector2(1100f, 960f));
+        guideWindow = inner.parent.gameObject;
+
+        Label(inner, "TUTORIAL", new Vector2(0f, 390f), new Vector2(1000f, 80f), 64).color = UIStyle.Gold;
+        guideTitle = UIStyle.Bold(Label(inner, "", new Vector2(0f, 300f), new Vector2(1000f, 60f), 32));
+        guideTitle.color = UIStyle.Gold;
+        guideBody = Label(inner, "", new Vector2(0f, 70f), new Vector2(960f, 280f), 32);
+        guideBody.lineSpacing = 1.15f;
+        Label(inner, "Consulte estas dicas a qualquer momento em Opções.",
+            new Vector2(0f, -150f), new Vector2(1000f, 60f), 32).color = UIStyle.Muted;
+
+        previousPageButton = MakeButton(inner, new Vector2(-250f, -270f), new Vector2(400f, 70f),
+            "Anterior", 32, out _);
+        previousPageButton.onClick.AddListener(() => ChangeGuidePage(-1));
+        nextPageButton = MakeButton(inner, new Vector2(250f, -270f), new Vector2(400f, 70f),
+            "Próxima", 32, out _);
+        nextPageButton.onClick.AddListener(() => ChangeGuidePage(1));
+        MakeButton(inner, new Vector2(0f, -400f), new Vector2(360f, 70f),
+            "Voltar  [Esc]", 40, out _).onClick.AddListener(ShowOptions);
+        guideWindow.SetActive(false);
+    }
+
+    void ShowGuide()
+    {
+        guidePage = 0;
+        RefreshGuide();
+        optionsWindow.SetActive(false);
+        guideWindow.SetActive(true);
+        if (EventSystem.current) EventSystem.current.SetSelectedGameObject(nextPageButton.gameObject);
+    }
+
+    void ShowOptions()
+    {
+        guideWindow.SetActive(false);
+        optionsWindow.SetActive(true);
+        if (EventSystem.current) EventSystem.current.SetSelectedGameObject(openGuideButton.gameObject);
+    }
+
+    void ChangeGuidePage(int delta)
+    {
+        guidePage = Mathf.Clamp(guidePage + delta, 0, Tutorial.GuidePageCount - 1);
+        RefreshGuide();
+    }
+
+    void RefreshGuide()
+    {
+        guideTitle.text = Tutorial.GuidePageTitle(guidePage);
+        guideBody.text = Tutorial.GuidePageText(guidePage);
+        previousPageButton.interactable = guidePage > 0;
+        nextPageButton.interactable = guidePage < Tutorial.GuidePageCount - 1;
     }
 
     static bool FirstRunGuide => !Tutorial.Seen || !Intro.Seen;

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 // A direção das pessoas perdidas fica nas missões (QuestLog).
 public class CampHUD : MonoBehaviour
 {
-    const float BarWidth = 492f, LowHealth = 0.3f;
+    const float LowHealth = 0.3f;
     static readonly Color FireColor = new Color(1f, 0.55f, 0.15f);
     static readonly Color AlertColor = new Color(1f, 0.2f, 0.15f);
 
@@ -20,15 +20,26 @@ public class CampHUD : MonoBehaviour
         var canvas = UIStyle.Canvas(transform, "CampHUD", -1); // Os menus continuam por cima.
         root = canvas.gameObject;
 
-        var panel = UIStyle.Panel(canvas, "Fogueira", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -154f), new Vector2(520f, 90f));
-        label = UIStyle.Label(panel, "", UIStyle.Body, TextAnchor.UpperCenter, Color.white);
-        UIStyle.Stretch(label.rectTransform, 4f);
+        // Card 480×72 em (0,-134), logo abaixo do relógio.
+        var panel = UIStyle.Panel(canvas, "Fogueira", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -134f), new Vector2(480f, 72f));
+
+        label = UIStyle.Label(panel, "", UIStyle.Body, TextAnchor.MiddleCenter, Color.white);
+        var lRect = label.rectTransform;
+        lRect.anchorMin = new Vector2(0f, 0f);
+        lRect.anchorMax = new Vector2(1f, 1f);
+        lRect.offsetMin = new Vector2(8f, 22f);
+        lRect.offsetMax = new Vector2(-8f, -2f);
+        label.resizeTextForBestFit = true;
+        label.resizeTextMinSize = 24;
+        label.resizeTextMaxSize = 32;
+
+        // Trilho de vida 452×12 a 8 da borda inferior.
         var track = UIStyle.Image(panel, "Barra", new Color(0.05f, 0.03f, 0.02f));
         track.rectTransform.anchorMin = new Vector2(0.5f, 0f);
         track.rectTransform.anchorMax = new Vector2(0.5f, 0f);
         track.rectTransform.pivot = new Vector2(0.5f, 0f);
-        track.rectTransform.anchoredPosition = new Vector2(0f, 10f);
-        track.rectTransform.sizeDelta = new Vector2(BarWidth - 20f, 26f);
+        track.rectTransform.anchoredPosition = new Vector2(0f, 8f);
+        track.rectTransform.sizeDelta = new Vector2(452f, 12f);
         fill = UIStyle.Image(track.rectTransform, "Vida", FireColor);
         fill.rectTransform.anchorMin = Vector2.zero;
         fill.rectTransform.anchorMax = new Vector2(1f, 1f);

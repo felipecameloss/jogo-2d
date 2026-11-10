@@ -2,12 +2,47 @@ using System;
 using UnityEngine;
 
 // Tutorial do primeiro dia: objetivos curtos, um de cada vez, sem pausar o jogo. Aparece no
-// topo das missões (QuestLog). Termina ao anoitecer, ao cumprir tudo ou com Enter. Depois de
+// card próprio abaixo das missões (QuestLog). O guia das opções reutiliza os mesmos textos.
+// Termina ao anoitecer, ao cumprir tudo ou com Enter. Depois de
 // concluído ou pulado, não aparece mais (dá para reativar nas opções).
 public class Tutorial : MonoBehaviour
 {
     const string SeenKey = "tutorial_visto";
     const float DoneDelay = 1.2f, NightMessageTime = 6f;
+
+    public const int GuidePageCount = 5;
+
+    const string CollectInstruction = "Segure [E] perto de uma árvore e de uma rocha para coletar madeira e pedra.";
+    const string BuildInstruction = "Volte à fogueira e aperte [F] numa marca do chão para erguer uma cerca.";
+    const string RescueInstruction = "Há pessoas perdidas pelo mapa. Siga a missão de resgate e aperte [F] perto delas.";
+    const string ChestInstruction = "Ache uma chave pelo mapa e abra um baú com [F]: ele dá armas e equipamentos.";
+    const string NightInstruction = "Os monstros vão atrás da fogueira. Defenda-a e repare o que eles quebrarem com [F].";
+
+    public static string GuidePageTitle(int page)
+    {
+        switch (page)
+        {
+            case 0: return "1/5 - COLETA";
+            case 1: return "2/5 - CONSTRUÇÃO";
+            case 2: return "3/5 - RESGATE";
+            case 3: return "4/5 - BAÚS";
+            case 4: return "5/5 - DEFESA NOTURNA";
+            default: return "";
+        }
+    }
+
+    public static string GuidePageText(int page)
+    {
+        switch (page)
+        {
+            case 0: return CollectInstruction;
+            case 1: return BuildInstruction;
+            case 2: return RescueInstruction;
+            case 3: return ChestInstruction;
+            case 4: return NightInstruction;
+            default: return "";
+        }
+    }
 
     public static bool Seen
     {
@@ -46,10 +81,10 @@ public class Tutorial : MonoBehaviour
         bag = player ? player.GetComponent<ResourceInventory>() : null;
         steps = new[]
         {
-            new Step("Segure [E] perto de uma árvore e de uma rocha para coletar madeira e pedra.", () => sawWood && sawStone),
-            new Step("Volte à fogueira e aperte [F] numa marca do chão para erguer uma cerca.", HasWall),
-            new Step("Há pessoas perdidas pelo mapa. Siga a missão de resgate e aperte [F] perto delas.", RescuedSomeone),
-            new Step("Ache uma chave pelo mapa e abra um baú com [F]: ele dá armas e equipamentos.", () => ChestSystem.Instance && ChestSystem.Instance.ClosedChests < 3),
+            new Step(CollectInstruction, () => sawWood && sawStone),
+            new Step(BuildInstruction, HasWall),
+            new Step(RescueInstruction, RescuedSomeone),
+            new Step(ChestInstruction, () => ChestSystem.Instance && ChestSystem.Instance.ClosedChests < 3),
         };
         Show();
     }
@@ -86,7 +121,7 @@ public class Tutorial : MonoBehaviour
             {
                 nightTimer = NightMessageTime;
                 Title = "A NOITE CHEGOU";
-                Text = "Os monstros vão atrás da fogueira. Defenda-a e repare o que eles quebrarem com [F].";
+                Text = NightInstruction;
             }
             nightTimer -= Time.deltaTime;
             if (nightTimer <= 0f) Finish();
