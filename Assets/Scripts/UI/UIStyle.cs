@@ -92,6 +92,26 @@ public static class UIStyle
         return image;
     }
 
+    // Quadrado para um ícone de pixel art, centrado em position. Fica escondido até receber um sprite.
+    public static Image Icon(Transform parent, Vector2 position, float size)
+    {
+        var image = Image(parent, "Icone", Color.white);
+        var rect = image.rectTransform;
+        rect.anchorMin = rect.anchorMax = Vector2.one * 0.5f;
+        rect.anchoredPosition = position;
+        rect.sizeDelta = Vector2.one * size;
+        image.preserveAspect = true;
+        image.gameObject.SetActive(false);
+        return image;
+    }
+
+    public static void SetIcon(Image image, Sprite sprite)
+    {
+        if (!image) return;
+        image.sprite = sprite;
+        image.gameObject.SetActive(sprite);
+    }
+
     public static Text Label(Transform parent, string content, int size, TextAnchor align, Color color)
     {
         var go = new GameObject("Texto", typeof(RectTransform), typeof(Text));

@@ -5,6 +5,8 @@ public class BombWeapon : Weapon
 {
     public Sprite bombSprite;
     public Sprite explosionSprite;
+    [Tooltip("Tira da explosão (explosao.png). Vazia, usa o explosionSprite crescendo e sumindo.")]
+    public Sprite[] explosionFrames;
     public Color color = new Color(1f, 0.35f, 0.25f);
     public int count = 1;
     public float fuseTime = 1.2f;
@@ -25,7 +27,7 @@ public class BombWeapon : Weapon
             sr.sprite = bombSprite;
             sr.color = color;
             sr.sortingOrder = -3;
-            go.AddComponent<Bomb>().Init(fuseTime, radius * Area, Damage, knockback, explosionSprite, color);
+            go.AddComponent<Bomb>().Init(fuseTime, radius * Area, Damage, knockback, explosionSprite, explosionFrames, color);
         }
     }
 

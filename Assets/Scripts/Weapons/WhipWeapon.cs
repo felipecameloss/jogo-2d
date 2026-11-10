@@ -4,6 +4,8 @@ using UnityEngine;
 public class WhipWeapon : Weapon
 {
     public Sprite slashSprite;
+    [Tooltip("Tira do golpe (golpe_espada.png), com o pivô na mão. Vazia, usa o slashSprite esticado.")]
+    public Sprite[] slashFrames;
     public Color color = new Color(1f, 1f, 1f, 0.85f);
     public float length = 3.2f;
     public float height = 0.9f;
@@ -27,7 +29,8 @@ public class WhipWeapon : Weapon
         float len = length * Area;
         float h = height * Area;
         Vector2 center = (Vector2)transform.position + new Vector2(side * len * 0.5f, 0f);
-        FxManager.Flash(slashSprite, center, new Vector2(len * 0.6f, h * 1.2f), new Vector2(len, h * 0.3f), color, 0.15f);
+        if (!FxManager.Animate(slashFrames, transform.position, SlashScale(side, len, h), 0.2f))
+            FxManager.Flash(slashSprite, center, new Vector2(len * 0.6f, h * 1.2f), new Vector2(len, h * 0.3f), color, 0.15f);
 
         const float enemyRadius = 0.3f;
         float hx = len * 0.5f + enemyRadius, hy = h * 0.5f + enemyRadius;
@@ -40,6 +43,15 @@ public class WhipWeapon : Weapon
             if (Mathf.Abs(offset.x) <= hx && Mathf.Abs(offset.y) <= hy)
                 e.TakeDamage(Damage, new Vector2(side, 0f) * knockback);
         }
+    }
+
+    // O arco da tira tem 21 px de raio em volta da mão (24 px por unidade, 0,875 unidade).
+    // Esticado para caber na área de acerto: alcança len à frente e cobre a altura h,
+    // mais a folga do raio do inimigo. O lado esquerdo é espelhado.
+    static Vector2 SlashScale(float side, float len, float h)
+    {
+        const float arcRadius = 21f / 24f;
+        return new Vector2(side * len / arcRadius, (h * 0.5f + 0.3f) / arcRadius);
     }
 
     protected override void ApplyLevel(int newLevel)

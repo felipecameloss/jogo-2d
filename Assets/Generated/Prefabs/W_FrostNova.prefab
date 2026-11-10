@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FrostNovaWeapon
   weaponName: "Nova G\xE9lida"
   description: "Explos\xE3o de gelo que empurra e deixa os inimigos lentos."
+  icon: {fileID: 0}
   maxLevel: 5
   damage: 8
   cooldown: 4

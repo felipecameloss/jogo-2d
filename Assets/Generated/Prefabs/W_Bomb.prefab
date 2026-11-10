@@ -46,11 +46,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BombWeapon
   weaponName: Bombas
   description: Larga bombas que explodem depois de um tempo.
+  icon: {fileID: 21300000, guid: 115ab895c2af4a998f8ba965bde3710c, type: 3}
   maxLevel: 5
   damage: 30
   cooldown: 3
-  bombSprite: {fileID: 21300000, guid: f39b52eb8677f17458526be84cc7a7f8, type: 3}
+  bombSprite: {fileID: 1780275011, guid: 459b2915c3c741639875598d1ebeb06d, type: 3}
   explosionSprite: {fileID: 21300000, guid: c0a7c36bc53243b4097af2789edf8f5c, type: 3}
+  explosionFrames:
+  - {fileID: 1332110915, guid: 61d6c4d58c594e55a2955fbcc4d0e5c9, type: 3}
+  - {fileID: -612387452, guid: 61d6c4d58c594e55a2955fbcc4d0e5c9, type: 3}
+  - {fileID: 367350840, guid: 61d6c4d58c594e55a2955fbcc4d0e5c9, type: 3}
+  - {fileID: -1913177049, guid: 61d6c4d58c594e55a2955fbcc4d0e5c9, type: 3}
+  - {fileID: -1978016330, guid: 61d6c4d58c594e55a2955fbcc4d0e5c9, type: 3}
+  - {fileID: 348328290, guid: 61d6c4d58c594e55a2955fbcc4d0e5c9, type: 3}
+  - {fileID: 979030848, guid: 61d6c4d58c594e55a2955fbcc4d0e5c9, type: 3}
   color: {r: 1, g: 0.35, b: 0.25, a: 1}
   count: 1
   fuseTime: 1.2

@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KnifeWeapon
   weaponName: Facas
   description: "Arremessa facas na dire\xE7\xE3o em que voc\xEA anda."
+  icon: {fileID: 21300000, guid: 68641d0c1e8d4c2d8dcc0f448c30ba16, type: 3}
   maxLevel: 5
   damage: 7
   cooldown: 0.6

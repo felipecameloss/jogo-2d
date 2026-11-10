@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FlaskWeapon
   weaponName: Frasco Venenoso
   description: "Cria po\xE7as de veneno embaixo dos inimigos."
+  icon: {fileID: 0}
   maxLevel: 5
   damage: 4
   cooldown: 2.5

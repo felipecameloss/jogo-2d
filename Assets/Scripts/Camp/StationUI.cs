@@ -6,13 +6,15 @@ using UnityEngine.UI;
 public class StationUI : MonoBehaviour
 {
     const int MaxCards = 5;
-    const float CardWidth = 310f, CardHeight = 350f, CardSpacing = 330f;
+    const float CardWidth = 310f, CardHeight = 400f, CardSpacing = 330f;
+    const float IconSize = 72f; // ícones de 24 px, em 3x
 
     public StationSystem source;
     GameObject modal;
     Text heading, materials, message, empty;
     readonly GameObject[] cards = new GameObject[MaxCards];
     readonly Text[] titles = new Text[MaxCards], descriptions = new Text[MaxCards], costs = new Text[MaxCards];
+    readonly Image[] icons = new Image[MaxCards];
     readonly Button[] buttons = new Button[MaxCards];
     bool wasOpen;
 
@@ -31,13 +33,14 @@ public class StationUI : MonoBehaviour
         for (int i = 0; i < MaxCards; i++)
         {
             int index = i;
-            buttons[i] = UIStyle.Button(window, "", UIStyle.Body, new Vector2((i - (MaxCards - 1) / 2f) * CardSpacing, -10f), new Vector2(CardWidth, CardHeight), () => source.Buy(index), out var unused);
+            buttons[i] = UIStyle.Button(window, "", UIStyle.Body, new Vector2((i - (MaxCards - 1) / 2f) * CardSpacing, -5f), new Vector2(CardWidth, CardHeight), () => source.Buy(index), out var unused);
             unused.gameObject.SetActive(false);
             cards[i] = buttons[i].gameObject;
-            titles[i] = UIStyle.Bold(UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, 120f), new Vector2(CardWidth - 30f, 80f)));
+            icons[i] = UIStyle.Icon(buttons[i].transform, new Vector2(0f, 145f), IconSize);
+            titles[i] = UIStyle.Bold(UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, 70f), new Vector2(CardWidth - 30f, 70f)));
             titles[i].color = UIStyle.Gold;
-            descriptions[i] = UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, 0f), new Vector2(CardWidth - 30f, 150f));
-            costs[i] = UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, -135f), new Vector2(CardWidth - 30f, 70f));
+            descriptions[i] = UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, -40f), new Vector2(CardWidth - 30f, 140f));
+            costs[i] = UIStyle.Label(buttons[i].transform, "", UIStyle.Body, new Vector2(0f, -155f), new Vector2(CardWidth - 30f, 60f));
         }
         empty = UIStyle.Label(window, "Nada mais a ensinar", UIStyle.Large, new Vector2(0f, -10f), new Vector2(1600f, 60f));
         empty.color = UIStyle.Muted;
@@ -68,6 +71,7 @@ public class StationUI : MonoBehaviour
             var offer = offers[i];
             titles[i].text = $"[{i + 1}] {offer.Title}";
             descriptions[i].text = offer.Description;
+            UIStyle.SetIcon(icons[i], offer.Icon);
             costs[i].text = BuildSpot.Cost(offer.Wood, offer.Stone);
             costs[i].color = bag && bag.CanAfford(offer.Wood, offer.Stone) ? UIStyle.Good : UIStyle.Bad;
         }

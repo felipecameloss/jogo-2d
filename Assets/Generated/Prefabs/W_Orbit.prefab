@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OrbitWeapon
   weaponName: "L\xE2minas Orbitais"
   description: "L\xE2minas giram ao seu redor."
+  icon: {fileID: 0}
   maxLevel: 5
   damage: 8
   cooldown: 1

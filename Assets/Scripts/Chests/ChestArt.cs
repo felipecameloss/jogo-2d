@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Quadros do baú e sprite pixelado da chave, gerado uma vez por run.
+// Quadros do baú e sprite da chave.
 public static class ChestArt
 {
     const float ChestPixelsPerUnit = 24f;
@@ -21,7 +21,27 @@ public static class ChestArt
     public static Color Tint(int tier) =>
         tier == 0 ? Color.white : tier == 1 ? new Color(0.75f, 0.9f, 1f) : new Color(0.85f, 0.7f, 1f);
 
-    public static Sprite Key()
+    // A chave de Assets/Art/Resources/Pickups/chave.png. A 20 px por unidade (não 24) fica do
+    // tamanho da chave antiga. Em cache: a textura é do projeto e não pode ser destruída.
+    // Sem o arquivo, gera a chave antiga; aí generated = true e quem chamou destrói a textura.
+    const float KeyPixelsPerUnit = 20f;
+    static Sprite keyArt;
+
+    public static Sprite Key(out bool generated)
+    {
+        generated = false;
+        if (keyArt) return keyArt;
+        var art = Resources.Load<Sprite>("Pickups/chave");
+        if (art)
+        {
+            keyArt = Sprite.Create(art.texture, art.rect, new Vector2(0.5f, 0.5f), KeyPixelsPerUnit, 0, SpriteMeshType.FullRect);
+            return keyArt;
+        }
+        generated = true;
+        return GeneratedKey();
+    }
+
+    static Sprite GeneratedKey()
     {
         const int size = 16;
         var texture = NewTexture(size);

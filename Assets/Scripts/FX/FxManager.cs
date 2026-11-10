@@ -89,10 +89,27 @@ public class FxManager : MonoBehaviour
     public static SpriteRenderer Flash(Sprite sprite, Vector3 position, Vector2 startScale, Vector2 endScale, Color color,
         float duration, float rotation = 0f, int sortingOrder = 40)
     {
-        var fx = Instance;
-        if (!sprite && fx) sprite = fx.particleSprite;
+        if (!sprite && Instance) sprite = Instance.particleSprite;
         if (!sprite) return null;
+        var fade = SpawnFlash(sprite, position, color, rotation, sortingOrder);
+        fade.Init(startScale, endScale, duration);
+        return fade.Renderer;
+    }
 
+    // Tira de quadros tocada uma vez, sem mudar de escala (explosão, golpe da espada).
+    // Escala negativa em x espelha em volta do pivô do sprite.
+    public static SpriteRenderer Animate(Sprite[] frames, Vector3 position, Vector2 scale, float duration,
+        float rotation = 0f, int sortingOrder = 40)
+    {
+        if (frames == null || frames.Length == 0 || !frames[0]) return null;
+        var fade = SpawnFlash(frames[0], position, Color.white, rotation, sortingOrder);
+        fade.Init(scale, scale, duration, frames);
+        return fade.Renderer;
+    }
+
+    static FxFade SpawnFlash(Sprite sprite, Vector3 position, Color color, float rotation, int sortingOrder)
+    {
+        var fx = Instance;
         FxFade fade;
         if (fx && fx.freeFlashes.Count > 0) fade = fx.freeFlashes.Pop();
         else
@@ -109,8 +126,7 @@ public class FxManager : MonoBehaviour
         sr.flipX = false;
         sr.flipY = false;
         fade.gameObject.SetActive(true);
-        fade.Init(startScale, endScale, duration);
-        return sr;
+        return fade;
     }
 
     // Chamados pelos próprios efeitos quando terminam.
