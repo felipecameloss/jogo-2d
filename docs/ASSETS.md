@@ -46,7 +46,7 @@ Autoria confirmada por Pedro Nadotti em 09/11/2026: ferreira, árvore, arbustos,
 
 ### Formas geradas (`Assets/Generated/Sprites/`)
 
-Formas simples (`Blob`, `Circle`, `Cross`, `Diamond`, `Glow`, `Pixel`, `Ring`, `Square`) desenhadas por código em `SurvivorsSetup` a cada execução do gerador: corpo provisório dos inimigos sem folha, partículas, brilhos e as armas mágicas fora do escopo. Fazem parte do código-base (equipe, com auxílio do Claude). `Ground.png` é o chão antigo: o gerador não o cria mais e nada o usa.
+Formas simples (`Blob`, `Circle`, `Cross`, `Diamond`, `Glow`, `Pixel`, `Ring`, `Square`) desenhadas por código em `SurvivorsSetup` a cada execução do gerador: corpo provisório dos inimigos sem folha, partículas, brilhos e as armas mágicas fora do escopo. Fazem parte do código-base (equipe, com auxílio do Claude).
 
 As folhas de `Resources/Enemies/` são tiras de 8 quadros olhando para a direita (o jogo vira com `flipX`), com a sombra desenhada no chão. São importadas como sprite único (filtro *Point*, sem compressão, 24 px por unidade) e fatiadas por `EnemyArt`, que guarda o pivô de cada uma: o centro do corpo, a 12 px da base no Slime, 19 no Morcego, 23 no Golem, 29 no Golem Ancião e 40 no Rei da Noite. A fonte é o script `tools/sprites-inimigos/gerar.py` (Python com Pillow): mude cores ou formas lá e rode de novo, em vez de editar os PNGs.
 
