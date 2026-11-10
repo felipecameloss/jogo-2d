@@ -30,7 +30,7 @@ Organizado pelo framework **DDE** (Design, Dynamics, Experience), como pede a ru
 - **Pessoas (05/11/2026):** dois NPCs, ferreiro de armas e ferreira de armaduras. Nunca morrem: derrotados, voltam a ficar perdidos longe do acampamento e precisam de novo resgate; a estação fecha até lá.
 - **Armas (05/11/2026):** Besta (inicial), Espada, Facas, Machado de arremesso e Bombas. Quanto mais pessoas no acampamento, melhores as armas à venda.
 - **Baús (05/11/2026):** mantêm chaves e oferecem armas e gear.
-- **Tutorial (08/11/2026):** objetivos curtos no primeiro dia, sem pausar: coletar, construir, resgatar e abrir um baú. Termina ao anoitecer com um aviso para defender a fogueira. Pode ser pulado e só aparece na primeira run; as opções o reativam.
+- **Tutorial (08/11/2026; interface revista em 10/11/2026):** objetivos curtos no primeiro dia, sem pausar: coletar, construir, resgatar e abrir um baú. Termina ao anoitecer com um aviso para defender a fogueira. Pode ser pulado; as opções reativam a experiência automática na próxima run. Um guia consultável nas Opções mostra as mesmas instruções a qualquer momento, inclusive numa run iniciada sem tutorial.
 - **Nome e história (09/11/2026):** o jogo se chama *Brasa Viva*. O protagonista é Bento, um jovem lenhador; os monstros vêm da maldição do Rei da Noite (ver 1.1). Uma introdução curta conta a história na primeira run.
 - **Duração da run (08/11/2026):** infinita. A dificuldade cresce sem limite a partir da Noite 4, e o objetivo é sobreviver a mais noites.
 
@@ -105,10 +105,10 @@ Valores detalhados em `BALANCEAMENTO.md`.
 
 ### 1.3 Interface
 
-- **HUD:** painéis opacos com moldura. Canto superior esquerdo: nível, abates e barra de XP rotulada; abaixo, materiais (madeira, pedra, chaves, ouro) e **missões**. Topo: relógio, período e vida da fogueira; em noite de chefe, abaixo deles, nome e barra de vida do chefe. Canto superior direito: minimapa. Embaixo: avisos de interação, barra de coleta (só perto de árvore ou rocha) e dash.
-- **Missões:** lista no canto esquerdo com o passo do tutorial, as pessoas a resgatar (distância e direção), estações a construir, o baú mais próximo e a meta do período (coletar de dia, defender a fogueira à noite).
+- **HUD:** painéis opacos com moldura. Canto superior esquerdo: barra compacta com ícones e quantidades de madeira, pedra, chaves e ouro; abaixo, card da missão ativa. Topo central: relógio, período e vida da fogueira em cards menores; em noite de chefe, abaixo deles, nome e barra de vida do chefe. Canto superior direito: minimapa menor. Rodapé: nível e barra fina de XP rotulada, avisos de interação, barra de coleta (só perto de árvore ou rocha) e dash. Abates continuam na estatística de fim de run, fora da HUD principal.
+- **Missões:** de dia, o card mostra um objetivo e sua distância; M abre a lista completa com resgates, estações, baú mais próximo e coleta. À noite, os cards de missão somem para destacar a defesa da fogueira. As instruções do tutorial automático aparecem em card separado somente enquanto a etapa está ativa.
 - **Minimapa:** radar centrado no jogador, com alcance fixo, que mostra a fogueira e os baús fechados; o que está além do alcance fica preso na borda, indicando a direção. Chaves e inimigos ficam de fora para manter a exploração.
-- **Menus:** principal (com o nome *Brasa Viva* e a frase "Mantenha a fogueira acesa até o amanhecer."), introdução da primeira run, pausa, opções (volume de música e efeitos, controles, introdução e tutorial na próxima run), level up, baú, ferraria, armaria e game over.
+- **Menus:** principal (com o nome *Brasa Viva* e a frase "Mantenha a fogueira acesa até o amanhecer."), introdução da primeira run, pausa, opções (volume de música e efeitos, controles, introdução e tutorial na próxima run, além de um guia consultável mesmo durante uma run sem tutorial), level up, baú, ferraria, armaria e game over.
 - **Identidade visual:** fonte pixelada (Pixel Operator) em toda a interface, sem suavização; painéis e botões opacos em tons de madeira com moldura.
 - **Arte dos monstros:** pixel art no estilo do jogador (sem contorno preto, paleta terrosa, luz de cima à esquerda), com olhos que brilham para ler bem à noite. Slime verde com um osso engolido; Morcego roxo de olhos âmbar; Golem de pedra com musgo. O Golem Ancião é um golem maior de basalto, com cristais âmbar nas costas e uma runa de lava no peito; o Rei da Noite é um rei espectral que flutua, com capa roxa rasgada, coroa, lua no peito e espadão violeta. As cores seguem as dos tiros de cada chefe (laranja e roxo).
 - **Feedback no mundo:** monstros avermelham e crescem um pouco ao levar golpe; números de dano; tela tremendo e jogador piscando ao sofrer dano; recursos esgotados acinzentados; chaves pulsando; escuridão à noite com luz em volta do jogador.
@@ -136,6 +136,7 @@ Registre aqui as mudanças de trajetória, como pede a rubrica.
 
 | Data | Mudança | Motivo |
 |---|---|---|
+| 10/11/2026 | HUD compactada: materiais em linha, missão ativa com acesso à lista por M, nível/XP no rodapé e cards centrais/minimapa menores; tutorial contextual em card separado e guia consultável nas Opções durante qualquer run. | Melhorar leitura do cenário sem perder orientações e permitir consulta ao tutorial após iniciar sem ele |
 | 10/11/2026 | Ferraria e armaria passam a cobrar ouro, e não mais madeira e pedra. Fecha a decisão aberta sobre o uso do ouro. Não é o mercador removido em 04/11: as compras continuam nas estações dos residentes. | O ouro não tinha uso, e as compras disputavam material com os muros |
 | 10/11/2026 | O primeiro dia dura 6 minutos; os demais dias e as noites seguem com 3. | No teste de jogo não dava tempo de se preparar, e o acampamento caía na primeira noite |
 | 09/11/2026 | Arte das armas, itens e chão no jogo: projéteis, bomba, explosão e golpe da espada animados, drops, chave e ladrilho de grama; ícones das armas e equipamentos no baú e na ferraria, e de madeira e pedra no HUD. | Rubrica pede arte medieval no lugar das formas geradas |

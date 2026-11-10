@@ -16,6 +16,7 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 | Dash (invencível, atravessa monstros) | Left Shift | Indisponível |
 | Coletar materiais (segurar) | E | Botão oeste (X no Xbox, quadrado no PlayStation) |
 | Construir, reparar, resgatar, abrir baú e estação | F | Botão norte (Y no Xbox, triângulo no PlayStation) |
+| Missões | M | Indisponível |
 | Escolher upgrade, recompensa ou compra | 1 a 5 ou clique | Não testado |
 | Pausar | Esc / P | Start |
 | Avançar a introdução | Espaço ou clique | Botão sul (A no Xbox, X no PlayStation) |
@@ -57,7 +58,7 @@ Inspirações de gênero: Vampire Survivors e MegaBonk.
 
 ### Pessoas perdidas e estações
 
-- O ferreiro e a ferreira estão perdidos longe do acampamento. As missões, no canto esquerdo, mostram a distância e a direção de cada um.
+- O ferreiro e a ferreira estão perdidos longe do acampamento. Durante o dia, o card **MISSÕES** mostra o objetivo ativo e sua distância; **M** abre a lista completa com distâncias e direções.
 - Perto da pessoa, aperte **F** para resgatá-la. Ela anda sozinha até o acampamento.
 - Cada residente libera um ponto de estação: **ferraria** (ferreiro) e **armaria** (ferreira), por 30 madeira e 20 pedra.
 - Perto da estação, **F** abre as compras: a ferraria ensina e melhora armas; a armaria dá armadura e vida. Pague com ouro (1 a 5 ou clique; Esc fecha).
@@ -71,9 +72,11 @@ Inimigos têm chance de dropar ouro, e o valor cresce a cada noite; elites e che
 
 Na primeira run, uma introdução curta conta a história antes do primeiro dia, com o jogo parado. **Espaço** ou clique avança; **Enter** ou **Esc** pula.
 
-Depois, o topo das **missões** (canto esquerdo) mostra um objetivo por vez durante o primeiro dia: coletar, construir, resgatar e abrir um baú. **Enter** pula. Para ver os dois de novo, use **Opções > Introdução e tutorial na próxima run**.
+Depois, um card próprio de **tutorial**, abaixo de **MISSÕES**, mostra uma instrução por vez durante o primeiro dia: coletar, construir, resgatar e abrir um baú. **Enter** pula. O tutorial aparece somente quando estiver ativado para a próxima run em **Opções > Introdução e tutorial na próxima run**.
 
-As missões também mostram, o tempo todo, quem falta resgatar e o baú mais próximo, com distância e direção.
+Mesmo numa run iniciada sem tutorial, pause com **Esc/P** e escolha **Opções > Ver tutorial agora**. O guia permite consultar coleta, construção, resgate, baús e defesa noturna com **Anterior/Próxima**, sem reiniciar a run ou mudar a opção da próxima.
+
+Durante o dia, **[M] ver todas** no card de missões indica como abrir o painel completo, que lista os resgates e o baú mais próximo com distância e direção. À noite, as missões se ocultam para destacar a defesa da fogueira.
 
 ### Opções
 

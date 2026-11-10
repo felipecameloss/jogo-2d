@@ -100,6 +100,16 @@ public static class GameInput
 #endif
     }
 
+    public static bool MissionsPressed()
+    {
+#if ENABLE_INPUT_SYSTEM
+        var k = Keyboard.current;
+        return k != null && k.mKey.wasPressedThisFrame;
+#else
+        return Input.GetKeyDown(KeyCode.M);
+#endif
+    }
+
     // Atalho de teste (só funciona no Editor): N pula para o próximo período (dia/noite).
     public static bool DebugSkipPeriodPressed()
     {

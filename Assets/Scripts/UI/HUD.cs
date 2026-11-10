@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // HUD da run. Os textos vêm da cena gerada; no Start eles são reorganizados em painéis opacos:
-// nível e XP no canto superior esquerdo, relógio no topo, dash embaixo.
+// relógio no topo, nível e XP no rodapé, dash no canto inferior direito.
 public class HUD : MonoBehaviour
 {
     public Image xpFill;
@@ -51,33 +51,46 @@ public class HUD : MonoBehaviour
     void Layout()
     {
         var root = transform;
-        // Nível, abates e barra de XP rotulada.
-        var player = UIStyle.Panel(root, "Jogador", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -20f), new Vector2(UIStyle.ColumnWidth, 124f));
+
+        // Faixa transparente do rodapé: altura 64 para caber o número de XP acima da barra fina.
+        var footerGo = new GameObject("RodapeXP", typeof(RectTransform));
+        var footer = footerGo.GetComponent<RectTransform>();
+        footer.SetParent(root, false);
+        footer.anchorMin = new Vector2(0f, 0f);
+        footer.anchorMax = new Vector2(1f, 0f);
+        footer.pivot = new Vector2(0.5f, 0f);
+        footer.offsetMin = new Vector2(20f, 12f);
+        footer.offsetMax = new Vector2(-20f, 76f);
+
         if (levelText)
         {
-            Place(levelText, player, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(UIStyle.Padding, -56f), new Vector2(-UIStyle.Padding, -6f));
+            var lRect = levelText.rectTransform;
+            lRect.SetParent(footer, false);
+            lRect.anchorMin = new Vector2(0f, 0f);
+            lRect.anchorMax = new Vector2(0f, 1f);
+            lRect.pivot = new Vector2(0f, 0.5f);
+            lRect.anchoredPosition = Vector2.zero;
+            lRect.sizeDelta = new Vector2(150f, 0f);
             levelText.alignment = TextAnchor.MiddleLeft;
-            UIStyle.Style(levelText, UIStyle.Large);
+            UIStyle.Style(levelText, UIStyle.Body);
             UIStyle.Bold(levelText);
             levelText.color = UIStyle.Gold;
         }
-        if (killsText)
-        {
-            Place(killsText, player, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(UIStyle.Padding, -56f), new Vector2(-UIStyle.Padding, -6f));
-            killsText.alignment = TextAnchor.MiddleRight;
-            UIStyle.Style(killsText, UIStyle.Body);
-        }
+
+        if (killsText) killsText.gameObject.SetActive(false);
+
         if (xpFill)
         {
             var bar = (RectTransform)xpFill.transform.parent;
-            bar.SetParent(player, false);
+            bar.SetParent(footer, false);
             bar.anchorMin = new Vector2(0f, 0f);
             bar.anchorMax = new Vector2(1f, 0f);
             bar.pivot = new Vector2(0.5f, 0f);
-            bar.offsetMin = new Vector2(UIStyle.Padding, UIStyle.Padding);
-            bar.offsetMax = new Vector2(-UIStyle.Padding, UIStyle.Padding + 40f);
+            bar.offsetMin = new Vector2(180f, 8f);
+            bar.offsetMax = new Vector2(-20f, 20f);
             var background = bar.GetComponent<Image>();
             if (background) { background.sprite = null; background.color = new Color(0.05f, 0.03f, 0.02f); }
+
             // Preenchimento pela âncora: funciona sem depender do sprite da cena.
             var fill = xpFill.rectTransform;
             fill.anchorMin = Vector2.zero;
@@ -87,23 +100,34 @@ public class HUD : MonoBehaviour
             xpFill.sprite = null;
             xpFill.type = Image.Type.Simple;
             xpFill.color = new Color(0.3f, 0.62f, 1f);
-            xpLabel = UIStyle.Label(bar, "", UIStyle.Body, TextAnchor.MiddleCenter, Color.white);
-            UIStyle.Stretch(xpLabel.rectTransform);
+
+            // Rótulo numérico acima do trilho dentro da faixa
+            xpLabel = UIStyle.Label(footer, "", UIStyle.Body, TextAnchor.MiddleCenter, Color.white);
+            var xlRect = xpLabel.rectTransform;
+            xlRect.anchorMin = new Vector2(0f, 0f);
+            xlRect.anchorMax = new Vector2(1f, 0f);
+            xlRect.pivot = new Vector2(0.5f, 0f);
+            xlRect.offsetMin = new Vector2(180f, 24f);
+            xlRect.offsetMax = new Vector2(-20f, 56f);
         }
 
-        // Relógio e período no topo.
-        var clock = UIStyle.Panel(root, "Relogio", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -20f), new Vector2(520f, 124f));
+        // Relógio e período no centro superior: 480×104 em (0, -20).
+        var clock = UIStyle.Panel(root, "Relogio", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -20f), new Vector2(480f, 104f));
         if (timerText)
         {
-            Place(timerText, clock, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -72f), new Vector2(0f, -4f));
+            Place(timerText, clock, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -52f), new Vector2(0f, -4f));
             timerText.alignment = TextAnchor.MiddleCenter;
             UIStyle.Style(timerText, UIStyle.Title);
+            timerText.fontSize = 48;
         }
         if (periodText)
         {
-            Place(periodText, clock, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 6f), new Vector2(0f, 46f));
+            Place(periodText, clock, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 6f), new Vector2(0f, 44f));
             periodText.alignment = TextAnchor.MiddleCenter;
             UIStyle.Style(periodText, UIStyle.Body);
+            periodText.resizeTextForBestFit = true;
+            periodText.resizeTextMinSize = 24;
+            periodText.resizeTextMaxSize = 32;
         }
 
         // O ouro foi para o painel de materiais; a dica de teclas está nas opções.
@@ -113,7 +137,13 @@ public class HUD : MonoBehaviour
         if (dashText)
         {
             UIStyle.Style(dashText, UIStyle.Body);
-            dashText.rectTransform.anchoredPosition = new Vector2(0f, 24f);
+            var dRect = dashText.rectTransform;
+            dRect.anchorMin = new Vector2(1f, 0f);
+            dRect.anchorMax = new Vector2(1f, 0f);
+            dRect.pivot = new Vector2(1f, 0f);
+            dRect.anchoredPosition = new Vector2(-20f, 80f);
+            dRect.sizeDelta = new Vector2(300f, 48f);
+            dashText.alignment = TextAnchor.MiddleRight;
         }
         if (bannerText) UIStyle.Style(bannerText, UIStyle.Huge);
     }
@@ -183,8 +213,8 @@ public class HUD : MonoBehaviour
         bossBar.SetParent(transform, false);
         bossBar.anchorMin = bossBar.anchorMax = new Vector2(0.5f, 1f);
         bossBar.pivot = new Vector2(0.5f, 1f);
-        // Abaixo do painel da fogueira (topo, até y = -244) e sem encostar na coluna da esquerda.
-        bossBar.anchoredPosition = new Vector2(0f, -300f);
+        // Abaixo da fogueira com vão de 40 (fogueira vai até y = -206).
+        bossBar.anchoredPosition = new Vector2(0f, -246f);
         bossBar.sizeDelta = new Vector2(760f, 28f);
         var bg = go.AddComponent<Image>();
         bg.color = new Color(0f, 0f, 0f, 0.7f);
@@ -274,7 +304,6 @@ public class HUD : MonoBehaviour
             if (bannerTimer <= 0f) bannerText.gameObject.SetActive(false);
         }
         UpdateBossBar();
-        if (killsText) killsText.text = $"{gm.Kills} abates";
         if (goldText && wallet)
         {
             // "Pulinho" no texto quando ganha ouro.
