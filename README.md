@@ -2,6 +2,9 @@
 
 Roguelike de sobrevivência top-down 2D feito em Unity 6 (6000.6.5f1) para o Projeto 2D de Jogos Digitais do Insper 2026.2. De dia você explora e coleta; de noite, sobrevive às ondas de inimigos.
 
+- **Jogar no navegador (itch.io):** https://gustavolaf.itch.io/brasa-viva
+- **Submissão na Jam:** https://itch.io/jam/projeto-jogo-2d-insper-20262/rate/5337111
+
 ## História
 
 O vale de Alvorada vivia em paz até o Rei da Noite despertar sob as ruínas. Sua maldição dá vida à escuridão a cada anoitecer: lodo, morcegos e pedras antigas viram monstros, que se desfazem ao amanhecer. A aldeia caiu em uma só noite, e os sobreviventes se perderam na floresta. Bento, um jovem lenhador, salvou a última brasa da forja e acendeu uma fogueira. Só o fogo resiste à maldição, e é atrás dele que os monstros vêm. Mantenha a brasa viva.

@@ -1,6 +1,6 @@
 # Página do itch.io
 
-Texto e configuração da página do jogo na [jam do Projeto 2D](https://itch.io/jam/projeto-jogo-2d-insper-20262). Quando o jogo mudar, atualize este arquivo e a página juntos.
+Texto e configuração da página do jogo ([gustavolaf.itch.io/brasa-viva](https://gustavolaf.itch.io/brasa-viva)) na [jam do Projeto 2D](https://itch.io/jam/projeto-jogo-2d-insper-20262/rate/5337111). Quando o jogo mudar, atualize este arquivo e a página juntos.
 
 ## Configuração
 
@@ -85,8 +85,8 @@ Projeto 2D da disciplina de Jogos Digitais do Insper, 2026.2.
 
 - Pedro Nadotti
 - Felipe Camelo
-- Gustavo
-- Carlos
+- Gustavo Lima
+- Carlos Franco
 
 ### Créditos
 
@@ -98,9 +98,9 @@ Projeto 2D da disciplina de Jogos Digitais do Insper, 2026.2.
 
 ## Antes de publicar
 
-- [ ] Completar os nomes do Gustavo e do Carlos na seção Equipe
-- [ ] Conferir o link do GitHub
-- [ ] Gerar o build atual e testar no navegador, inclusive em tela cheia
-- [ ] Subir capa e capturas
-- [ ] Inscrever o jogo na jam (o upload sozinho não inscreve)
-- [ ] Deixar a página como **Public**
+- [x] Completar os nomes do Gustavo e do Carlos na seção Equipe
+- [x] Conferir o link do GitHub
+- [x] Gerar o build atual e testar no navegador, inclusive em tela cheia
+- [x] Subir capa e capturas
+- [x] Inscrever o jogo na jam (o upload sozinho não inscreve)
+- [x] Deixar a página como **Public**
